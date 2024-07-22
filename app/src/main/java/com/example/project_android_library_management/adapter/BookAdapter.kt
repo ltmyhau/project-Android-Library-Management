@@ -3,19 +3,37 @@ package com.example.project_android_library_management.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.model.Book
 
-class BookAdapter(private val bookList: List<Book>) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+class BookAdapter(
+    private val bookList: List<Book>,
+    private val itemClickListener: OnItemClickListener
+) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onItemClick(book: Book)
+    }
 
     inner class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvAuthor: TextView = itemView.findViewById(R.id.tvAuthor)
         val tvStock: TextView = itemView.findViewById(R.id.tvStock)
         val imgBookCover: ImageView = itemView.findViewById(R.id.imgBookCover)
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val selectedBook = bookList[position]
+                    itemClickListener.onItemClick(selectedBook)
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {

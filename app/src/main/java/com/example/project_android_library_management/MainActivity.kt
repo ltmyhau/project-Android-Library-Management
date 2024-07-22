@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawerLayout = findViewById(R.id.drawer_layout)
 
-        toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)

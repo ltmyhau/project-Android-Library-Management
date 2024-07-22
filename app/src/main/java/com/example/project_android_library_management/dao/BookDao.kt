@@ -34,4 +34,29 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
 
         return books
     }
+
+    fun getBookByIsbn(isbn: String?): Book? {
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery("SELECT * FROM Sach WHERE ISBN = ?", arrayOf(isbn))
+        var book: Book? = null
+        if (cursor.moveToFirst()) {
+            book = Book(
+                cursor.getString(cursor.getColumnIndexOrThrow("ISBN")),
+                cursor.getString(cursor.getColumnIndexOrThrow("TenSach")),
+                cursor.getString(cursor.getColumnIndexOrThrow("TacGia")),
+                cursor.getString(cursor.getColumnIndexOrThrow("NXB")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("NamXB")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("SoTrang")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("SoLuongTon")),
+                cursor.getDouble(cursor.getColumnIndexOrThrow("GiaBan")),
+                cursor.getString(cursor.getColumnIndexOrThrow("MoTa")),
+                cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("MaTL"))
+            )
+        }
+        cursor.close()
+        db.close()
+
+        return book
+    }
 }

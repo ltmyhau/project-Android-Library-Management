@@ -1,5 +1,6 @@
 package com.example.project_android_library_management.fragment.book
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,7 +32,18 @@ class BookListFragment : Fragment() {
         val databaseHelper = DatabaseHelper(requireContext())
         val bookDao = BookDao(databaseHelper)
         bookList = bookDao.getAllBooks()
-        bookAdapter = BookAdapter(bookList)
+
+//        bookAdapter = BookAdapter(bookList)
+
+        bookAdapter = BookAdapter(bookList, object : BookAdapter.OnItemClickListener {
+            override fun onItemClick(book: Book) {
+                val intent = Intent(context, BookDetailActivity::class.java)
+                intent.putExtra("ISBN", book.ISBN)
+                startActivity(intent)
+            }
+        })
+
+
         rcvBook.adapter = bookAdapter
 
         return view
