@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Trang chủ"/>
+        <item
+            android:id="@+id/nav_book"
+            android:icon="@drawable/ic_book"
+            android:title="Sách"/>
+        <item
+            android:id="@+id/nav_reader"
+            android:icon="@drawable/ic_reader"
+            android:title="Độc giả"/>
+        <item
+            android:id="@+id/nav_borrow_record"
+            android:icon="@drawable/ic_borrow_record"
+            android:title="Phiến mượn"/>
+        <item
+            android:id="@+id/nav_return_record"
+            android:icon="@drawable/ic_return_record"
+            android:title="Phiến trả"/>
+        <item
+            android:id="@+id/nav_statistic"
+            android:icon="@drawable/ic_statistic"
+            android:title="Thống kê"/>
+    </group>
+    <item
+        android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_account"
+                android:icon="@drawable/ic_account"
+                android:title="Tài khoản"/>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="Đăng xuất"/>
+        </menu>
+    </item>
+
+</menu>
