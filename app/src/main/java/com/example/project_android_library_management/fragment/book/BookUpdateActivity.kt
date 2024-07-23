@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.example.project_android_library_management.DatabaseHelper
@@ -91,6 +92,19 @@ class BookUpdateActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setTitle("Xác nhận")
+            .setMessage("Bạn có chắc chắn muốn quay lại không? Những thay đổi của bạn sẽ không được lưu.")
+            .setPositiveButton("Có") { _, _ ->
+                super.onBackPressed()
+            }
+            .setNegativeButton("Không") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun loadCategorySpinner() {

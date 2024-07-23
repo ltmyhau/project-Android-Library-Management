@@ -11,8 +11,10 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.BookCategoryDao
@@ -87,6 +89,19 @@ class BookAddActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setTitle("Xác nhận")
+            .setMessage("Bạn có chắc chắn muốn quay lại không? Những thay đổi của bạn sẽ không được lưu.")
+            .setPositiveButton("Có") { _, _ ->
+                super.onBackPressed()
+            }
+            .setNegativeButton("Không") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
     private fun loadCategorySpinner() {
         val categories = bookCategoryDao.getAllBookCategories()
         val adapter = ArrayAdapter(this, R.layout.dropdown_item, categories.map { it.TenLoai })
@@ -99,6 +114,7 @@ class BookAddActivity : AppCompatActivity() {
             selectedCategory?.let {
                 bookCategoryId = it.MaLoai
             }
+            spnCategory.setTextColor(ContextCompat.getColor(this, R.color.text_dark_color))
         }
     }
 
@@ -168,12 +184,6 @@ class BookAddActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Thêm sách mới thất bại", Toast.LENGTH_SHORT).show()
             }
-//            bookDao.insertBook(book)
-//            Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()
-//            val resultIntent = Intent()
-//            resultIntent.putExtra("BOOK_ISBN", book.ISBN)
-//            setResult(RESULT_OK, resultIntent)
-//            finish()
         }
     }
 

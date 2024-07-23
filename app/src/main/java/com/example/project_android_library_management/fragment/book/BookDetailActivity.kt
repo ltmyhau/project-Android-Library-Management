@@ -77,7 +77,7 @@ class BookDetailActivity : AppCompatActivity() {
             tvStock.text = book.SoLuongTon.toString()
             tvPrice.text = book.GiaBan.toString()
             tvDescription.text = book.MoTa
-//            imgBookCover.setImageResource(R.drawable.book_cover)
+
             val imagePath = book.HinhAnh
             if (imagePath != null) {
                 val imgFile = File(imagePath)
@@ -124,7 +124,6 @@ class BookDetailActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_UPDATE_BOOK && resultCode == RESULT_OK) {
-//            val isbn = data?.getStringExtra("BOOK_ISBN") ?: return
             loadBookDetails(isbn)
         }
     }
@@ -140,10 +139,12 @@ class BookDetailActivity : AppCompatActivity() {
             .setTitle("Xác nhận")
             .setMessage("Bạn có chắc chắn muốn xóa sách này không?")
             .setPositiveButton("Có") { _, _ ->
-//                databaseHelper.deleteBook(bookId)
-                Toast.makeText(this, "Đã xóa sách thành công", Toast.LENGTH_SHORT).show()
-//                val intent = Intent()
-//                setResult(RESULT_OK, intent)
+                val rowsAffected = bookDao.deleteBook(isbn)
+                if (rowsAffected > 0) {
+                    Toast.makeText(this, "Đã xóa sách thành công", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Xóa sách thất bại", Toast.LENGTH_SHORT).show()
+                }
                 finish()
             }
             .setNegativeButton("Không") { dialog, _ ->

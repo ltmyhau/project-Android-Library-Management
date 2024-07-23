@@ -49,6 +49,13 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         return rowsAffected
     }
 
+    fun deleteBook(isbn: String): Int {
+        val db = databaseHelper.writableDatabase
+        val rowsAffected = db.delete("Sach", "ISBN = ?", arrayOf(isbn))
+        db.close()
+        return rowsAffected
+    }
+
     private fun cursorToBook(cursor: Cursor): Book {
         val isbn = cursor.getString(cursor.getColumnIndexOrThrow("ISBN"))
         val tenSach = cursor.getString(cursor.getColumnIndexOrThrow("TenSach"))
