@@ -7,7 +7,7 @@ import com.example.project_android_library_management.model.Book
 
 class BookDao(private val databaseHelper: DatabaseHelper) {
 
-    fun insertBook(book: Book) {
+    fun insertBook(book: Book): Int {
         val db = databaseHelper.writableDatabase
 
         val contentValues = ContentValues().apply {
@@ -20,11 +20,12 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
             put("SoLuongTon", book.SoLuongTon)
             put("GiaBan", book.GiaBan)
             put("MoTa", book.MoTa)
+            put("HinhAnh", book.HinhAnh)
             put("MaTL", book.MaTL)
         }
-
-        db.insert("Book", null, contentValues)
+        val result = db.insert("Sach", null, contentValues)
         db.close()
+        return if (result == -1L) 0 else 1
     }
 
     fun updateBook(book: Book): Int {

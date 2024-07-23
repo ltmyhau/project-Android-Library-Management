@@ -7,8 +7,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
@@ -20,13 +18,12 @@ import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.BookCategoryDao
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.model.Book
-import com.example.project_android_library_management.model.BookCategory
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class BookUpdateActivity : AppCompatActivity() {
+class BookAddActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var spnCategory: AutoCompleteTextView
     private lateinit var bookDao: BookDao
@@ -52,11 +49,9 @@ class BookUpdateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_book_update)
+        setContentView(R.layout.activity_book_add)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        val isbn = intent.getStringExtra("ISBN") ?: ""
 
         databaseHelper = DatabaseHelper(this)
         bookDao = BookDao(databaseHelper)
@@ -76,11 +71,10 @@ class BookUpdateActivity : AppCompatActivity() {
         edtDescription = findViewById(R.id.edtDescription)
 
         loadCategorySpinner()
-        loadBookDetails(isbn)
 
-        val btnSave = findViewById<AppCompatButton>(R.id.btnSave)
-        btnSave.setOnClickListener {
-            saveBookDetails()
+        val btnAdd = findViewById<AppCompatButton>(R.id.btnAdd)
+        btnAdd.setOnClickListener {
+            addNewBook()
         }
 
         imgBookCover.setOnClickListener {
@@ -105,40 +99,6 @@ class BookUpdateActivity : AppCompatActivity() {
             selectedCategory?.let {
                 bookCategoryId = it.MaLoai
             }
-        }
-    }
-
-    private fun loadBookDetails(isbn: String) {
-        val book = bookDao.getBookByIsbn(isbn)
-
-        if (book != null) {
-            edtISBN.setText(book.ISBN)
-            edtTitle.setText(book.TenSach)
-            edtAuthor.setText(book.TacGia)
-            edtPublisher.setText(book.NXB)
-            edtYear.setText(book.NamXB.toString())
-            edtPages.setText(book.SoTrang.toString())
-            edtStock.setText(book.SoLuongTon.toString())
-            edtPrice.setText(book.GiaBan.toString())
-            edtDescription.setText(book.MoTa)
-
-            bookCategoryId = book.MaTL
-
-            val bookCategoryName = bookCategoryDao.getBookCategoryNameById(book.MaTL)
-            if (bookCategoryName != null) {
-                spnCategory.setText(bookCategoryName, false)
-            }
-
-            imagePath = book.HinhAnh
-            imagePath?.let {
-                val imgFile = File(it)
-                if (imgFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                    imgBookCover.setImageBitmap(bitmap)
-                }
-            }
-        } else {
-            Toast.makeText(this, "Không tìm thấy sách", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -185,7 +145,7 @@ class BookUpdateActivity : AppCompatActivity() {
         return file.absolutePath
     }
 
-    private fun saveBookDetails() {
+    private fun addNewBook() {
         val isbn = edtISBN.text.toString()
         val title = edtTitle.text.toString()
         val author = edtAuthor.text.toString()
@@ -198,16 +158,22 @@ class BookUpdateActivity : AppCompatActivity() {
 
         if (validateFields()) {
             val book = Book(isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
-            val rowsAffected = bookDao.updateBook(book)
+            val rowsAffected = bookDao.insertBook(book)
             if (rowsAffected > 0) {
-                Toast.makeText(this, "Cập nhật thông tin sách thành công", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()
                 val resultIntent = Intent()
                 resultIntent.putExtra("BOOK_ISBN", book.ISBN)
                 setResult(RESULT_OK, resultIntent)
                 finish()
             } else {
-                Toast.makeText(this, "Cập nhật thông tin sách thất bại", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Thêm sách mới thất bại", Toast.LENGTH_SHORT).show()
             }
+//            bookDao.insertBook(book)
+//            Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()
+//            val resultIntent = Intent()
+//            resultIntent.putExtra("BOOK_ISBN", book.ISBN)
+//            setResult(RESULT_OK, resultIntent)
+//            finish()
         }
     }
 
@@ -286,5 +252,4 @@ class BookUpdateActivity : AppCompatActivity() {
         }
         return true
     }
-
 }
