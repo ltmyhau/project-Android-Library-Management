@@ -1,5 +1,6 @@
 package com.example.project_android_library_management.adapter
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.model.Book
+import java.io.File
 
 class BookAdapter(
-    private val bookList: List<Book>,
+    private val bookList: MutableList<Book>,
     private val itemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
 
@@ -46,10 +48,28 @@ class BookAdapter(
         holder.tvTitle.text = book.TenSach
         holder.tvAuthor.text = book.TacGia
         holder.tvStock.text = "Số lượng tồn: ${book.SoLuongTon}"
-        holder.imgBookCover.setImageResource(R.drawable.book_cover)
+//        holder.imgBookCover.setImageResource(R.drawable.book_cover)
+        if (book.HinhAnh != null) {
+            val imgFile = File(book.HinhAnh)
+            if (imgFile.exists()) {
+                val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+                holder.imgBookCover.setImageBitmap(bitmap)
+            } else {
+                holder.imgBookCover.setImageResource(R.drawable.book_cover) // Hình ảnh mặc định nếu file không tồn tại
+            }
+        } else {
+            holder.imgBookCover.setImageResource(R.drawable.book_cover) // Hình ảnh mặc định nếu không có đường dẫn
+        }
     }
 
     override fun getItemCount(): Int {
         return bookList.size
     }
+
+    fun updateData(newBookList: List<Book>) {
+        bookList.clear()
+        bookList.addAll(newBookList)
+        notifyDataSetChanged()
+    }
+
 }
