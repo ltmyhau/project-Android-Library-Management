@@ -5,63 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.book.BookDetailActivity">
-
-    <ImageView
-        android:id="@+id/imgBookCover"
-        android:layout_width="130dp"
-        android:layout_height="170dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/book_cover"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgBookCover"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tên sách"
-            android:textColor="@color/primary"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvAuthor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:text="Tác giả"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvPublisher"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:text="Nhà xuất bản"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:text="Thê loại"
-            android:textSize="16sp" />
-    </LinearLayout>
+    tools:context=".fragment.borrow_record.BorrowDetailActivity">
 
     <TableLayout
         android:id="@+id/tableLayout"
@@ -72,11 +16,11 @@
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgBookCover">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TableRow
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/table_border">
 
             <TextView
@@ -84,25 +28,25 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Mã sách"
+                android:text="Mã phiếu nhập"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvBookId"
+                android:id="@+id/tvBorrowRecordID"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:background="@drawable/line_left"
                 android:padding="8dp"
-                android:text="Mã sách"
+                android:text="Mã phiếu nhập"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </TableRow>
 
         <TableRow
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/table_border">
 
             <TextView
@@ -110,23 +54,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="IBPN"
+                android:text="Độc giả"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvIBPN"
+                android:id="@+id/tvReaderName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:background="@drawable/line_left"
                 android:padding="8dp"
-                android:text="IBPN"
+                android:text="Độc giả"
                 android:textSize="16sp" />
         </TableRow>
 
         <TableRow
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/table_border">
 
             <TextView
@@ -134,23 +78,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Năm xuất bản"
+                android:text="Thủ thư"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvYear"
+                android:id="@+id/tvLibrarianName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:background="@drawable/line_left"
                 android:padding="8dp"
-                android:text="Năm xuất bản"
+                android:text="Thủ thư"
                 android:textSize="16sp" />
         </TableRow>
 
         <TableRow
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/table_border">
 
             <TextView
@@ -158,23 +102,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Số trang"
+                android:text="Thời gian mượn"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvPages"
+                android:id="@+id/tvTimeBorrow"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:background="@drawable/line_left"
                 android:padding="8dp"
-                android:text="Số trang"
+                android:text="Thời gian mượn"
                 android:textSize="16sp" />
         </TableRow>
 
         <TableRow
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/table_border">
 
             <TextView
@@ -182,23 +126,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Số lượng tồn"
+                android:text="Ngày mượn"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvQuantity"
+                android:id="@+id/tvBorrowDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:background="@drawable/line_left"
                 android:padding="8dp"
-                android:text="Số lượng tồn"
+                android:text="Ngày mượn"
                 android:textSize="16sp" />
         </TableRow>
 
         <TableRow
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/table_border">
 
             <TextView
@@ -206,20 +150,43 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Giá bán"
+                android:text="Ngày đến hạn"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvPrice"
+                android:id="@+id/tvReturnDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:background="@drawable/line_left"
                 android:padding="8dp"
-                android:text="Giá bán"
+                android:text="Ngày đến hạn"
                 android:textSize="16sp" />
         </TableRow>
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/table_border">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:text="Tiền cọc"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvDeposit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/line_left"
+                android:padding="8dp"
+                android:text="Tiền cọc"
+                android:textSize="16sp" />
+        </TableRow>
     </TableLayout>
 
     <LinearLayout
@@ -234,16 +201,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mô tả"
+            android:text="Chi tiết sách mượn"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvDescription"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvBooks"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Mô tả sách"
-            android:textSize="16sp" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

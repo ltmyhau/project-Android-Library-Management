@@ -44,7 +44,7 @@ class BorrowRecordFragment : Fragment() {
 
         borrowRecordAdapter = BorrowRecordAdapter(borrowRecordList, object : BorrowRecordAdapter.OnItemClickListener {
             override fun onItemClick(borrowRecord: BorrowRecord) {
-                val intent = Intent(context, ReaderDetailActivity::class.java)
+                val intent = Intent(context, BorrowDetailActivity::class.java)
                 intent.putExtra("BORROW_ID", borrowRecord.MaPM)
                 startActivityForResult(intent, REQUEST_CODE_BORROW_LIST)
             }

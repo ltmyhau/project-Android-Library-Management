@@ -10,12 +10,12 @@ class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
         val maPM = cursor.getString(cursor.getColumnIndexOrThrow("MaPM"))
         val ngayMuon = cursor.getString(cursor.getColumnIndexOrThrow("NgayMuon"))
         val soNgayMuon = cursor.getInt(cursor.getColumnIndexOrThrow("SoNgayMuon"))
-        val tienCuoc = cursor.getDouble(cursor.getColumnIndexOrThrow("TienCuoc"))
+        val tienCoc = cursor.getDouble(cursor.getColumnIndexOrThrow("TienCoc"))
         val ghiChu = cursor.getString(cursor.getColumnIndexOrThrow("GhiChu"))
         val maDG = cursor.getString(cursor.getColumnIndexOrThrow("MaDG"))
         val maTT = cursor.getString(cursor.getColumnIndexOrThrow("MaTT"))
 
-        return BorrowRecord(maPM, ngayMuon, soNgayMuon, tienCuoc, ghiChu, maDG, maTT)
+        return BorrowRecord(maPM, ngayMuon, soNgayMuon, tienCoc, ghiChu, maDG, maTT)
     }
 
     fun getAllBorrowRecord(): ArrayList<BorrowRecord> {
@@ -30,5 +30,19 @@ class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
         cursor.close()
         db.close()
         return borrowRecords
+    }
+
+    fun getBorrowRecordById(maPM: String?): BorrowRecord? {
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery("SELECT * FROM PhieuMuon WHERE MaPM = ?", arrayOf(maPM))
+        var borrowRecord: BorrowRecord? = null
+        if (cursor.moveToFirst()) {
+            borrowRecord = cursor(cursor)
+        }
+
+        cursor.close()
+        db.close()
+
+        return borrowRecord
     }
 }

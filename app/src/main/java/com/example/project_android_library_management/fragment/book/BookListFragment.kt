@@ -41,7 +41,7 @@ class BookListFragment : Fragment() {
         bookDao = BookDao(databaseHelper)
         bookList = bookDao.getAllBooks()
 
-        bookAdapter = BookAdapter(bookList, object : BookAdapter.OnItemClickListener {
+        bookAdapter = BookAdapter(bookList, null, object : BookAdapter.OnItemClickListener {
             override fun onItemClick(book: Book) {
                 val intent = Intent(context, BookDetailActivity::class.java)
                 intent.putExtra("BOOK_ID", book.MaSach)

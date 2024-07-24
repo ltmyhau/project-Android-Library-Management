@@ -3,6 +3,7 @@ package com.example.project_android_library_management.dao
 import android.database.Cursor
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.model.Librarian
+import com.example.project_android_library_management.model.Reader
 
 class LibrarianDao(private val databaseHelper: DatabaseHelper) {
 
@@ -29,5 +30,19 @@ class LibrarianDao(private val databaseHelper: DatabaseHelper) {
         cursor.close()
         db.close()
         return librarians
+    }
+
+    fun getLibrarianById(maTT: String?): Librarian? {
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery("SELECT * FROM ThuThu WHERE MaTT = ?", arrayOf(maTT))
+        var librarian: Librarian? = null
+        if (cursor.moveToFirst()) {
+            librarian = cursor(cursor)
+        }
+
+        cursor.close()
+        db.close()
+
+        return librarian
     }
 }

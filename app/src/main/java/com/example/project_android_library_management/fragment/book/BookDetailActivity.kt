@@ -10,7 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.BookCategoryDao
@@ -58,7 +57,7 @@ class BookDetailActivity : AppCompatActivity() {
         tvIBPN = findViewById(R.id.tvIBPN)
         tvYear = findViewById(R.id.tvYear)
         tvPages = findViewById(R.id.tvPages)
-        tvStock = findViewById(R.id.tvStock)
+        tvStock = findViewById(R.id.tvQuantity)
         tvPrice = findViewById(R.id.tvPrice)
         tvDescription = findViewById(R.id.tvDescription)
 
