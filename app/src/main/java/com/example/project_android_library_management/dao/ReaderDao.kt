@@ -7,10 +7,28 @@ import com.example.project_android_library_management.model.Reader
 
 class ReaderDao(private val databaseHelper: DatabaseHelper) {
 
+    fun generateNewId(): String {
+        var newId = "DG00001"
+        val db = databaseHelper.readableDatabase
+        db.rawQuery("SELECT MAX(MaDG) FROM DocGia", null).use { cursor ->
+            if (cursor.moveToFirst()) {
+                val maxCode = cursor.getString(0)
+                if (!maxCode.isNullOrEmpty()) {
+                    val currentNumber = maxCode.substring(2).toInt()
+                    val newNumber = currentNumber + 1
+                    newId = "DG" + String.format("%05d", newNumber)
+                }
+            }
+        }
+        db.close()
+        return newId
+    }
+
     fun insert(reader: Reader): Int {
         val db = databaseHelper.writableDatabase
 
         val contentValues = ContentValues().apply {
+            put("MaDG", generateNewId())
             put("HoTen", reader.HoTen)
             put("NgaySinh", reader.NgaySinh)
             put("GioiTinh", reader.GioiTinh)
@@ -39,20 +57,20 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
             put("NgayLamThe", reader.NgayLamThe)
         }
 
-        val rowsAffected = db.update("DocGia", contentValues, "MaDG = ?", arrayOf(reader.MaDG.toString()))
+        val rowsAffected = db.update("DocGia", contentValues, "MaDG = ?", arrayOf(reader.MaDG))
         db.close()
         return rowsAffected
     }
 
-    fun delete(maDG: Int): Int {
+    fun delete(maDG: String): Int {
         val db = databaseHelper.writableDatabase
-        val rowsAffected = db.delete("DocGia", "MaDG = ?", arrayOf(maDG.toString()))
+        val rowsAffected = db.delete("DocGia", "MaDG = ?", arrayOf(maDG))
         db.close()
         return rowsAffected
     }
 
     private fun cursor(cursor: Cursor): Reader {
-        val maDG = cursor.getInt(cursor.getColumnIndexOrThrow("MaDG"))
+        val maDG = cursor.getString(cursor.getColumnIndexOrThrow("MaDG"))
         val hoTen = cursor.getString(cursor.getColumnIndexOrThrow("HoTen"))
         val ngaySinh = cursor.getString(cursor.getColumnIndexOrThrow("NgaySinh"))
         val gioiTinh = cursor.getString(cursor.getColumnIndexOrThrow("GioiTinh"))
@@ -82,9 +100,9 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
         return readers
     }
 
-    fun getReaderById(maDG: Int?): Reader? {
+    fun getReaderById(maDG: String?): Reader? {
         val db = databaseHelper.openDatabase()
-        val cursor: Cursor = db.rawQuery("SELECT * FROM DocGia WHERE MaDG = ?", arrayOf(maDG.toString()))
+        val cursor: Cursor = db.rawQuery("SELECT * FROM DocGia WHERE MaDG = ?", arrayOf(maDG))
         var reader: Reader? = null
         if (cursor.moveToFirst()) {
             reader = cursor(cursor)

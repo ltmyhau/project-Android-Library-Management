@@ -45,7 +45,7 @@ class ReaderFragment : Fragment() {
         readerAdapter = ReaderAdapter(readerList, object : ReaderAdapter.OnItemClickListener {
             override fun onItemClick(reader: Reader) {
                 val intent = Intent(context, ReaderDetailActivity::class.java)
-                intent.putExtra("MaDG", reader.MaDG)
+                intent.putExtra("READER_ID", reader.MaDG)
                 startActivityForResult(intent, REQUEST_CODE_READER_LIST)
             }
         })

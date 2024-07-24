@@ -19,7 +19,7 @@ import java.io.File
 class ReaderDetailActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var readerDao: ReaderDao
-    private var maDG: Int = 0
+    private var maDG: String = ""
 
     private lateinit var imgAvatar: ImageView
     private lateinit var tvReaderName: TextView
@@ -36,7 +36,7 @@ class ReaderDetailActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        maDG = intent.getIntExtra("MaDG", 0)
+        maDG = intent.getStringExtra("READER_ID") ?: ""
 
         databaseHelper = DatabaseHelper(this)
         readerDao = ReaderDao(databaseHelper)
@@ -53,7 +53,7 @@ class ReaderDetailActivity : AppCompatActivity() {
         loadReaderDetails(maDG)
     }
 
-    private fun loadReaderDetails(maDG: Int) {
+    private fun loadReaderDetails(maDG: String) {
         val reader = readerDao.getReaderById(maDG)
 
         if (reader != null) {
@@ -116,9 +116,9 @@ class ReaderDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun editReader(maDG: Int) {
+    private fun editReader(maDG: String) {
         val intent = Intent(this, ReaderUpdateActivity::class.java)
-        intent.putExtra("MaDG", maDG)
+        intent.putExtra("READER_ID", maDG)
         startActivityForResult(intent, REQUEST_CODE_UPDATE_READER)
     }
 

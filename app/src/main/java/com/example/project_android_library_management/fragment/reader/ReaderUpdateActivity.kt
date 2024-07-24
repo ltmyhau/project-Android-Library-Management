@@ -41,9 +41,10 @@ class ReaderUpdateActivity : AppCompatActivity() {
     private lateinit var readerDao: ReaderDao
 
     private var imagePath: String? = null
-    private var maDG: Int = -1
+    private var maDG: String = ""
 
     private lateinit var imgAvatar: ImageView
+    private lateinit var edtReaderId: TextInputEditText
     private lateinit var edtReaderName: TextInputEditText
     private lateinit var edtDateOfBirth: TextInputEditText
     private lateinit var rgGender: RadioGroup
@@ -62,12 +63,13 @@ class ReaderUpdateActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        maDG = intent.getIntExtra("MaDG", 0)
+        maDG = intent.getStringExtra("READER_ID") ?: ""
 
         databaseHelper = DatabaseHelper(this)
         readerDao = ReaderDao(databaseHelper)
 
         imgAvatar = findViewById(R.id.imgAvatar)
+        edtReaderId = findViewById(R.id.edtReaderId)
         edtReaderName = findViewById(R.id.edtReaderName)
         edtDateOfBirth = findViewById(R.id.edtDateOfBirth)
         rgGender = findViewById(R.id.rgGender)
@@ -116,10 +118,11 @@ class ReaderUpdateActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun loadReaderDetails(maDG: Int) {
+    private fun loadReaderDetails(maDG: String) {
         val reader = readerDao.getReaderById(maDG)
 
         if (reader != null) {
+            edtReaderId.setText(reader.MaDG)
             edtReaderName.setText(reader.HoTen)
             edtDateOfBirth.setText(reader.NgaySinh)
             edtPhoneNumber.setText(reader.DienThoai)
@@ -233,7 +236,7 @@ class ReaderUpdateActivity : AppCompatActivity() {
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Cập nhật thông tin độc giả thành công", Toast.LENGTH_SHORT).show()
                 val resultIntent = Intent()
-                resultIntent.putExtra("MaDG", maDG)
+                resultIntent.putExtra("READER_ID", maDG)
                 setResult(RESULT_OK, resultIntent)
                 finish()
             } else {

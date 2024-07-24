@@ -5,11 +5,11 @@ import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.model.BookCategory
 
 class BookCategoryDao(private val databaseHelper: DatabaseHelper) {
-    fun getBookCategoryNameById(categoryId: Int): String? {
+    fun getBookCategoryNameById(categoryId: String): String? {
         val db = databaseHelper.openDatabase()
         var categoryName: String? = null
 
-        val cursor: Cursor = db.rawQuery("SELECT TenLoai FROM TheLoai WHERE MaLoai = ?", arrayOf(categoryId.toString()))
+        val cursor: Cursor = db.rawQuery("SELECT TenLoai FROM TheLoai WHERE MaLoai = ?", arrayOf(categoryId))
         if (cursor.moveToFirst()) {
             categoryName = cursor.getString(cursor.getColumnIndexOrThrow("TenLoai"))
         }
@@ -25,7 +25,7 @@ class BookCategoryDao(private val databaseHelper: DatabaseHelper) {
         val cursor = db.rawQuery("SELECT * FROM TheLoai", null)
         if (cursor.moveToFirst()) {
             do {
-                val maLoai = cursor.getInt(cursor.getColumnIndexOrThrow("MaLoai"))
+                val maLoai = cursor.getString(cursor.getColumnIndexOrThrow("MaLoai"))
                 val tenLoai = cursor.getString(cursor.getColumnIndexOrThrow("TenLoai"))
                 categories.add(BookCategory(maLoai, tenLoai))
             } while (cursor.moveToNext())

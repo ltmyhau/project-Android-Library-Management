@@ -21,13 +21,14 @@ class BookDetailActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var bookDao: BookDao
     private lateinit var bookCategoryDao: BookCategoryDao
-    private lateinit var isbn: String
+    private lateinit var bookId: String
 
     private lateinit var imgBookCover: ImageView
     private lateinit var tvTitle: TextView
     private lateinit var tvAuthor: TextView
     private lateinit var tvPublisher: TextView
     private lateinit var tvCategory: TextView
+    private lateinit var tvBookId: TextView
     private lateinit var tvIBPN: TextView
     private lateinit var tvYear: TextView
     private lateinit var tvPages: TextView
@@ -42,7 +43,7 @@ class BookDetailActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        isbn = intent.getStringExtra("ISBN") ?: ""
+        bookId = intent.getStringExtra("BOOK_ID") ?: ""
 
         databaseHelper = DatabaseHelper(this)
         bookDao = BookDao(databaseHelper)
@@ -53,6 +54,7 @@ class BookDetailActivity : AppCompatActivity() {
         tvAuthor = findViewById(R.id.tvAuthor)
         tvPublisher = findViewById(R.id.tvPublisher)
         tvCategory = findViewById(R.id.tvCategory)
+        tvBookId = findViewById(R.id.tvBookId)
         tvIBPN = findViewById(R.id.tvIBPN)
         tvYear = findViewById(R.id.tvYear)
         tvPages = findViewById(R.id.tvPages)
@@ -60,17 +62,18 @@ class BookDetailActivity : AppCompatActivity() {
         tvPrice = findViewById(R.id.tvPrice)
         tvDescription = findViewById(R.id.tvDescription)
 
-        loadBookDetails(isbn)
+        loadBookDetails(bookId)
     }
 
-    private fun loadBookDetails(isbn: String) {
-        val book = bookDao.getBookByIsbn(isbn)
+    private fun loadBookDetails(bookId: String) {
+        val book = bookDao.getBookById(bookId)
 
         if (book != null) {
             tvTitle.text = book.TenSach
             tvAuthor.text = book.TacGia
             tvPublisher.text = book.NXB
             tvCategory.text = bookCategoryDao.getBookCategoryNameById(book.MaTL)
+            tvBookId.text = book.MaSach
             tvIBPN.text = book.ISBN
             tvYear.text = book.NamXB.toString()
             tvPages.text = book.SoTrang.toString()
@@ -105,7 +108,7 @@ class BookDetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_edit -> {
-                editBook(isbn)
+                editBook(bookId)
                 true
             }
 
@@ -125,13 +128,13 @@ class BookDetailActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_UPDATE_BOOK && resultCode == RESULT_OK) {
-            loadBookDetails(isbn)
+            loadBookDetails(bookId)
         }
     }
 
-    private fun editBook(isbn: String) {
+    private fun editBook(bookId: String) {
         val intent = Intent(this, BookUpdateActivity::class.java)
-        intent.putExtra("ISBN", isbn)
+        intent.putExtra("BOOK_ID", bookId)
         startActivityForResult(intent, REQUEST_CODE_UPDATE_BOOK)
     }
 
@@ -140,7 +143,7 @@ class BookDetailActivity : AppCompatActivity() {
             .setTitle("Xác nhận")
             .setMessage("Bạn có chắc chắn muốn xóa sách này không?")
             .setPositiveButton("Có") { _, _ ->
-                val rowsAffected = bookDao.delete(isbn)
+                val rowsAffected = bookDao.delete(bookId)
                 if (rowsAffected > 0) {
                     Toast.makeText(this, "Đã xóa sách thành công", Toast.LENGTH_SHORT).show()
                 } else {

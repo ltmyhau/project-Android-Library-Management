@@ -31,10 +31,11 @@ class BookAddActivity : AppCompatActivity() {
     private lateinit var bookDao: BookDao
     private lateinit var bookCategoryDao: BookCategoryDao
 
-    private var bookCategoryId: Int = -1
+    private var bookCategoryId: String = ""
     private var imagePath: String? = null
 
     private lateinit var imgBookCover: ImageView
+    private lateinit var edtBookId: TextInputEditText
     private lateinit var edtISBN: TextInputEditText
     private lateinit var edtTitle: TextInputEditText
     private lateinit var edtAuthor: TextInputEditText
@@ -60,6 +61,7 @@ class BookAddActivity : AppCompatActivity() {
         bookCategoryDao = BookCategoryDao(databaseHelper)
 
         imgBookCover = findViewById(R.id.imgBookCover)
+        edtBookId = findViewById(R.id.edtBookId)
         edtISBN = findViewById(R.id.edtISBN)
         edtTitle = findViewById(R.id.edtTitle)
         edtAuthor = findViewById(R.id.edtAuthor)
@@ -70,6 +72,8 @@ class BookAddActivity : AppCompatActivity() {
         edtStock = findViewById(R.id.edtStock)
         edtPrice = findViewById(R.id.edtPrice)
         edtDescription = findViewById(R.id.edtDescription)
+
+        edtBookId.setText(bookDao.generateNewId())
 
         loadCategorySpinner()
 
@@ -161,6 +165,7 @@ class BookAddActivity : AppCompatActivity() {
     }
 
     private fun addNewBook() {
+        val bookId = edtBookId.text.toString()
         val isbn = edtISBN.text.toString()
         val title = edtTitle.text.toString()
         val author = edtAuthor.text.toString()
@@ -172,13 +177,10 @@ class BookAddActivity : AppCompatActivity() {
         val description = edtDescription.text.toString()
 
         if (validateFields()) {
-            val book = Book(isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
+            val book = Book(bookId, isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
             val rowsAffected = bookDao.insert(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()
-//                val resultIntent = Intent()
-//                resultIntent.putExtra("BOOK_ISBN", book.ISBN)
-//                setResult(RESULT_OK, resultIntent)
                 finish()
             } else {
                 Toast.makeText(this, "Thêm sách mới thất bại", Toast.LENGTH_SHORT).show()

@@ -10,7 +10,7 @@ import java.io.OutputStream
 class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME = "Database_ThuVien.db"
+        private const val DATABASE_NAME = "Database_Library.db"
         private const val DATABASE_VERSION = 1
     }
 

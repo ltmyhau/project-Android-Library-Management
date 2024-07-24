@@ -44,7 +44,7 @@ class BookListFragment : Fragment() {
         bookAdapter = BookAdapter(bookList, object : BookAdapter.OnItemClickListener {
             override fun onItemClick(book: Book) {
                 val intent = Intent(context, BookDetailActivity::class.java)
-                intent.putExtra("ISBN", book.ISBN)
+                intent.putExtra("BOOK_ID", book.MaSach)
                 startActivityForResult(intent, REQUEST_CODE_BOOK_DETAIL)
             }
         })

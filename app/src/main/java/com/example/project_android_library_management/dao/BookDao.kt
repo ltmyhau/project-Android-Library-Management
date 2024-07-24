@@ -7,10 +7,28 @@ import com.example.project_android_library_management.model.Book
 
 class BookDao(private val databaseHelper: DatabaseHelper) {
 
+    fun generateNewId(): String {
+        var newId = "S00001"
+        val db = databaseHelper.readableDatabase
+        db.rawQuery("SELECT MAX(MaSach) FROM Sach", null).use { cursor ->
+            if (cursor.moveToFirst()) {
+                val maxCode = cursor.getString(0)
+                if (!maxCode.isNullOrEmpty()) {
+                    val currentNumber = maxCode.substring(1).toInt()
+                    val newNumber = currentNumber + 1
+                    newId = "S" + String.format("%05d", newNumber)
+                }
+            }
+        }
+        db.close()
+        return newId
+    }
+
     fun insert(book: Book): Int {
         val db = databaseHelper.writableDatabase
 
         val contentValues = ContentValues().apply {
+            put("MaSach", generateNewId())
             put("ISBN", book.ISBN)
             put("TenSach", book.TenSach)
             put("TacGia", book.TacGia)
@@ -32,6 +50,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         val db = databaseHelper.writableDatabase
 
         val contentValues = ContentValues().apply {
+            put("ISBN", book.ISBN)
             put("TenSach", book.TenSach)
             put("TacGia", book.TacGia)
             put("NXB", book.NXB)
@@ -44,19 +63,20 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
             put("MaTL", book.MaTL)
         }
 
-        val rowsAffected = db.update("Sach", contentValues, "ISBN = ?", arrayOf(book.ISBN))
+        val rowsAffected = db.update("Sach", contentValues, "MaSach = ?", arrayOf(book.MaSach))
         db.close()
         return rowsAffected
     }
 
-    fun delete(isbn: String): Int {
+    fun delete(bookId: String): Int {
         val db = databaseHelper.writableDatabase
-        val rowsAffected = db.delete("Sach", "ISBN = ?", arrayOf(isbn))
+        val rowsAffected = db.delete("Sach", "MaSach = ?", arrayOf(bookId))
         db.close()
         return rowsAffected
     }
 
     private fun cursor(cursor: Cursor): Book {
+        val maSach = cursor.getString(cursor.getColumnIndexOrThrow("MaSach"))
         val isbn = cursor.getString(cursor.getColumnIndexOrThrow("ISBN"))
         val tenSach = cursor.getString(cursor.getColumnIndexOrThrow("TenSach"))
         val tacGia = cursor.getString(cursor.getColumnIndexOrThrow("TacGia"))
@@ -67,9 +87,9 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         val giaBan = cursor.getDouble(cursor.getColumnIndexOrThrow("GiaBan"))
         val moTa = cursor.getString(cursor.getColumnIndexOrThrow("MoTa"))
         val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
-        val maTL = cursor.getInt(cursor.getColumnIndexOrThrow("MaTL"))
+        val maTL = cursor.getString(cursor.getColumnIndexOrThrow("MaTL"))
 
-        return Book(isbn, tenSach, tacGia, nxb, namXB, soTrang, soLuongTon, giaBan, moTa, hinhAnh, maTL)
+        return Book(maSach, isbn, tenSach, tacGia, nxb, namXB, soTrang, soLuongTon, giaBan, moTa, hinhAnh, maTL)
     }
 
     fun getAllBooks(): ArrayList<Book> {
@@ -89,9 +109,9 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         return books
     }
 
-    fun getBookByIsbn(isbn: String?): Book? {
+    fun getBookById(bookId: String?): Book? {
         val db = databaseHelper.openDatabase()
-        val cursor: Cursor = db.rawQuery("SELECT * FROM Sach WHERE ISBN = ?", arrayOf(isbn))
+        val cursor: Cursor = db.rawQuery("SELECT * FROM Sach WHERE MaSach = ?", arrayOf(bookId))
         var book: Book? = null
         if (cursor.moveToFirst()) {
             book = cursor(cursor)

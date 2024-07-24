@@ -33,10 +33,11 @@ class BookUpdateActivity : AppCompatActivity() {
     private lateinit var bookDao: BookDao
     private lateinit var bookCategoryDao: BookCategoryDao
 
-    private var bookCategoryId: Int = -1
+    private var bookCategoryId: String = ""
     private var imagePath: String? = null
 
     private lateinit var imgBookCover: ImageView
+    private lateinit var edtBookId: TextInputEditText
     private lateinit var edtISBN: TextInputEditText
     private lateinit var edtTitle: TextInputEditText
     private lateinit var edtAuthor: TextInputEditText
@@ -57,7 +58,7 @@ class BookUpdateActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val isbn = intent.getStringExtra("ISBN") ?: ""
+        val maSach = intent.getStringExtra("BOOK_ID") ?: ""
 
         databaseHelper = DatabaseHelper(this)
         bookDao = BookDao(databaseHelper)
@@ -65,6 +66,7 @@ class BookUpdateActivity : AppCompatActivity() {
 
 
         imgBookCover = findViewById(R.id.imgBookCover)
+        edtBookId = findViewById(R.id.edtBookId)
         edtISBN = findViewById(R.id.edtISBN)
         edtTitle = findViewById(R.id.edtTitle)
         edtAuthor = findViewById(R.id.edtAuthor)
@@ -77,7 +79,7 @@ class BookUpdateActivity : AppCompatActivity() {
         edtDescription = findViewById(R.id.edtDescription)
 
         loadCategorySpinner()
-        loadBookDetails(isbn)
+        loadBookDetails(maSach)
 
         val btnSave = findViewById<AppCompatButton>(R.id.btnSave)
         btnSave.setOnClickListener {
@@ -122,10 +124,11 @@ class BookUpdateActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadBookDetails(isbn: String) {
-        val book = bookDao.getBookByIsbn(isbn)
+    private fun loadBookDetails(bookId: String) {
+        val book = bookDao.getBookById(bookId)
 
         if (book != null) {
+            edtBookId.setText(book.MaSach)
             edtISBN.setText(book.ISBN)
             edtTitle.setText(book.TenSach)
             edtAuthor.setText(book.TacGia)
@@ -200,6 +203,7 @@ class BookUpdateActivity : AppCompatActivity() {
     }
 
     private fun saveBookDetails() {
+        val bookId = edtBookId.text.toString()
         val isbn = edtISBN.text.toString()
         val title = edtTitle.text.toString()
         val author = edtAuthor.text.toString()
@@ -211,12 +215,12 @@ class BookUpdateActivity : AppCompatActivity() {
         val description = edtDescription.text.toString()
 
         if (validateFields()) {
-            val book = Book(isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
+            val book = Book(bookId, isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
             val rowsAffected = bookDao.update(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Cập nhật thông tin sách thành công", Toast.LENGTH_SHORT).show()
                 val resultIntent = Intent()
-                resultIntent.putExtra("BOOK_ISBN", book.ISBN)
+                resultIntent.putExtra("BOOK_ID", book.MaSach)
                 setResult(RESULT_OK, resultIntent)
                 finish()
             } else {

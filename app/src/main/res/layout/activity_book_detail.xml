@@ -84,8 +84,34 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="IBPN"
+                android:text="Mã sách"
+                android:textSize="16sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvBookId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/line_left"
+                android:padding="8dp"
+                android:text="Mã sách"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@drawable/table_border">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:text="IBPN"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvIBPN"
@@ -95,7 +121,7 @@
                 android:background="@drawable/line_left"
                 android:padding="8dp"
                 android:text="IBPN"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -108,7 +134,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Năm xuất bản" />
+                android:text="Năm xuất bản"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvYear"
@@ -117,7 +144,8 @@
                 android:layout_weight="2"
                 android:background="@drawable/line_left"
                 android:padding="8dp"
-                android:text="Năm xuất bản" />
+                android:text="Năm xuất bản"
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -130,7 +158,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Số trang" />
+                android:text="Số trang"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvPages"
@@ -139,7 +168,8 @@
                 android:layout_weight="2"
                 android:background="@drawable/line_left"
                 android:padding="8dp"
-                android:text="Số trang" />
+                android:text="Số trang"
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -152,7 +182,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Số lượng tồn" />
+                android:text="Số lượng tồn"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvStock"
@@ -161,7 +192,8 @@
                 android:layout_weight="2"
                 android:background="@drawable/line_left"
                 android:padding="8dp"
-                android:text="Số lượng tồn" />
+                android:text="Số lượng tồn"
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -174,7 +206,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:text="Giá bán" />
+                android:text="Giá bán"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvPrice"
@@ -183,7 +216,8 @@
                 android:layout_weight="2"
                 android:background="@drawable/line_left"
                 android:padding="8dp"
-                android:text="Giá bán" />
+                android:text="Giá bán"
+                android:textSize="16sp" />
         </TableRow>
 
     </TableLayout>
@@ -209,6 +243,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Mô tả sách" />
+            android:text="Mô tả sách"
+            android:textSize="16sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

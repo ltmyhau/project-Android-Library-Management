@@ -29,6 +29,7 @@ import java.io.IOException
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class ReaderAddActivity : AppCompatActivity() {
@@ -38,6 +39,7 @@ class ReaderAddActivity : AppCompatActivity() {
     private var imagePath: String? = null
 
     private lateinit var imgAvatar: ImageView
+    private lateinit var edtReaderId: TextInputEditText
     private lateinit var edtReaderName: TextInputEditText
     private lateinit var edtDateOfBirth: TextInputEditText
     private lateinit var rgGender: RadioGroup
@@ -60,6 +62,7 @@ class ReaderAddActivity : AppCompatActivity() {
         readerDao = ReaderDao(databaseHelper)
 
         imgAvatar = findViewById(R.id.imgAvatar)
+        edtReaderId = findViewById(R.id.edtReaderId)
         edtReaderName = findViewById(R.id.edtReaderName)
         edtDateOfBirth = findViewById(R.id.edtDateOfBirth)
         rgGender = findViewById(R.id.rgGender)
@@ -67,6 +70,13 @@ class ReaderAddActivity : AppCompatActivity() {
         edtEmail = findViewById(R.id.edtEmail)
         edtJoinDate = findViewById(R.id.edtJoinDate)
         edtAddress = findViewById(R.id.edtAddress)
+
+        edtReaderId.setText(readerDao.generateNewId())
+
+        rgGender.check(R.id.rdoMale)
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        edtJoinDate.setText(sdf.format(Date()))
 
         val btnAdd = findViewById<AppCompatButton>(R.id.btnAdd)
         btnAdd.setOnClickListener {
@@ -174,6 +184,7 @@ class ReaderAddActivity : AppCompatActivity() {
     }
 
     private fun addNewReader() {
+        val readerId = edtReaderId.text.toString()
         val readerName = edtReaderName.text.toString()
         val dateOfBirth = edtDateOfBirth.text.toString()
         val gender = when (rgGender.checkedRadioButtonId) {
@@ -187,27 +198,11 @@ class ReaderAddActivity : AppCompatActivity() {
         val joinDate = edtJoinDate.text.toString()
         val address = edtAddress.text.toString()
 
-//        if (validateFields()) {
-//            val book = Book(isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
-//            val rowsAffected = bookDao.insert(book)
-//            if (rowsAffected > 0) {
-//                Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()
-//                val resultIntent = Intent()
-//                resultIntent.putExtra("BOOK_ISBN", book.ISBN)
-//                setResult(RESULT_OK, resultIntent)
-//                finish()
-//            } else {
-//                Toast.makeText(this, "Thêm sách mới thất bại", Toast.LENGTH_SHORT).show()
-//            }
-//        }
         if (validateFields()) {
-            val reader = Reader(0, readerName, dateOfBirth, gender, phoneNumber, email, address, imagePath, joinDate)
+            val reader = Reader(readerId, readerName, dateOfBirth, gender, phoneNumber, email, address, imagePath, joinDate)
             val rowsAffected = readerDao.insert(reader)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Thêm độc giả mới thành công", Toast.LENGTH_SHORT).show()
-//                val resultIntent = Intent()
-//                resultIntent.putExtra("MaDG", maDG)
-//                setResult(RESULT_OK, resultIntent)
                 finish()
             } else {
                 Toast.makeText(this, "Thêm độc giả mới thất bại", Toast.LENGTH_SHORT).show()
