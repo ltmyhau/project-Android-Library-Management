@@ -88,6 +88,7 @@ class BookDetailActivity : AppCompatActivity() {
             }
         } else {
             Toast.makeText(this, "Không tìm thấy sách", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
@@ -139,7 +140,7 @@ class BookDetailActivity : AppCompatActivity() {
             .setTitle("Xác nhận")
             .setMessage("Bạn có chắc chắn muốn xóa sách này không?")
             .setPositiveButton("Có") { _, _ ->
-                val rowsAffected = bookDao.deleteBook(isbn)
+                val rowsAffected = bookDao.delete(isbn)
                 if (rowsAffected > 0) {
                     Toast.makeText(this, "Đã xóa sách thành công", Toast.LENGTH_SHORT).show()
                 } else {

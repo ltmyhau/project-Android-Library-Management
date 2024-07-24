@@ -174,7 +174,7 @@ class BookAddActivity : AppCompatActivity() {
 
         if (validateFields()) {
             val book = Book(isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
-            val rowsAffected = bookDao.insertBook(book)
+            val rowsAffected = bookDao.insert(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()
                 val resultIntent = Intent()

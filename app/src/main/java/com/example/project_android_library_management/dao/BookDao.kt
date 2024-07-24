@@ -7,7 +7,7 @@ import com.example.project_android_library_management.model.Book
 
 class BookDao(private val databaseHelper: DatabaseHelper) {
 
-    fun insertBook(book: Book): Int {
+    fun insert(book: Book): Int {
         val db = databaseHelper.writableDatabase
 
         val contentValues = ContentValues().apply {
@@ -28,7 +28,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         return if (result == -1L) 0 else 1
     }
 
-    fun updateBook(book: Book): Int {
+    fun update(book: Book): Int {
         val db = databaseHelper.writableDatabase
 
         val contentValues = ContentValues().apply {
@@ -49,14 +49,14 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         return rowsAffected
     }
 
-    fun deleteBook(isbn: String): Int {
+    fun delete(isbn: String): Int {
         val db = databaseHelper.writableDatabase
         val rowsAffected = db.delete("Sach", "ISBN = ?", arrayOf(isbn))
         db.close()
         return rowsAffected
     }
 
-    private fun cursorToBook(cursor: Cursor): Book {
+    private fun cursor(cursor: Cursor): Book {
         val isbn = cursor.getString(cursor.getColumnIndexOrThrow("ISBN"))
         val tenSach = cursor.getString(cursor.getColumnIndexOrThrow("TenSach"))
         val tacGia = cursor.getString(cursor.getColumnIndexOrThrow("TacGia"))
@@ -79,7 +79,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         val cursor: Cursor = db.rawQuery("SELECT * FROM Sach", null)
         if (cursor.moveToFirst()) {
             do {
-                books.add(cursorToBook(cursor))
+                books.add(cursor(cursor))
             } while (cursor.moveToNext())
         }
 
@@ -94,7 +94,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         val cursor: Cursor = db.rawQuery("SELECT * FROM Sach WHERE ISBN = ?", arrayOf(isbn))
         var book: Book? = null
         if (cursor.moveToFirst()) {
-            book = cursorToBook(cursor)
+            book = cursor(cursor)
         }
 
         cursor.close()

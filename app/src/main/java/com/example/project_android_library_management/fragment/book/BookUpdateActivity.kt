@@ -212,7 +212,7 @@ class BookUpdateActivity : AppCompatActivity() {
 
         if (validateFields()) {
             val book = Book(isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
-            val rowsAffected = bookDao.updateBook(book)
+            val rowsAffected = bookDao.update(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Cập nhật thông tin sách thành công", Toast.LENGTH_SHORT).show()
                 val resultIntent = Intent()

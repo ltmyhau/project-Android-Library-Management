@@ -31,8 +31,8 @@ class BookAdapter(
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    val selectedBook = bookList[position]
-                    itemClickListener.onItemClick(selectedBook)
+                    val selected = bookList[position]
+                    itemClickListener.onItemClick(selected)
                 }
             }
         }
@@ -48,17 +48,16 @@ class BookAdapter(
         holder.tvTitle.text = book.TenSach
         holder.tvAuthor.text = book.TacGia
         holder.tvStock.text = "Số lượng tồn: ${book.SoLuongTon}"
-//        holder.imgBookCover.setImageResource(R.drawable.book_cover)
         if (book.HinhAnh != null) {
             val imgFile = File(book.HinhAnh)
             if (imgFile.exists()) {
                 val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
                 holder.imgBookCover.setImageBitmap(bitmap)
             } else {
-                holder.imgBookCover.setImageResource(R.drawable.book_cover) // Hình ảnh mặc định nếu file không tồn tại
+                holder.imgBookCover.setImageResource(R.drawable.book_cover)
             }
         } else {
-            holder.imgBookCover.setImageResource(R.drawable.book_cover) // Hình ảnh mặc định nếu không có đường dẫn
+            holder.imgBookCover.setImageResource(R.drawable.book_cover)
         }
     }
 

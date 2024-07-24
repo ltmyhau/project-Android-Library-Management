@@ -45,10 +45,14 @@
                     android:id="@+id/edtISBN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/white_background"
+                    android:background="@drawable/gray_background"
                     android:hint="ISBN"
                     android:paddingStart="48dp"
-                    android:paddingLeft="48dp" />
+                    android:paddingLeft="48dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
