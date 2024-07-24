@@ -240,6 +240,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
+                android:layout_marginBottom="64dp"
                 android:background="@drawable/gradient_button"
                 android:text="Thêm"
                 android:textColor="@color/white"

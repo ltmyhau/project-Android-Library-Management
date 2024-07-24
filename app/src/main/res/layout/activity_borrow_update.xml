@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/readerIdLayout"
+                android:id="@+id/borrowIdLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/gray_background"
-                    android:hint="Mã độc giả"
+                    android:hint="Mã phiếu mượn"
                     android:paddingStart="48dp"
                     android:paddingLeft="48dp"
                     android:focusable="false"
@@ -46,194 +46,164 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:id="@+id/readerNameLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/readerIdLayout"
-                app:layout_constraintStart_toStartOf="@+id/readerIdLayout"
-                app:layout_constraintTop_toBottomOf="@+id/readerIdLayout"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="@+id/borrowIdLayout"
+                app:layout_constraintStart_toStartOf="@+id/borrowIdLayout"
+                app:layout_constraintTop_toBottomOf="@+id/borrowIdLayout"
                 app:startIconDrawable="@drawable/ic_reader">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtReaderName"
+                <AutoCompleteTextView
+                    android:id="@+id/spnReader"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@drawable/white_background"
-                    android:hint="Tên độc giả"
+                    android:inputType="none"
                     android:paddingStart="48dp"
-                    android:paddingLeft="48dp" />
+                    android:paddingLeft="48dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="Độc giả" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/dateOfBirthLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:id="@+id/librarianNameLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="@+id/readerNameLayout"
                 app:layout_constraintStart_toStartOf="@+id/readerNameLayout"
                 app:layout_constraintTop_toBottomOf="@+id/readerNameLayout"
+                app:startIconDrawable="@drawable/ic_librarian">
+
+                <AutoCompleteTextView
+                    android:id="@+id/spnLibrarian"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/white_background"
+                    android:inputType="none"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="Thủ thư" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:id="@+id/timeBorrowLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="@+id/librarianNameLayout"
+                app:layout_constraintStart_toStartOf="@+id/librarianNameLayout"
+                app:layout_constraintTop_toBottomOf="@+id/librarianNameLayout"
+                app:startIconDrawable="@drawable/ic_expiry_date_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/spnTimeBorrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/white_background"
+                    android:inputType="none"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="Thời gian mượn" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/borrowDateLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/timeBorrowLayout"
+                app:layout_constraintStart_toStartOf="@+id/timeBorrowLayout"
+                app:layout_constraintTop_toBottomOf="@+id/timeBorrowLayout"
                 app:startIconDrawable="@drawable/ic_calendar">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtDateOfBirth"
+                    android:id="@+id/edtBorrowDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/white_background"
-                    android:hint="Ngày sinh"
-                    android:paddingStart="48dp"
-                    android:paddingLeft="48dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:id="@+id/genderLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/white_background"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/dateOfBirthLayout"
-                app:layout_constraintStart_toStartOf="@+id/dateOfBirthLayout"
-                app:layout_constraintTop_toBottomOf="@+id/dateOfBirthLayout">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_gender" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="32dp"
-                    android:text="Giới tính"
-                    android:textSize="16sp" />
-
-                <RadioGroup
-                    android:id="@+id/rgGender"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/rdoMale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Nam" />
-
-                    <RadioButton
-                        android:id="@+id/rdoFemale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:text="Nữ" />
-
-                    <RadioButton
-                        android:id="@+id/rdoOther"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Khác" />
-                </RadioGroup>
-            </LinearLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phoneNumberLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/genderLayout"
-                app:layout_constraintStart_toStartOf="@+id/genderLayout"
-                app:layout_constraintTop_toBottomOf="@+id/genderLayout"
-                app:startIconDrawable="@drawable/ic_phone">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtPhoneNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/white_background"
-                    android:hint="Điện thoại"
+                    android:hint="Ngày mượn"
                     android:paddingStart="48dp"
                     android:paddingLeft="48dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emailLayout"
+                android:id="@+id/returnDateLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/phoneNumberLayout"
-                app:layout_constraintStart_toStartOf="@+id/phoneNumberLayout"
-                app:layout_constraintTop_toBottomOf="@+id/phoneNumberLayout"
-                app:startIconDrawable="@drawable/ic_email">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/white_background"
-                    android:hint="Email"
-                    android:paddingStart="48dp"
-                    android:paddingLeft="48dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/joinDateLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/emailLayout"
-                app:layout_constraintStart_toStartOf="@+id/emailLayout"
-                app:layout_constraintTop_toBottomOf="@+id/emailLayout"
+                app:layout_constraintEnd_toEndOf="@+id/borrowDateLayout"
+                app:layout_constraintStart_toStartOf="@+id/borrowDateLayout"
+                app:layout_constraintTop_toBottomOf="@+id/borrowDateLayout"
                 app:startIconDrawable="@drawable/ic_calendar">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtJoinDate"
+                    android:id="@+id/edtReturnDatew"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/white_background"
-                    android:hint="Ngày làm thẻ"
+                    android:hint="Ngày đến hạn"
                     android:paddingStart="48dp"
                     android:paddingLeft="48dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addressLayout"
+                android:id="@+id/depositLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/joinDateLayout"
-                app:layout_constraintStart_toStartOf="@+id/joinDateLayout"
-                app:layout_constraintTop_toBottomOf="@+id/joinDateLayout"
-                app:startIconDrawable="@drawable/ic_address">
+                app:layout_constraintEnd_toEndOf="@+id/returnDateLayout"
+                app:layout_constraintStart_toStartOf="@+id/returnDateLayout"
+                app:layout_constraintTop_toBottomOf="@+id/returnDateLayout"
+                app:startIconDrawable="@drawable/ic_price">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtAddress"
+                    android:id="@+id/edtDeposit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/white_background"
-                    android:hint="Địa chỉ"
+                    android:hint="Tiền cọc"
                     android:paddingStart="48dp"
                     android:paddingLeft="48dp" />
             </com.google.android.material.textfield.TextInputLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvBooks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/depositLayout" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSave"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="64dp"
                 android:background="@drawable/gradient_button"
                 android:text="Lưu thông tin"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/addressLayout"
-                app:layout_constraintStart_toStartOf="@+id/addressLayout"
-                app:layout_constraintTop_toBottomOf="@+id/addressLayout" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rcvBooks" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
