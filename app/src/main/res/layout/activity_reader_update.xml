@@ -1,33 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".fragment.reader.ReaderUpdateActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="wrap_content">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance_App_Circular"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/avatar" />
 
-    <include layout="@layout/content_reader_update" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ISBNLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgAvatar"
+                app:startIconDrawable="@drawable/ic_isbn">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtISBN"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gray_background"
+                    android:hint="ISBN"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:longClickable="false" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/titleLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/ISBNLayout"
+                app:layout_constraintStart_toStartOf="@+id/ISBNLayout"
+                app:layout_constraintTop_toBottomOf="@+id/ISBNLayout"
+                app:startIconDrawable="@drawable/ic_title">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background"
+                    android:hint="Tên sách"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/authorLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/titleLayout"
+                app:layout_constraintStart_toStartOf="@+id/titleLayout"
+                app:layout_constraintTop_toBottomOf="@+id/titleLayout"
+                app:startIconDrawable="@drawable/ic_writer">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background"
+                    android:hint="Tác giả"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/publisherLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/authorLayout"
+                app:layout_constraintStart_toStartOf="@+id/authorLayout"
+                app:layout_constraintTop_toBottomOf="@+id/authorLayout"
+                app:startIconDrawable="@drawable/ic_publisher">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPublisher"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background"
+                    android:hint="Nhà xuất bản"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/yearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/publisherLayout"
+                app:layout_constraintStart_toStartOf="@+id/publisherLayout"
+                app:layout_constraintTop_toBottomOf="@+id/publisherLayout"
+                app:startIconDrawable="@drawable/ic_year">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background"
+                    android:hint="Năm xuất bản"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pagesLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/yearLayout"
+                app:layout_constraintStart_toStartOf="@+id/yearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/yearLayout"
+                app:startIconDrawable="@drawable/ic_pages">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background"
+                    android:hint="Số trang"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/stockLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/pagesLayout"
+                app:layout_constraintStart_toStartOf="@+id/pagesLayout"
+                app:layout_constraintTop_toBottomOf="@+id/pagesLayout"
+                app:startIconDrawable="@drawable/ic_stock">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtStock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background"
+                    android:hint="Số lượng tồn"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/priceLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/stockLayout"
+                app:layout_constraintStart_toStartOf="@+id/stockLayout"
+                app:layout_constraintTop_toBottomOf="@+id/stockLayout"
+                app:startIconDrawable="@drawable/ic_price">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background"
+                    android:hint="Giá bán"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/descriptionLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/priceLayout"
+                app:layout_constraintStart_toStartOf="@+id/priceLayout"
+                app:layout_constraintTop_toBottomOf="@+id/priceLayout"
+                app:startIconDrawable="@drawable/ic_description">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background"
+                    android:hint="Mô tả"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="64dp"
+                android:background="@drawable/gradient_button"
+                android:text="Lưu thông tin"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/descriptionLayout"
+                app:layout_constraintStart_toStartOf="@+id/descriptionLayout"
+                app:layout_constraintTop_toBottomOf="@+id/descriptionLayout" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

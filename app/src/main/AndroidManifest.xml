@@ -15,7 +15,8 @@
         <activity
             android:name=".fragment.reader.ReaderUpdateActivity"
             android:exported="false"
-            android:theme="@style/Theme.ProjectAndroidLibraryManagement" />
+            android:label="Cập nhật thông tin độc giả"
+            android:theme="@style/Theme.ActionBar" />
         <activity
             android:name=".fragment.reader.ReaderDetailActivity"
             android:exported="false"
