@@ -6,6 +6,7 @@ data class Reader (
     val NgaySinh: String,
     val GioiTinh: String,
     val DienThoai: String,
+    val Email: String,
     val DiaChi: String,
     val HinhAnh: String?,
     val NgayLamThe: String,

@@ -1,5 +1,6 @@
 package com.example.project_android_library_management.fragment.reader
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +13,6 @@ import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.ReaderAdapter
 import com.example.project_android_library_management.dao.ReaderDao
-import com.example.project_android_library_management.fragment.book.BookDetailActivity
 import com.example.project_android_library_management.model.Reader
 
 class ReaderFragment : Fragment() {
@@ -24,7 +24,6 @@ class ReaderFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE_READER_LIST = 1
-//        private const val REQUEST_CODE_BOOK_DETAIL = 1
     }
 
     override fun onCreateView(
@@ -52,5 +51,22 @@ class ReaderFragment : Fragment() {
         rcvReaders.adapter = readerAdapter
 
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_READER_LIST && resultCode == Activity.RESULT_OK) {
+            loadReaderList()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadReaderList()
+    }
+
+    private fun loadReaderList() {
+        val readers = readerDao.getAllReaders()
+        readerAdapter.updateData(readers)
     }
 }

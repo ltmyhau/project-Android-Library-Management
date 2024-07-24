@@ -15,6 +15,7 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
             put("NgaySinh", reader.NgaySinh)
             put("GioiTinh", reader.GioiTinh)
             put("DienThoai", reader.DienThoai)
+            put("Email", reader.Email)
             put("DiaChi", reader.DiaChi)
             put("HinhAnh", reader.HinhAnh)
             put("NgayLamThe", reader.NgayLamThe)
@@ -33,6 +34,7 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
             put("NgaySinh", reader.NgaySinh)
             put("GioiTinh", reader.GioiTinh)
             put("DienThoai", reader.DienThoai)
+            put("Email", reader.Email)
             put("DiaChi", reader.DiaChi)
             put("HinhAnh", reader.HinhAnh)
             put("NgayLamThe", reader.NgayLamThe)
@@ -57,12 +59,13 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
         val ngaySinh = cursor.getString(cursor.getColumnIndexOrThrow("NgaySinh"))
         val gioiTinh = cursor.getString(cursor.getColumnIndexOrThrow("GioiTinh"))
         val dienThoai = cursor.getString(cursor.getColumnIndexOrThrow("DienThoai"))
+        val email = cursor.getString(cursor.getColumnIndexOrThrow("Email"))
         val diaChi = cursor.getString(cursor.getColumnIndexOrThrow("DiaChi"))
         val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
         val ngayLamThe = cursor.getString(cursor.getColumnIndexOrThrow("NgayLamThe"))
         val hanThe = cursor.getString(cursor.getColumnIndexOrThrow("HanThe"))
 
-        return Reader(maDG, hoTen, ngaySinh, gioiTinh, dienThoai, diaChi, hinhAnh, ngayLamThe, hanThe)
+        return Reader(maDG, hoTen, ngaySinh, gioiTinh, dienThoai, email, diaChi, hinhAnh, ngayLamThe, hanThe)
     }
 
     fun getAllReaders(): ArrayList<Reader> {

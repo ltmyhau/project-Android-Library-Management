@@ -68,7 +68,7 @@ class ReaderDetailActivity : AppCompatActivity() {
             tvDateOfBirth.text = reader.NgaySinh
             tvGender.text = reader.GioiTinh
             tvPhoneNumber.text = reader.DienThoai
-            tvEmail.text = reader.DiaChi
+            tvEmail.text = reader.Email
             tvAddress.text = reader.DiaChi
 
             val imagePath = reader.HinhAnh
@@ -123,7 +123,7 @@ class ReaderDetailActivity : AppCompatActivity() {
     }
 
     private fun editReader(maDG: Int) {
-        val intent = Intent(this, BookUpdateActivity::class.java)
+        val intent = Intent(this, ReaderUpdateActivity::class.java)
         intent.putExtra("MaDG", maDG)
         startActivityForResult(intent, REQUEST_CODE_UPDATE_READER)
     }
