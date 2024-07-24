@@ -9,6 +9,5 @@ data class Reader (
     val Email: String,
     val DiaChi: String,
     val HinhAnh: String?,
-    val NgayLamThe: String,
-    val HanThe: String
+    val NgayLamThe: String
 )

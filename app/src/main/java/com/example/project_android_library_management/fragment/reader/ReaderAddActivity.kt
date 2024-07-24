@@ -8,9 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.ImageView
 import android.widget.RadioGroup
@@ -22,8 +20,6 @@ import androidx.appcompat.widget.AppCompatButton
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.ReaderDao
-import com.example.project_android_library_management.fragment.book.BookUpdateActivity
-import com.example.project_android_library_management.model.Book
 import com.example.project_android_library_management.model.Reader
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -33,15 +29,13 @@ import java.io.IOException
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
-class ReaderUpdateActivity : AppCompatActivity() {
+class ReaderAddActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var readerDao: ReaderDao
 
     private var imagePath: String? = null
-    private var maDG: Int = -1
 
     private lateinit var imgAvatar: ImageView
     private lateinit var edtReaderName: TextInputEditText
@@ -58,11 +52,9 @@ class ReaderUpdateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reader_update)
+        setContentView(R.layout.activity_reader_add)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        maDG = intent.getIntExtra("MaDG", 0)
 
         databaseHelper = DatabaseHelper(this)
         readerDao = ReaderDao(databaseHelper)
@@ -76,11 +68,9 @@ class ReaderUpdateActivity : AppCompatActivity() {
         edtJoinDate = findViewById(R.id.edtJoinDate)
         edtAddress = findViewById(R.id.edtAddress)
 
-        loadReaderDetails(maDG)
-
-        val btnSave = findViewById<AppCompatButton>(R.id.btnSave)
-        btnSave.setOnClickListener {
-            saveReaderDetails()
+        val btnAdd = findViewById<AppCompatButton>(R.id.btnAdd)
+        btnAdd.setOnClickListener {
+            addNewReader()
         }
 
         imgAvatar.setOnClickListener {
@@ -114,60 +104,6 @@ class ReaderUpdateActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             .show()
-    }
-
-    private fun loadReaderDetails(maDG: Int) {
-        val reader = readerDao.getReaderById(maDG)
-
-        if (reader != null) {
-            edtReaderName.setText(reader.HoTen)
-            edtDateOfBirth.setText(reader.NgaySinh)
-            edtPhoneNumber.setText(reader.DienThoai)
-            edtEmail.setText(reader.Email)
-            edtJoinDate.setText(reader.NgayLamThe)
-            edtAddress.setText(reader.DiaChi)
-
-            when (reader.GioiTinh.toLowerCase()) {
-                "nam" -> rgGender.check(R.id.rdoMale)
-                "nữ", "nu" -> rgGender.check(R.id.rdoFemale)
-                "khác", "khac" -> rgGender.check(R.id.rdoOther)
-            }
-
-            imagePath = reader.HinhAnh
-            imagePath?.let {
-                val imgFile = File(it)
-                if (imgFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                    imgAvatar.setImageBitmap(bitmap)
-                }
-            }
-        } else {
-            Toast.makeText(this, "Không tìm thấy độc giả", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun showDatePickerDialog(textView: TextView) {
-        var calendar: Calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
-        try {
-            dateFormat.parse(textView.text.toString())
-            calendar.time = dateFormat.parse(textView.text.toString())!!
-        } catch (e: ParseException) {
-            calendar.time = Calendar.getInstance().time
-        }
-
-        val datePickerDialog = DatePickerDialog(
-            this,
-            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                val selectedDate = "${year}-${month + 1}-${dayOfMonth}"
-                textView.text = selectedDate
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePickerDialog.show()
     }
 
     private fun openImagePicker() {
@@ -213,7 +149,31 @@ class ReaderUpdateActivity : AppCompatActivity() {
         return file.absolutePath
     }
 
-    private fun saveReaderDetails() {
+    private fun showDatePickerDialog(textView: TextView) {
+        var calendar: Calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        try {
+            dateFormat.parse(textView.text.toString())
+            calendar.time = dateFormat.parse(textView.text.toString())!!
+        } catch (e: ParseException) {
+            calendar.time = Calendar.getInstance().time
+        }
+
+        val datePickerDialog = DatePickerDialog(
+            this,
+            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                val selectedDate = "${year}-${month + 1}-${dayOfMonth}"
+                textView.text = selectedDate
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePickerDialog.show()
+    }
+
+    private fun addNewReader() {
         val readerName = edtReaderName.text.toString()
         val dateOfBirth = edtDateOfBirth.text.toString()
         val gender = when (rgGender.checkedRadioButtonId) {
@@ -227,17 +187,30 @@ class ReaderUpdateActivity : AppCompatActivity() {
         val joinDate = edtJoinDate.text.toString()
         val address = edtAddress.text.toString()
 
+//        if (validateFields()) {
+//            val book = Book(isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
+//            val rowsAffected = bookDao.insert(book)
+//            if (rowsAffected > 0) {
+//                Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()
+//                val resultIntent = Intent()
+//                resultIntent.putExtra("BOOK_ISBN", book.ISBN)
+//                setResult(RESULT_OK, resultIntent)
+//                finish()
+//            } else {
+//                Toast.makeText(this, "Thêm sách mới thất bại", Toast.LENGTH_SHORT).show()
+//            }
+//        }
         if (validateFields()) {
-            val reader = Reader(maDG, readerName, dateOfBirth, gender, phoneNumber, email, address, imagePath, joinDate)
-            val rowsAffected = readerDao.update(reader)
+            val reader = Reader(0, readerName, dateOfBirth, gender, phoneNumber, email, address, imagePath, joinDate)
+            val rowsAffected = readerDao.insert(reader)
             if (rowsAffected > 0) {
-                Toast.makeText(this, "Cập nhật thông tin độc giả thành công", Toast.LENGTH_SHORT).show()
-                val resultIntent = Intent()
-                resultIntent.putExtra("MaDG", maDG)
-                setResult(RESULT_OK, resultIntent)
+                Toast.makeText(this, "Thêm độc giả mới thành công", Toast.LENGTH_SHORT).show()
+//                val resultIntent = Intent()
+//                resultIntent.putExtra("MaDG", maDG)
+//                setResult(RESULT_OK, resultIntent)
                 finish()
             } else {
-                Toast.makeText(this, "Cập nhật thông tin độc giả thất bại", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Thêm độc giả mới thất bại", Toast.LENGTH_SHORT).show()
             }
         }
     }

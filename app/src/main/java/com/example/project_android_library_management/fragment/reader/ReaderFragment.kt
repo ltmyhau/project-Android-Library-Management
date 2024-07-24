@@ -13,7 +13,9 @@ import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.ReaderAdapter
 import com.example.project_android_library_management.dao.ReaderDao
+import com.example.project_android_library_management.fragment.book.BookAddActivity
 import com.example.project_android_library_management.model.Reader
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ReaderFragment : Fragment() {
     private lateinit var rcvReaders: RecyclerView
@@ -49,6 +51,12 @@ class ReaderFragment : Fragment() {
         })
 
         rcvReaders.adapter = readerAdapter
+
+        val btnAdd = view.findViewById<FloatingActionButton>(R.id.btnAdd)
+        btnAdd.setOnClickListener {
+            val intent = Intent(activity, ReaderAddActivity::class.java)
+            startActivity(intent)
+        }
 
         return view
     }

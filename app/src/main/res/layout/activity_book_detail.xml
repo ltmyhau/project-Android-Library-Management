@@ -74,13 +74,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgBookCover">
 
-        <TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@drawable/table_border">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/table_border"
                 android:padding="8dp"
                 android:text="IBPN"
                 android:textStyle="bold" />
@@ -90,19 +92,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:background="@drawable/table_border"
+                android:background="@drawable/line_left"
                 android:padding="8dp"
                 android:text="IBPN"
                 android:textStyle="bold" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@drawable/table_border">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/table_border"
                 android:padding="8dp"
                 android:text="Năm xuất bản" />
 
@@ -111,18 +115,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:background="@drawable/table_border"
+                android:background="@drawable/line_left"
                 android:padding="8dp"
                 android:text="Năm xuất bản" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@drawable/table_border">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/table_border"
                 android:padding="8dp"
                 android:text="Số trang" />
 
@@ -131,18 +137,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:background="@drawable/table_border"
+                android:background="@drawable/line_left"
                 android:padding="8dp"
                 android:text="Số trang" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@drawable/table_border">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/table_border"
                 android:padding="8dp"
                 android:text="Số lượng tồn" />
 
@@ -151,18 +159,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:background="@drawable/table_border"
+                android:background="@drawable/line_left"
                 android:padding="8dp"
                 android:text="Số lượng tồn" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@drawable/table_border">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/table_border"
                 android:padding="8dp"
                 android:text="Giá bán" />
 
@@ -171,7 +181,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:background="@drawable/table_border"
+                android:background="@drawable/line_left"
                 android:padding="8dp"
                 android:text="Giá bán" />
         </TableRow>

@@ -19,7 +19,6 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
             put("DiaChi", reader.DiaChi)
             put("HinhAnh", reader.HinhAnh)
             put("NgayLamThe", reader.NgayLamThe)
-            put("HanThe", reader.HanThe)
         }
         val result = db.insert("DocGia", null, contentValues)
         db.close()
@@ -38,7 +37,6 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
             put("DiaChi", reader.DiaChi)
             put("HinhAnh", reader.HinhAnh)
             put("NgayLamThe", reader.NgayLamThe)
-            put("HanThe", reader.HanThe)
         }
 
         val rowsAffected = db.update("DocGia", contentValues, "MaDG = ?", arrayOf(reader.MaDG.toString()))
@@ -63,9 +61,8 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
         val diaChi = cursor.getString(cursor.getColumnIndexOrThrow("DiaChi"))
         val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
         val ngayLamThe = cursor.getString(cursor.getColumnIndexOrThrow("NgayLamThe"))
-        val hanThe = cursor.getString(cursor.getColumnIndexOrThrow("HanThe"))
 
-        return Reader(maDG, hoTen, ngaySinh, gioiTinh, dienThoai, email, diaChi, hinhAnh, ngayLamThe, hanThe)
+        return Reader(maDG, hoTen, ngaySinh, gioiTinh, dienThoai, email, diaChi, hinhAnh, ngayLamThe)
     }
 
     fun getAllReaders(): ArrayList<Reader> {

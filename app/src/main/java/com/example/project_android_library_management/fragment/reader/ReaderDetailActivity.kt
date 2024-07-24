@@ -23,12 +23,10 @@ class ReaderDetailActivity : AppCompatActivity() {
 
     private lateinit var imgAvatar: ImageView
     private lateinit var tvReaderName: TextView
-    private lateinit var tvExpiryDate: TextView
+    private lateinit var tvPhoneNumber: TextView
     private lateinit var tvJoinDate: TextView
-    private lateinit var tvDuration: TextView
     private lateinit var tvDateOfBirth: TextView
     private lateinit var tvGender: TextView
-    private lateinit var tvPhoneNumber: TextView
     private lateinit var tvEmail: TextView
     private lateinit var tvAddress: TextView
 
@@ -45,12 +43,10 @@ class ReaderDetailActivity : AppCompatActivity() {
 
         imgAvatar = findViewById(R.id.imgAvatar)
         tvReaderName = findViewById(R.id.tvReaderName)
-        tvExpiryDate = findViewById(R.id.tvExpiryDate)
+        tvPhoneNumber = findViewById(R.id.tvPhoneNumber)
         tvJoinDate = findViewById(R.id.tvJoinDate)
-        tvDuration = findViewById(R.id.tvDuration)
         tvDateOfBirth = findViewById(R.id.tvDateOfBirth)
         tvGender = findViewById(R.id.tvGender)
-        tvPhoneNumber = findViewById(R.id.tvPhoneNumber)
         tvEmail = findViewById(R.id.tvEmail)
         tvAddress = findViewById(R.id.tvAddress)
 
@@ -62,12 +58,10 @@ class ReaderDetailActivity : AppCompatActivity() {
 
         if (reader != null) {
             tvReaderName.text = reader.HoTen
-            tvExpiryDate.text = reader.HanThe
+            tvPhoneNumber.text = reader.DienThoai
             tvJoinDate.text = reader.NgayLamThe
-            tvDuration.text = reader.HanThe
             tvDateOfBirth.text = reader.NgaySinh
             tvGender.text = reader.GioiTinh
-            tvPhoneNumber.text = reader.DienThoai
             tvEmail.text = reader.Email
             tvAddress.text = reader.DiaChi
 

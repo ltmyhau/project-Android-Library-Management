@@ -59,7 +59,6 @@ class BookAddActivity : AppCompatActivity() {
         bookDao = BookDao(databaseHelper)
         bookCategoryDao = BookCategoryDao(databaseHelper)
 
-
         imgBookCover = findViewById(R.id.imgBookCover)
         edtISBN = findViewById(R.id.edtISBN)
         edtTitle = findViewById(R.id.edtTitle)
@@ -177,9 +176,9 @@ class BookAddActivity : AppCompatActivity() {
             val rowsAffected = bookDao.insert(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()
-                val resultIntent = Intent()
-                resultIntent.putExtra("BOOK_ISBN", book.ISBN)
-                setResult(RESULT_OK, resultIntent)
+//                val resultIntent = Intent()
+//                resultIntent.putExtra("BOOK_ISBN", book.ISBN)
+//                setResult(RESULT_OK, resultIntent)
                 finish()
             } else {
                 Toast.makeText(this, "Thêm sách mới thất bại", Toast.LENGTH_SHORT).show()

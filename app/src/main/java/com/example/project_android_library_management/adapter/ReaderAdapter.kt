@@ -24,7 +24,7 @@ class ReaderAdapter(
     inner class ReaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgAvatar: ImageView = itemView.findViewById(R.id.imgAvatar)
         val tvReaderName: TextView = itemView.findViewById(R.id.tvReaderName)
-        val tvExpiryDate: TextView = itemView.findViewById(R.id.tvExpiryDate)
+        val tvPhoneNumber: TextView = itemView.findViewById(R.id.tvPhoneNumber)
 
         init {
             itemView.setOnClickListener {
@@ -45,7 +45,7 @@ class ReaderAdapter(
     override fun onBindViewHolder(holder: ReaderViewHolder, position: Int) {
         val reader = readerList[position]
         holder.tvReaderName.text = reader.HoTen
-        holder.tvExpiryDate.text = reader.HanThe
+        holder.tvPhoneNumber.text = reader.DienThoai
         if (reader.HinhAnh != null) {
             val imgFile = File(reader.HinhAnh)
             if (imgFile.exists()) {
