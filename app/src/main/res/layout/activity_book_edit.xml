@@ -112,7 +112,8 @@
                     android:background="@drawable/white_background"
                     android:hint="Tác giả"
                     android:paddingStart="48dp"
-                    android:paddingLeft="48dp" />
+                    android:paddingLeft="48dp"
+                    android:textColor="#000000" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -136,7 +137,8 @@
                     android:paddingLeft="48dp"
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
-                    android:text="Thể loại" />
+                    android:text="Thể loại"
+                    android:textColor="@color/text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -260,13 +262,13 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSave"
+                android:id="@+id/btnEdit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="64dp"
                 android:background="@drawable/gradient_button"
-                android:text="Lưu thông tin"
+                android:text="Edit"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/descriptionLayout"

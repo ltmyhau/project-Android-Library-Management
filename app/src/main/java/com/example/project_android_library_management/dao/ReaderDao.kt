@@ -25,7 +25,8 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
     }
 
     fun insert(reader: Reader): Int {
-        val db = databaseHelper.writableDatabase
+//        val db = databaseHelper.writableDatabase
+        val db = databaseHelper.openDatabase()
 
         val contentValues = ContentValues().apply {
             put("MaDG", generateNewId())

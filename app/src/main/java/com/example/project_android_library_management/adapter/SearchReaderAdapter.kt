@@ -1,5 +1,8 @@
 package com.example.project_android_library_management.adapter
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
@@ -11,38 +14,24 @@ import com.example.project_android_library_management.R
 import com.example.project_android_library_management.model.Reader
 import java.io.File
 
-class ReaderAdapter(
+class SearchReaderAdapter(
+    private val context: Context,
     private val readerList: MutableList<Reader>,
-    private val itemClickListener: OnItemClickListener
-) : RecyclerView.Adapter<ReaderAdapter.ReaderViewHolder>() {
+) : RecyclerView.Adapter<SearchReaderAdapter.SearchReaderViewHolder>() {
 
-    interface OnItemClickListener {
-        fun onItemClick(reader: Reader)
-    }
-
-    inner class ReaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class SearchReaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgAvatar: ImageView = itemView.findViewById(R.id.imgAvatar)
         val tvReaderName: TextView = itemView.findViewById(R.id.tvReaderName)
         val tvPhoneNumber: TextView = itemView.findViewById(R.id.tvPhoneNumber)
         val btnSelect: ImageView = itemView.findViewById(R.id.btnSelect)
-
-        init {
-            itemView.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    val selected = readerList[position]
-                    itemClickListener.onItemClick(selected)
-                }
-            }
-        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReaderViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchReaderViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_reader, parent, false)
-        return ReaderViewHolder(itemView)
+        return SearchReaderViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ReaderViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchReaderViewHolder, position: Int) {
         val reader = readerList[position]
         holder.tvReaderName.text = reader.HoTen
         holder.tvPhoneNumber.text = reader.DienThoai
@@ -58,17 +47,15 @@ class ReaderAdapter(
             holder.imgAvatar.setImageResource(R.drawable.avatar)
         }
 
-        holder.btnSelect.visibility = View.GONE
+        holder.btnSelect.setOnClickListener {
+            val intent = Intent()
+            intent.putExtra("READER_ID", reader.MaDG)
+            (context as Activity).setResult(Activity.RESULT_OK, intent)
+            (context as Activity).finish()
+        }
     }
 
     override fun getItemCount(): Int {
         return readerList.size
     }
-
-    fun updateData(newReaderList: List<Reader>) {
-        readerList.clear()
-        readerList.addAll(newReaderList)
-        notifyDataSetChanged()
-    }
-
 }

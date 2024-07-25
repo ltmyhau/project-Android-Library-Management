@@ -19,6 +19,9 @@ import com.example.project_android_library_management.dao.BorrowRecordDao
 import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.dao.ReaderDao
 import com.example.project_android_library_management.fragment.reader.ReaderUpdateActivity
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class BorrowDetailActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
@@ -91,10 +94,11 @@ class BorrowDetailActivity : AppCompatActivity() {
 
         if (borrowRecord != null) {
             tvBorrowRecordID.text = borrowRecord.MaPM
-            tvTimeBorrow.text = borrowRecord.NgayMuon
+            tvTimeBorrow.text = "${borrowRecord.SoNgayMuon} ngày"
             tvBorrowDate.text = borrowRecord.NgayMuon
-            tvReturnDate.text = borrowRecord.NgayMuon
-            tvDeposit.text = borrowRecord.TienCoc.toString()
+            calculateReturnDate(borrowRecord.NgayMuon, borrowRecord.SoNgayMuon)
+            tvDeposit.text = String.format("%.0f", borrowRecord.TienCoc)
+
 
             val readerDao = ReaderDao(databaseHelper)
             val reader = readerDao.getReaderById(borrowRecord.MaDG)
@@ -118,6 +122,19 @@ class BorrowDetailActivity : AppCompatActivity() {
             rcvBooks.adapter = bookAdapter
         } else {
             Toast.makeText(this, "Không tìm thấy chi tiết phiếu mượn", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun calculateReturnDate(dateStr: String, daysToAdd: Int) {
+        val borrowDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateStr)
+
+        if (borrowDate != null) {
+            val calendar = Calendar.getInstance()
+            calendar.time = borrowDate
+            calendar.add(Calendar.DAY_OF_MONTH, daysToAdd)
+
+            val returnDateStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+            tvReturnDate.setText(returnDateStr)
         }
     }
 

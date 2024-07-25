@@ -96,7 +96,7 @@ class BookBorrowAdapter(
                 if (borrowDetails.size > 1){
                     deleteItem(position)
                 } else {
-                    Toast.makeText(context, "Không thể xóa sản phẩm cuối cùng", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Không thể xóa sách cuối cùng", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("Không", null)

@@ -52,7 +52,7 @@ class BookAddActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_book_add)
+        setContentView(R.layout.activity_book_edit)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -77,8 +77,9 @@ class BookAddActivity : AppCompatActivity() {
 
         loadCategorySpinner()
 
-        val btnAdd = findViewById<AppCompatButton>(R.id.btnAdd)
-        btnAdd.setOnClickListener {
+        val btnEdit = findViewById<AppCompatButton>(R.id.btnEdit)
+        btnEdit.text = "Thêm"
+        btnEdit.setOnClickListener {
             addNewBook()
         }
 

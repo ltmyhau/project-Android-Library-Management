@@ -54,7 +54,7 @@ class BookUpdateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_book_update)
+        setContentView(R.layout.activity_book_edit)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -81,8 +81,9 @@ class BookUpdateActivity : AppCompatActivity() {
         loadCategorySpinner()
         loadBookDetails(maSach)
 
-        val btnSave = findViewById<AppCompatButton>(R.id.btnSave)
-        btnSave.setOnClickListener {
+        val btnEdit = findViewById<AppCompatButton>(R.id.btnEdit)
+        btnEdit.text = "Lưu thông tin"
+        btnEdit.setOnClickListener {
             saveBookDetails()
         }
 
@@ -136,7 +137,7 @@ class BookUpdateActivity : AppCompatActivity() {
             edtYear.setText(book.NamXB.toString())
             edtPages.setText(book.SoTrang.toString())
             edtStock.setText(book.SoLuongTon.toString())
-            edtPrice.setText(book.GiaBan.toString())
+            edtPrice.setText(String.format("%.0f", book.GiaBan))
             edtDescription.setText(book.MoTa)
 
             bookCategoryId = book.MaTL

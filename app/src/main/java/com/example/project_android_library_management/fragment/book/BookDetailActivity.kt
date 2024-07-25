@@ -77,7 +77,7 @@ class BookDetailActivity : AppCompatActivity() {
             tvYear.text = book.NamXB.toString()
             tvPages.text = book.SoTrang.toString()
             tvStock.text = book.SoLuongTon.toString()
-            tvPrice.text = book.GiaBan.toString()
+            tvPrice.text =String.format("%.0f", book.GiaBan)
             tvDescription.text = book.MoTa
 
             val imagePath = book.HinhAnh

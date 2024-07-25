@@ -59,7 +59,7 @@ class ReaderUpdateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reader_update)
+        setContentView(R.layout.activity_reader_edit)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -80,8 +80,9 @@ class ReaderUpdateActivity : AppCompatActivity() {
 
         loadReaderDetails(maDG)
 
-        val btnSave = findViewById<AppCompatButton>(R.id.btnSave)
-        btnSave.setOnClickListener {
+        val btnEdit = findViewById<AppCompatButton>(R.id.btnEdit)
+        btnEdit.text = "Lưu thông tin"
+        btnEdit.setOnClickListener {
             saveReaderDetails()
         }
 
@@ -163,7 +164,9 @@ class ReaderUpdateActivity : AppCompatActivity() {
         val datePickerDialog = DatePickerDialog(
             this,
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                val selectedDate = "${year}-${month + 1}-${dayOfMonth}"
+                val formattedMonth = String.format("%02d", month + 1)
+                val formattedDay = String.format("%02d", dayOfMonth)
+                val selectedDate = "${year}-${formattedMonth}-${formattedDay}"
                 textView.text = selectedDate
             },
             calendar.get(Calendar.YEAR),

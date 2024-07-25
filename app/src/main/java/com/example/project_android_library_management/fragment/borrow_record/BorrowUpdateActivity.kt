@@ -1,8 +1,11 @@
 package com.example.project_android_library_management.fragment.borrow_record
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
@@ -18,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
-import com.example.project_android_library_management.adapter.BookAdapter
+import com.example.project_android_library_management.SearchReaderActivity
 import com.example.project_android_library_management.adapter.BookBorrowAdapter
 import com.example.project_android_library_management.dao.BorrowDetailDao
 import com.example.project_android_library_management.dao.BorrowRecordDao
@@ -26,7 +29,6 @@ import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.dao.ReaderDao
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -42,6 +44,8 @@ class BorrowUpdateActivity : AppCompatActivity() {
 
     private var maPM: String = ""
     private var readerId: String = ""
+    private var librarianId: String = ""
+    private var timeBorrow: Int? = null
 
     private lateinit var edtBorrowId: TextInputEditText
     private lateinit var spnLibrarian: AutoCompleteTextView
@@ -51,6 +55,10 @@ class BorrowUpdateActivity : AppCompatActivity() {
     private lateinit var edtReturnDate: TextInputEditText
     private lateinit var edtDeposit: TextInputEditText
     private lateinit var rcvBooks: RecyclerView
+
+    companion object {
+        private const val REQUEST_CODE_READER_ID = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,11 +101,27 @@ class BorrowUpdateActivity : AppCompatActivity() {
         borrowDateLayout.setStartIconOnClickListener {
             showDatePickerDialog(edtBorrowDate)
         }
+
+        edtReaderName.setOnClickListener {
+            val intent = Intent(this, SearchReaderActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_READER_ID)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_READER_ID && resultCode == RESULT_OK) {
+            readerId = data?.getStringExtra("READER_ID") ?: ""
+            if (readerId != null && readerId.isNotEmpty()) {
+                val reader = readerDao.getReaderById(readerId)
+                edtReaderName.setText(reader?.HoTen ?: "")
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -127,8 +151,11 @@ class BorrowUpdateActivity : AppCompatActivity() {
         val datePickerDialog = DatePickerDialog(
             this,
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                val selectedDate = "${year}-${month + 1}-${dayOfMonth}"
+                val formattedMonth = String.format("%02d", month + 1)
+                val formattedDay = String.format("%02d", dayOfMonth)
+                val selectedDate = "${year}-${formattedMonth}-${formattedDay}"
                 textView.text = selectedDate
+                updateReturnDate()
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
@@ -147,16 +174,26 @@ class BorrowUpdateActivity : AppCompatActivity() {
             val selectedCategoryName = parent.getItemAtPosition(position) as String
             val selectedCategory = libraries.find { it.HoTen == selectedCategoryName }
             selectedCategory?.let {
-                readerId = it.MaTT
+                librarianId = it.MaTT
             }
             spnLibrarian.setTextColor(ContextCompat.getColor(this, R.color.text_dark_color))
         }
     }
 
     private fun loadTimeBorrowSpinner() {
-        val timeBorrow = resources.getStringArray(R.array.book_lend_period)
-        val adapter = ArrayAdapter(this, R.layout.dropdown_item, timeBorrow)
+        val timeBorrowArray = resources.getStringArray(R.array.book_lend_period)
+        val adapter = ArrayAdapter(this, R.layout.dropdown_item, timeBorrowArray)
         spnTimeBorrow.setAdapter(adapter)
+
+        spnTimeBorrow.setOnItemClickListener { parent, _, position, _ ->
+            val selectedItem = timeBorrowArray[position]
+            timeBorrow = extractNumberFromString(selectedItem)
+            updateReturnDate()
+        }
+    }
+
+    private fun extractNumberFromString(text: String): Int? {
+        return text.replace(Regex("[^0-9]"), "").toIntOrNull()
     }
 
     private fun loadBorrowDetails(maPM: String) {
@@ -164,10 +201,15 @@ class BorrowUpdateActivity : AppCompatActivity() {
 
         if (borrowRecord != null) {
             edtBorrowId.setText(borrowRecord.MaPM)
-            setSpinnerValue(spnTimeBorrow, borrowRecord.SoNgayMuon.toString() + " ngày")
+            timeBorrow = borrowRecord.SoNgayMuon
+            setSpinnerValue(spnTimeBorrow, "${timeBorrow} ngày")
             edtBorrowDate.setText(borrowRecord.NgayMuon)
             edtReturnDate.setText(borrowRecord.NgayMuon)
-            edtDeposit.setText(borrowRecord.TienCoc.toString())
+            edtDeposit.setText(String.format("%.0f", borrowRecord.TienCoc))
+
+            Log.d("borrowRecord", borrowRecord.SoNgayMuon.toString())
+
+            updateReturnDate()
 
             val readerDao = ReaderDao(databaseHelper)
             val reader = readerDao.getReaderById(borrowRecord.MaDG)
@@ -204,8 +246,23 @@ class BorrowUpdateActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateReturnDate() {
+        val borrowDateStr = edtBorrowDate.text.toString()
+        val borrowDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(borrowDateStr)
+        val daysToAdd = timeBorrow ?: 0
+
+        if (borrowDate != null) {
+            val calendar = Calendar.getInstance()
+            calendar.time = borrowDate
+            calendar.add(Calendar.DAY_OF_MONTH, daysToAdd)
+
+            val returnDateStr =
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+            edtReturnDate.setText(returnDateStr)
+        }
+    }
+
     private fun saveReaderDetails() {
 
     }
-
 }

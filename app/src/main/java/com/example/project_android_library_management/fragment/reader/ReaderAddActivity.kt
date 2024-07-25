@@ -54,7 +54,7 @@ class ReaderAddActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reader_add)
+        setContentView(R.layout.activity_reader_edit)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -78,8 +78,9 @@ class ReaderAddActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         edtJoinDate.setText(sdf.format(Date()))
 
-        val btnAdd = findViewById<AppCompatButton>(R.id.btnAdd)
-        btnAdd.setOnClickListener {
+        val btnEdit = findViewById<AppCompatButton>(R.id.btnEdit)
+        btnEdit.text = "Thêm"
+        btnEdit.setOnClickListener {
             addNewReader()
         }
 
@@ -173,7 +174,9 @@ class ReaderAddActivity : AppCompatActivity() {
         val datePickerDialog = DatePickerDialog(
             this,
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                val selectedDate = "${year}-${month + 1}-${dayOfMonth}"
+                val formattedMonth = String.format("%02d", month + 1)
+                val formattedDay = String.format("%02d", dayOfMonth)
+                val selectedDate = "${year}-${formattedMonth}-${formattedDay}"
                 textView.text = selectedDate
             },
             calendar.get(Calendar.YEAR),
