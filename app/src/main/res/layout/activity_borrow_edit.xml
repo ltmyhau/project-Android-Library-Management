@@ -185,6 +185,26 @@
                     android:paddingLeft="48dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/notesLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/depositLayout"
+                app:layout_constraintStart_toStartOf="@+id/depositLayout"
+                app:layout_constraintTop_toBottomOf="@+id/depositLayout"
+                app:startIconDrawable="@drawable/ic_notes">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background"
+                    android:hint="Ghi chú"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <LinearLayout
                 android:id="@id/layoutBooks"
                 android:layout_width="match_parent"
@@ -195,14 +215,33 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/depositLayout">
+                app:layout_constraintTop_toBottomOf="@+id/notesLayout">
 
-                <TextView
+                <LinearLayout
+                    android:id="@id/layoutBooks"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Chi tiết sách mượn"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Chi tiết sách mượn"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/btnAddBook"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/gradient_button"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_plus"
+                        app:tint="@color/white" />
+
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvBooks"

@@ -62,16 +62,15 @@ class BookBorrowAdapter(
 
         holder.tvQuantity.text = borrowDetail.SoLuong.toString()
 
-        var quantity = borrowDetail.SoLuong
         holder.btnIncrease.setOnClickListener {
-            quantity += 1
-            holder.tvQuantity.text = quantity.toString()
+            borrowDetail.SoLuong += 1
+            holder.tvQuantity.text = borrowDetail.SoLuong.toString()
         }
 
         holder.btnDecrease.setOnClickListener {
-            if (quantity > 1) {
-                quantity -= 1
-                holder.tvQuantity.text = quantity.toString()
+            if (borrowDetail.SoLuong > 1) {
+                borrowDetail.SoLuong -= 1
+                holder.tvQuantity.text = borrowDetail.SoLuong.toString()
             } else {
                 showDeleteConfirmationDialog(holder, position)
             }

@@ -303,10 +303,6 @@ class ReaderUpdateActivity : AppCompatActivity() {
     }
 
     private fun validateDate(dateString: String): Boolean {
-        if (dateString.isEmpty()) {
-            return false
-        }
-
         return try {
             dateFormat.parse(dateString)
             true

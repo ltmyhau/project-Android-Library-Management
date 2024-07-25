@@ -1,5 +1,6 @@
 package com.example.project_android_library_management.fragment.borrow_record
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +14,6 @@ import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.BorrowRecordAdapter
 import com.example.project_android_library_management.dao.BorrowRecordDao
 import com.example.project_android_library_management.fragment.reader.ReaderAddActivity
-import com.example.project_android_library_management.fragment.reader.ReaderDetailActivity
 import com.example.project_android_library_management.model.BorrowRecord
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -60,4 +60,22 @@ class BorrowRecordFragment : Fragment() {
 
         return view
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_BORROW_LIST && resultCode == Activity.RESULT_OK) {
+            loadBorrowRecordList()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadBorrowRecordList()
+    }
+
+    private fun loadBorrowRecordList() {
+        val borrowRecord = borrowRecordDao.getAllBorrowRecord()
+        borrowRecordAdapter.updateData(borrowRecord)
+    }
+
 }

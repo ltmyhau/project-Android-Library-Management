@@ -1,22 +1,17 @@
 package com.example.project_android_library_management.fragment.borrow_record
 
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
@@ -27,6 +22,8 @@ import com.example.project_android_library_management.dao.BorrowDetailDao
 import com.example.project_android_library_management.dao.BorrowRecordDao
 import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.dao.ReaderDao
+import com.example.project_android_library_management.model.BorrowDetail
+import com.example.project_android_library_management.model.BorrowRecord
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.ParseException
@@ -41,6 +38,7 @@ class BorrowUpdateActivity : AppCompatActivity() {
     private lateinit var librarianDao: LibrarianDao
     private lateinit var borrowRecordDao: BorrowRecordDao
     private lateinit var borrowDetailDao: BorrowDetailDao
+    private lateinit var bookBorrows: ArrayList<BorrowDetail>
 
     private var maPM: String = ""
     private var readerId: String = ""
@@ -54,6 +52,7 @@ class BorrowUpdateActivity : AppCompatActivity() {
     private lateinit var edtBorrowDate: TextInputEditText
     private lateinit var edtReturnDate: TextInputEditText
     private lateinit var edtDeposit: TextInputEditText
+    private lateinit var edtNotes: TextInputEditText
     private lateinit var rcvBooks: RecyclerView
 
     companion object {
@@ -62,7 +61,7 @@ class BorrowUpdateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_borrow_update)
+        setContentView(R.layout.activity_borrow_edit)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -81,6 +80,7 @@ class BorrowUpdateActivity : AppCompatActivity() {
         edtBorrowDate = findViewById(R.id.edtBorrowDate)
         edtReturnDate = findViewById(R.id.edtReturnDate)
         edtDeposit = findViewById(R.id.edtDeposit)
+        edtNotes = findViewById(R.id.edtNotes)
         rcvBooks = findViewById(R.id.rcvBooks)
 
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -94,7 +94,7 @@ class BorrowUpdateActivity : AppCompatActivity() {
 
         val btnSave = findViewById<AppCompatButton>(R.id.btnSave)
         btnSave.setOnClickListener {
-            saveReaderDetails()
+            saveBorrowRecord()
         }
 
         val borrowDateLayout = findViewById<TextInputLayout>(R.id.borrowDateLayout)
@@ -206,15 +206,17 @@ class BorrowUpdateActivity : AppCompatActivity() {
             edtBorrowDate.setText(borrowRecord.NgayMuon)
             edtReturnDate.setText(borrowRecord.NgayMuon)
             edtDeposit.setText(String.format("%.0f", borrowRecord.TienCoc))
-
-            Log.d("borrowRecord", borrowRecord.SoNgayMuon.toString())
+            edtNotes.setText(borrowRecord.GhiChu)
 
             updateReturnDate()
 
+            readerId = borrowRecord.MaDG
             val readerDao = ReaderDao(databaseHelper)
-            val reader = readerDao.getReaderById(borrowRecord.MaDG)
+            val reader = readerDao.getReaderById(readerId)
+
+            librarianId = borrowRecord.MaTT
             val libraryDao = LibrarianDao(databaseHelper)
-            val librarian = libraryDao.getLibrarianById(borrowRecord.MaTT)
+            val librarian = libraryDao.getLibrarianById(librarianId)
 
             reader?.let { edtReaderName.setText(it.HoTen) }
             librarian?.let { setSpinnerValue(spnLibrarian, it.HoTen) }
@@ -225,7 +227,7 @@ class BorrowUpdateActivity : AppCompatActivity() {
     }
 
     private fun loadBookBorrows(maPM: String) {
-        val bookBorrows = borrowDetailDao.getBorrowDetailById(maPM)
+        bookBorrows = borrowDetailDao.getBorrowDetailById(maPM)
 
         if (bookBorrows != null) {
             rcvBooks.layoutManager = LinearLayoutManager(this)
@@ -262,7 +264,89 @@ class BorrowUpdateActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveReaderDetails() {
+    private fun saveBorrowRecord() {
+        val borrowDate = edtBorrowDate.text.toString()
+        val deposit = edtDeposit.text.toString().toDoubleOrNull() ?: 0.0
+        val notes = edtNotes.text.toString()
 
+        if (validateFields()) {
+            val borrowRecord = BorrowRecord(maPM, borrowDate, timeBorrow!!, deposit, notes, readerId, librarianId)
+            val rowsAffected = borrowRecordDao.update(borrowRecord)
+            if (rowsAffected > 0 && saveBookBorrow()) {
+                Toast.makeText(this, "Cập nhật thông tin phiếu nhập thành công", Toast.LENGTH_SHORT)
+                    .show()
+                val resultIntent = Intent()
+                resultIntent.putExtra("BORROW_ID", maPM)
+                setResult(RESULT_OK, resultIntent)
+                finish()
+            } else {
+                Toast.makeText(this, "Cập nhật thông tin phiếu nhập thất bại", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+    private fun saveBookBorrow(): Boolean {
+        var allSuccess = true
+
+        try {
+            val rowsDeleted = borrowDetailDao.delete(maPM)
+            if (rowsDeleted <= 0) {
+                allSuccess = false
+            }
+        } catch (e: Exception) {
+            Log.e("RefreshBookBorrow", "Lỗi xóa chi tiết phiếu mượn", e)
+            allSuccess = false
+        }
+
+        if (allSuccess) {
+            for (borrowDetail in bookBorrows) {
+                val rowsAffected = borrowDetailDao.insert(borrowDetail)
+                if (rowsAffected <= 0) {
+                    allSuccess = false
+                    break
+                }
+            }
+        }
+        return allSuccess
+    }
+
+    private fun validateFields(): Boolean {
+        if (spnLibrarian.text.isNullOrEmpty() || spnLibrarian.text.toString() == "Thủ thư") {
+            Toast.makeText(this, "Vui lòng chọn thủ thư", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (edtReaderName.text.isNullOrEmpty() || edtReaderName.text.toString() == "Độc giả") {
+            edtReaderName.error = "Vui lòng chọn độc giả"
+            edtReaderName.requestFocus()
+            return false
+        }
+        if (spnTimeBorrow.text.isNullOrEmpty() || spnTimeBorrow.text.toString() == "Thời gian mượn") {
+            Toast.makeText(this, "Vui lòng chọn thủ thư", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (edtBorrowDate.text.isNullOrEmpty()) {
+            edtBorrowDate.error = "Ngày mượn (yyyy-MM-dd) không được để trống"
+            edtBorrowDate.requestFocus()
+            return false
+        } else if (!validateDate(edtBorrowDate.text.toString())) {
+            edtBorrowDate.error = "Ngày mượn (yyyy-MM-dd) không hợp lệ"
+            edtBorrowDate.requestFocus()
+            return false
+        }
+        return true
+    }
+
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
+        isLenient = false
+    }
+
+    private fun validateDate(dateString: String): Boolean {
+        return try {
+            dateFormat.parse(dateString)
+            true
+        } catch (e: ParseException) {
+            false
+        }
     }
 }

@@ -1,10 +1,50 @@
 package com.example.project_android_library_management.dao
 
+import android.content.ContentValues
 import android.database.Cursor
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.model.BorrowDetail
 
 class BorrowDetailDao(private val databaseHelper: DatabaseHelper) {
+
+    fun insert(borrowDetail: BorrowDetail): Int {
+        val db = databaseHelper.openDatabase()
+
+        val contentValues = ContentValues().apply {
+            put("MaPM", borrowDetail.MaPM)
+            put("MaSach", borrowDetail.MaSach)
+            put("SoLuong", borrowDetail.SoLuong)
+            put("GhiChu", borrowDetail.GhiChu)
+        }
+        val result = db.insert("CTPhieuMuon", null, contentValues)
+        db.close()
+        return if (result == -1L) 0 else 1
+    }
+
+    fun update(borrowDetail: BorrowDetail): Int {
+        val db = databaseHelper.writableDatabase
+
+        val contentValues = ContentValues().apply {
+            put("MaPM", borrowDetail.MaPM)
+            put("MaSach", borrowDetail.MaSach)
+            put("SoLuong", borrowDetail.SoLuong)
+            put("GhiChu", borrowDetail.GhiChu)
+        }
+
+        val whereClause = "MaPM = ? AND MaSach = ?"
+        val whereArgs = arrayOf(borrowDetail.MaPM, borrowDetail.MaSach)
+
+        val rowsAffected = db.update("CTPhieuMuon", contentValues, whereClause, whereArgs)
+        db.close()
+        return rowsAffected
+    }
+
+    fun delete(borrowRecordId: String): Int {
+        val db = databaseHelper.writableDatabase
+        val rowsAffected = db.delete("CTPhieuMuon", "MaPM = ?", arrayOf(borrowRecordId))
+        db.close()
+        return rowsAffected
+    }
 
     private fun cursor(cursor: Cursor): BorrowDetail {
         val maPM = cursor.getString(cursor.getColumnIndexOrThrow("MaPM"))
