@@ -56,8 +56,6 @@ class BorrowDetailActivity : AppCompatActivity() {
         tvDeposit = findViewById(R.id.tvDeposit)
         rcvBooks = findViewById(R.id.rcvBooks)
 
-        rcvBooks.layoutManager = LinearLayoutManager(this)
-
         loadBorrowDetails(maPM)
         loadBookBorrows(maPM)
     }
@@ -103,12 +101,8 @@ class BorrowDetailActivity : AppCompatActivity() {
             val libraryDao = LibrarianDao(databaseHelper)
             val librarian = libraryDao.getLibrarianById(borrowRecord.MaTT)
 
-            if (reader != null) {
-                tvReaderName.text = reader.HoTen
-            }
-            if (librarian != null) {
-                tvLibrarianName.text = librarian.HoTen
-            }
+            reader?.let { tvReaderName.text = reader.HoTen }
+            librarian?.let { tvLibrarianName.text = librarian.HoTen }
         } else {
             Toast.makeText(this, "Không tìm thấy phiếu mượn", Toast.LENGTH_SHORT).show()
             finish()
@@ -119,6 +113,7 @@ class BorrowDetailActivity : AppCompatActivity() {
         val bookBorrows = borrowDetailDao.getBorrowDetailById(maPM)
 
         if (bookBorrows != null) {
+            rcvBooks.layoutManager = LinearLayoutManager(this)
             val bookAdapter = BookAdapter(null, bookBorrows, null)
             rcvBooks.adapter = bookAdapter
         } else {
@@ -139,7 +134,7 @@ class BorrowDetailActivity : AppCompatActivity() {
     }
 
     private fun editBorrowRecord(maPM: String) {
-        val intent = Intent(this, ReaderUpdateActivity::class.java)
+        val intent = Intent(this, BorrowUpdateActivity::class.java)
         intent.putExtra("BORROW_ID", maPM)
         startActivityForResult(intent, REQUEST_CODE_UPDATE_BORROW)
     }

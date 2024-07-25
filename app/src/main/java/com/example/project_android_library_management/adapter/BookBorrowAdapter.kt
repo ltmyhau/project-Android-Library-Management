@@ -1,12 +1,16 @@
 package com.example.project_android_library_management.adapter
 
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
@@ -22,9 +26,10 @@ class BookBorrowAdapter(
         val imgBookCover: ImageView = itemView.findViewById(R.id.imgBookCover)
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvAuthor: TextView = itemView.findViewById(R.id.tvAuthor)
-        val btnDecrease: ImageButton = itemView.findViewById(R.id.btnDecrease)
         val tvQuantity: TextView = itemView.findViewById(R.id.tvQuantity)
+        val btnDecrease: ImageButton = itemView.findViewById(R.id.btnDecrease)
         val btnIncrease: ImageButton = itemView.findViewById(R.id.btnIncrease)
+        val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookBorrowViewHolder {
@@ -57,21 +62,50 @@ class BookBorrowAdapter(
 
         holder.tvQuantity.text = borrowDetail.SoLuong.toString()
 
-//        holder.btnIncrease.setOnClickListener {
-//            borrowDetail.SoLuong += 1
-//            holder.tvQuantity.text = borrowDetail.SoLuong.toString()
-//        }
-//
-//        holder.btnDecrease.setOnClickListener {
-//            if (borrowDetail.SoLuong > 1) {
-//                borrowDetail.SoLuong -= 1
-//                holder.tvQuantity.text = borrowDetail.SoLuong.toString()
-//            }
-//        }
+        var quantity = borrowDetail.SoLuong
+        holder.btnIncrease.setOnClickListener {
+            quantity += 1
+            holder.tvQuantity.text = quantity.toString()
+        }
+
+        holder.btnDecrease.setOnClickListener {
+            if (quantity > 1) {
+                quantity -= 1
+                holder.tvQuantity.text = quantity.toString()
+            } else {
+                showDeleteConfirmationDialog(holder, position)
+            }
+        }
+
+        holder.btnDelete.setOnClickListener {
+            showDeleteConfirmationDialog(holder, position)
+        }
 
     }
 
     override fun getItemCount(): Int {
         return borrowDetails.size
+    }
+
+    private fun showDeleteConfirmationDialog(holder: BookBorrowViewHolder, position: Int) {
+        val context = holder.itemView.context
+        AlertDialog.Builder(context)
+            .setTitle("Xóa sách")
+            .setMessage("Bạn có chắc chắn muốn xóa sách này không?")
+            .setPositiveButton("Có") { _, _ ->
+                if (borrowDetails.size > 1){
+                    deleteItem(position)
+                } else {
+                    Toast.makeText(context, "Không thể xóa sản phẩm cuối cùng", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Không", null)
+            .show()
+    }
+
+    private fun deleteItem(position: Int) {
+        borrowDetails.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, borrowDetails.size)
     }
 }

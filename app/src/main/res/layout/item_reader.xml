@@ -38,7 +38,18 @@
             android:layout_margin="4dp"
             android:drawableLeft="@drawable/ic_phone_call"
             android:drawablePadding="4dp"
-            android:text="Thời hạn thẻ"
+            android:text="Điện thoại"
             android:textSize="14sp" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/primary_background"
+        android:padding="8dp"
+        app:tint="@color/white"
+        app:srcCompat="@drawable/ic_select" />
+
 </LinearLayout>

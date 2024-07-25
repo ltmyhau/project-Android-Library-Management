@@ -36,48 +36,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/gray_background"
-                    android:hint="Mã phiếu mượn"
-                    android:paddingStart="48dp"
-                    android:paddingLeft="48dp"
+                    android:clickable="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:clickable="false"
-                    android:longClickable="false" />
+                    android:hint="Mã phiếu mượn"
+                    android:longClickable="false"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/librarianNameLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:id="@+id/readerNameLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="@+id/borrowIdLayout"
                 app:layout_constraintStart_toStartOf="@+id/borrowIdLayout"
                 app:layout_constraintTop_toBottomOf="@+id/borrowIdLayout"
-                app:startIconDrawable="@drawable/ic_reader">
-
-                <AutoCompleteTextView
-                    android:id="@+id/spnReader"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/white_background"
-                    android:inputType="none"
-                    android:paddingStart="48dp"
-                    android:paddingLeft="48dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp"
-                    android:text="Độc giả" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:id="@+id/librarianNameLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                app:layout_constraintEnd_toEndOf="@+id/readerNameLayout"
-                app:layout_constraintStart_toStartOf="@+id/readerNameLayout"
-                app:layout_constraintTop_toBottomOf="@+id/readerNameLayout"
                 app:startIconDrawable="@drawable/ic_librarian">
 
                 <AutoCompleteTextView
@@ -94,14 +70,34 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:id="@+id/timeBorrowLayout"
+                android:id="@+id/readerNameLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/librarianNameLayout"
                 app:layout_constraintStart_toStartOf="@+id/librarianNameLayout"
                 app:layout_constraintTop_toBottomOf="@+id/librarianNameLayout"
+                app:startIconDrawable="@drawable/ic_reader">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtReaderName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_background"
+                    android:hint="Độc giả"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/timeBorrowLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="@+id/readerNameLayout"
+                app:layout_constraintStart_toStartOf="@+id/readerNameLayout"
+                app:layout_constraintTop_toBottomOf="@+id/readerNameLayout"
                 app:startIconDrawable="@drawable/ic_expiry_date_24">
 
                 <AutoCompleteTextView
@@ -148,11 +144,15 @@
                 app:startIconDrawable="@drawable/ic_calendar">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtReturnDatew"
+                    android:id="@+id/edtReturnDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/white_background"
+                    android:background="@drawable/gray_background"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:hint="Ngày đến hạn"
+                    android:longClickable="false"
                     android:paddingStart="48dp"
                     android:paddingLeft="48dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -171,23 +171,42 @@
                     android:id="@+id/edtDeposit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/white_background"
+                    android:background="@drawable/gray_background"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:hint="Tiền cọc"
+                    android:longClickable="false"
                     android:paddingStart="48dp"
                     android:paddingLeft="48dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcvBooks"
+            <LinearLayout
+                android:id="@id/layoutBooks"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="32dp"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/depositLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/depositLayout">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Chi tiết sách mượn"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcvBooks"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSave"
@@ -203,7 +222,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rcvBooks" />
+                app:layout_constraintTop_toBottomOf="@+id/layoutBooks" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
