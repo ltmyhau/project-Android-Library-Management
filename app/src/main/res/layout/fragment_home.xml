@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,6 +32,7 @@
                     android:layout_margin="8dp"
                     android:backgroundTint="@color/third"
                     android:drawableTop="@drawable/book_64"
+                    android:drawableTint="@color/primary"
                     android:gravity="center"
                     android:paddingLeft="40dp"
                     android:paddingTop="32dp"
@@ -103,7 +105,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:backgroundTint="@color/third"
-                    android:drawableTop="@drawable/book_64"
+                    android:drawableTop="@drawable/borrow_book_64"
+                    android:drawableTint="@color/primary"
                     android:gravity="center"
                     android:paddingLeft="40dp"
                     android:paddingTop="32dp"
@@ -135,7 +138,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:backgroundTint="@color/third"
-                    android:drawableTop="@drawable/reader_64"
+                    android:drawableTop="@drawable/return_book_64"
+                    android:drawableTint="@color/primary"
                     android:gravity="center"
                     android:paddingLeft="40dp"
                     android:paddingTop="32dp"
@@ -171,12 +175,46 @@
                 android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/btnOrderBook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:backgroundTint="@color/third"
+                    android:drawableTop="@drawable/order_book_64"
+                    android:drawableTint="@color/primary"
+                    android:gravity="center"
+                    android:paddingLeft="40dp"
+                    android:paddingTop="32dp"
+                    android:paddingRight="40dp"
+                    android:paddingBottom="16dp"
+                    android:text="130603"
+                    android:textColor="#757575"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Đặt sách"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
                     android:id="@+id/btnStatistic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:backgroundTint="@color/third"
-                    android:drawableTop="@drawable/book_64"
+                    android:drawableTop="@drawable/statistic_64"
+                    android:drawableTint="@color/primary"
                     android:gravity="center"
                     android:paddingLeft="40dp"
                     android:paddingTop="32dp"
@@ -193,15 +231,6 @@
                     android:text="Thống kê"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
             </LinearLayout>
 
         </LinearLayout>

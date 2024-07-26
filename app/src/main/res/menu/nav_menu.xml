@@ -10,23 +10,27 @@
             android:icon="@drawable/ic_home"
             android:title="Trang chủ"/>
         <item
-            android:id="@+id/nav_book"
+            android:id="@+id/nav_books"
             android:icon="@drawable/ic_book"
             android:title="Sách"/>
         <item
-            android:id="@+id/nav_reader"
+            android:id="@+id/nav_readers"
             android:icon="@drawable/ic_reader"
             android:title="Độc giả"/>
         <item
             android:id="@+id/nav_borrow_record"
-            android:icon="@drawable/ic_borrow_record"
+            android:icon="@drawable/ic_borrow_book"
             android:title="Phiến mượn"/>
         <item
             android:id="@+id/nav_return_record"
-            android:icon="@drawable/ic_return_record"
+            android:icon="@drawable/ic_return_book"
             android:title="Phiến trả"/>
         <item
-            android:id="@+id/nav_statistic"
+            android:id="@+id/nav_order_book"
+            android:icon="@drawable/ic_order_book"
+            android:title="Đặt sách"/>
+        <item
+            android:id="@+id/nav_statistics"
             android:icon="@drawable/ic_statistic"
             android:title="Thống kê"/>
     </group>
