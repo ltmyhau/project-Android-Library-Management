@@ -29,6 +29,7 @@ class BookAdapter(
         val tvAuthor: TextView = itemView.findViewById(R.id.tvAuthor)
         val tvQuantity: TextView = itemView.findViewById(R.id.tvQuantity)
         val imgBookCover: ImageView = itemView.findViewById(R.id.imgBookCover)
+        val btnAdd: ImageView = itemView.findViewById(R.id.btnAdd)
 
         init {
             if (bookList != null) {
@@ -49,6 +50,8 @@ class BookAdapter(
     }
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
+        holder.btnAdd.visibility = View.GONE
+
         if (bookList != null) {
             val book = bookList[position]
             holder.tvTitle.text = book.TenSach

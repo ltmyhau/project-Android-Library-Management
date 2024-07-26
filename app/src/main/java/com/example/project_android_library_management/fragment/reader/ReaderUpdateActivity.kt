@@ -8,9 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.ImageView
 import android.widget.RadioGroup
@@ -22,8 +20,6 @@ import androidx.appcompat.widget.AppCompatButton
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.ReaderDao
-import com.example.project_android_library_management.fragment.book.BookUpdateActivity
-import com.example.project_android_library_management.model.Book
 import com.example.project_android_library_management.model.Reader
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -33,7 +29,6 @@ import java.io.IOException
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class ReaderUpdateActivity : AppCompatActivity() {

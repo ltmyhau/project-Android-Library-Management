@@ -19,7 +19,9 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, D
         if (!dbFile.exists()) {
             copyDatabaseFromAssets()
         }
-        return SQLiteDatabase.openDatabase(dbFile.path, null, SQLiteDatabase.OPEN_READWRITE)
+        val database = SQLiteDatabase.openDatabase(dbFile.path, null, SQLiteDatabase.OPEN_READWRITE)
+        database.execSQL("PRAGMA foreign_keys = ON;")
+        return database
     }
 
     private fun copyDatabaseFromAssets() {

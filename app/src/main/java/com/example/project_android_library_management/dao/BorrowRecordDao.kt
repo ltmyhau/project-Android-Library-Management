@@ -2,6 +2,7 @@ package com.example.project_android_library_management.dao
 
 import android.content.ContentValues
 import android.database.Cursor
+import android.util.Log
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.model.BorrowRecord
 
@@ -28,7 +29,7 @@ class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
         val db = databaseHelper.openDatabase()
 
         val contentValues = ContentValues().apply {
-            put("MaPM", generateNewId())
+            put("MaPM", borrowRecord.MaPM)
             put("NgayMuon", borrowRecord.NgayMuon)
             put("SoNgayMuon", borrowRecord.SoNgayMuon)
             put("TienCoc", borrowRecord.TienCoc)
@@ -54,6 +55,15 @@ class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
         }
 
         val rowsAffected = db.update("PhieuMuon", contentValues, "MaPM = ?", arrayOf(borrowRecord.MaPM))
+        db.close()
+        return rowsAffected
+    }
+
+    fun delete(maPM: String): Int {
+        val db = databaseHelper.writableDatabase
+        db.execSQL("PRAGMA foreign_keys = ON;")
+        db.delete("CTPhieuMuon", "MaPM = ?", arrayOf(maPM))
+        val rowsAffected = db.delete("PhieuMuon", "MaPM = ?", arrayOf(maPM))
         db.close()
         return rowsAffected
     }

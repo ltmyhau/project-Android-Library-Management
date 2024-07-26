@@ -49,4 +49,14 @@
             android:drawablePadding="4dp"
             android:text="Số lượng tồn: 10" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@color/white"
+        android:padding="4dp"
+        app:tint="@color/primary"
+        app:srcCompat="@drawable/ic_book_add" />
 </LinearLayout>

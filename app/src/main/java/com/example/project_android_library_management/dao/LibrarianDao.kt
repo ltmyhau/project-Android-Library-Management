@@ -14,12 +14,13 @@ class LibrarianDao(private val databaseHelper: DatabaseHelper) {
         val gioiTinh = cursor.getString(cursor.getColumnIndexOrThrow("GioiTinh"))
         val dienThoai = cursor.getString(cursor.getColumnIndexOrThrow("DienThoai"))
         val diaChi = cursor.getString(cursor.getColumnIndexOrThrow("DiaChi"))
+        val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
 
-        return Librarian(maTT, hoTen, ngaySinh, gioiTinh, dienThoai, diaChi)
+        return Librarian(maTT, hoTen, ngaySinh, gioiTinh, dienThoai, diaChi, hinhAnh)
     }
 
-    fun getAllLibrarian(): List<Librarian> {
-        val librarians = mutableListOf<Librarian>()
+    fun getAllLibrarian(): ArrayList<Librarian> {
+        val librarians = ArrayList<Librarian>()
         val db = databaseHelper.openDatabase()
         val cursor: Cursor = db.rawQuery("SELECT * FROM ThuThu", null)
         if (cursor.moveToFirst()) {

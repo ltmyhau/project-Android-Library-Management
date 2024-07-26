@@ -2,6 +2,7 @@ package com.example.project_android_library_management.dao
 
 import android.content.ContentValues
 import android.database.Cursor
+import android.database.sqlite.SQLiteConstraintException
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.model.Reader
 
@@ -29,7 +30,7 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
         val db = databaseHelper.openDatabase()
 
         val contentValues = ContentValues().apply {
-            put("MaDG", generateNewId())
+            put("MaDG", reader.MaDG)
             put("HoTen", reader.HoTen)
             put("NgaySinh", reader.NgaySinh)
             put("GioiTinh", reader.GioiTinh)
@@ -65,9 +66,18 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
 
     fun delete(maDG: String): Int {
         val db = databaseHelper.writableDatabase
-        val rowsAffected = db.delete("DocGia", "MaDG = ?", arrayOf(maDG))
-        db.close()
-        return rowsAffected
+        db.execSQL("PRAGMA foreign_keys = ON;")
+//        val rowsAffected = db.delete("DocGia", "MaDG = ?", arrayOf(maDG))
+//        db.close()
+//        return rowsAffected
+        return try {
+            val rowsAffected = db.delete("DocGia", "MaDG = ?", arrayOf(maDG))
+            rowsAffected
+        } catch (e: SQLiteConstraintException) {
+            throw e
+        } finally {
+            db.close()
+        }
     }
 
     private fun cursor(cursor: Cursor): Reader {

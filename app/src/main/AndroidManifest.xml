@@ -13,9 +13,24 @@
         android:theme="@style/Theme.ProjectAndroidLibraryManagement"
         tools:targetApi="31">
         <activity
+            android:name=".SearchBookActivity"
+            android:exported="false"
+            android:label="Chọn sách"
+            android:theme="@style/Theme.ActionBar" />
+        <activity
+            android:name=".SearchLibrarianActivity"
+            android:exported="false"
+            android:label="Chọn thủ thư"
+            android:theme="@style/Theme.ActionBar" />
+        <activity
             android:name=".SearchReaderActivity"
             android:exported="false"
             android:label="Chọn độc giả"
+            android:theme="@style/Theme.ActionBar" />
+        <activity
+            android:name=".fragment.borrow_record.BorrowAddActivity"
+            android:exported="false"
+            android:label="Thêm phiếu mượn mới"
             android:theme="@style/Theme.ActionBar" />
         <activity
             android:name=".fragment.borrow_record.BorrowUpdateActivity"

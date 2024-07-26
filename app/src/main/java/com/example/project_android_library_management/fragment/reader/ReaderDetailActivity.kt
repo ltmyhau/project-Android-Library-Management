@@ -1,6 +1,7 @@
 package com.example.project_android_library_management.fragment.reader
 
 import android.content.Intent
+import android.database.sqlite.SQLiteConstraintException
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
@@ -127,13 +128,27 @@ class ReaderDetailActivity : AppCompatActivity() {
             .setTitle("Xác nhận")
             .setMessage("Bạn có chắc chắn muốn xóa độc giả này không?")
             .setPositiveButton("Có") { _, _ ->
-                val rowsAffected = readerDao.delete(maDG)
-                if (rowsAffected > 0) {
-                    Toast.makeText(this, "Đã xóa độc giả thành công", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Xóa độc giả thất bại", Toast.LENGTH_SHORT).show()
+//                val rowsAffected = readerDao.delete(maDG)
+//                if (rowsAffected > 0) {
+//                    Toast.makeText(this, "Đã xóa độc giả thành công", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    Toast.makeText(this, "Xóa độc giả thất bại", Toast.LENGTH_SHORT).show()
+//                }
+//                finish()
+                try {
+                    val rowsAffected = readerDao.delete(maDG)
+                    if (rowsAffected > 0) {
+                        Toast.makeText(this, "Đã xóa độc giả thành công", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Không tìm thấy độc giả để xóa", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: SQLiteConstraintException) {
+                    Toast.makeText(this, "Không thể xóa vì có ràng buộc khóa ngoại!", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Lỗi xảy ra: ${e.message}", Toast.LENGTH_SHORT).show()
+                } finally {
+                    finish()
                 }
-                finish()
             }
             .setNegativeButton("Không") { dialog, _ ->
                 dialog.dismiss()

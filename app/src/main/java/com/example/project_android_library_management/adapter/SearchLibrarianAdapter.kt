@@ -12,32 +12,32 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.R
-import com.example.project_android_library_management.model.Reader
+import com.example.project_android_library_management.model.Librarian
 import java.io.File
 
-class SearchReaderAdapter(
+class SearchLibrarianAdapter(
     private val context: Context,
-    private val readerList: MutableList<Reader>,
-) : RecyclerView.Adapter<SearchReaderAdapter.SearchReaderViewHolder>() {
+    private val librarianList: MutableList<Librarian>,
+) : RecyclerView.Adapter<SearchLibrarianAdapter.SearchLibrarianViewHolder>() {
 
-    inner class SearchReaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class SearchLibrarianViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgAvatar: ImageView = itemView.findViewById(R.id.imgAvatar)
         val tvReaderName: TextView = itemView.findViewById(R.id.tvReaderName)
         val tvPhoneNumber: TextView = itemView.findViewById(R.id.tvPhoneNumber)
         val btnSelect: ImageView = itemView.findViewById(R.id.btnSelect)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchReaderViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchLibrarianViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_reader, parent, false)
-        return SearchReaderViewHolder(itemView)
+        return SearchLibrarianViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: SearchReaderViewHolder, position: Int) {
-        val reader = readerList[position]
-        holder.tvReaderName.text = reader.HoTen
-        holder.tvPhoneNumber.text = reader.DienThoai
-        if (reader.HinhAnh != null) {
-            val imgFile = File(reader.HinhAnh)
+    override fun onBindViewHolder(holder: SearchLibrarianViewHolder, position: Int) {
+        val librarian = librarianList[position]
+        holder.tvReaderName.text = librarian.HoTen
+        holder.tvPhoneNumber.text = librarian.DienThoai
+        if (librarian.HinhAnh != null) {
+            val imgFile = File(librarian.HinhAnh)
             if (imgFile.exists()) {
                 val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
                 holder.imgAvatar.setImageBitmap(bitmap)
@@ -50,14 +50,14 @@ class SearchReaderAdapter(
 
         holder.btnSelect.setOnClickListener {
             val intent = Intent()
-            intent.putExtra("READER_ID", reader.MaDG)
-            Toast.makeText(context, "Đã chọn độc giả ${reader.HoTen}", Toast.LENGTH_SHORT).show()
+            intent.putExtra("LIBRARIAN_ID", librarian.MaTT)
+            Toast.makeText(context, "Đã chọn thủ thư ${librarian.HoTen}", Toast.LENGTH_SHORT).show()
             (context as Activity).setResult(Activity.RESULT_OK, intent)
             (context as Activity).finish()
         }
     }
 
     override fun getItemCount(): Int {
-        return readerList.size
+        return librarianList.size
     }
 }

@@ -29,7 +29,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         val db = databaseHelper.openDatabase()
 
         val contentValues = ContentValues().apply {
-            put("MaSach", generateNewId())
+            put("MaSach", book.MaSach)
             put("ISBN", book.ISBN)
             put("TenSach", book.TenSach)
             put("TacGia", book.TacGia)
@@ -71,6 +71,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
 
     fun delete(bookId: String): Int {
         val db = databaseHelper.writableDatabase
+        db.execSQL("PRAGMA foreign_keys = ON;")
         val rowsAffected = db.delete("Sach", "MaSach = ?", arrayOf(bookId))
         db.close()
         return rowsAffected

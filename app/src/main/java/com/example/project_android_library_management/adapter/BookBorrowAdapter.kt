@@ -22,6 +22,16 @@ class BookBorrowAdapter(
     private val borrowDetails: MutableList<BorrowDetail>
 ) : RecyclerView.Adapter<BookBorrowAdapter.BookBorrowViewHolder>() {
 
+    interface OnQuantityChangeListener {
+        fun onQuantityChange()
+    }
+
+    private var quantityChangeListener: OnQuantityChangeListener? = null
+
+    fun setOnQuantityChangeListener(listener: OnQuantityChangeListener) {
+        quantityChangeListener = listener
+    }
+
     inner class BookBorrowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgBookCover: ImageView = itemView.findViewById(R.id.imgBookCover)
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
@@ -65,12 +75,14 @@ class BookBorrowAdapter(
         holder.btnIncrease.setOnClickListener {
             borrowDetail.SoLuong += 1
             holder.tvQuantity.text = borrowDetail.SoLuong.toString()
+            quantityChangeListener?.onQuantityChange()
         }
 
         holder.btnDecrease.setOnClickListener {
             if (borrowDetail.SoLuong > 1) {
                 borrowDetail.SoLuong -= 1
                 holder.tvQuantity.text = borrowDetail.SoLuong.toString()
+                quantityChangeListener?.onQuantityChange()
             } else {
                 showDeleteConfirmationDialog(holder, position)
             }
@@ -79,7 +91,6 @@ class BookBorrowAdapter(
         holder.btnDelete.setOnClickListener {
             showDeleteConfirmationDialog(holder, position)
         }
-
     }
 
     override fun getItemCount(): Int {
@@ -94,6 +105,8 @@ class BookBorrowAdapter(
             .setPositiveButton("Có") { _, _ ->
                 if (borrowDetails.size > 1){
                     deleteItem(position)
+                    quantityChangeListener?.onQuantityChange()
+                    Toast.makeText(context, "Đã xóa sách thành công", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(context, "Không thể xóa sách cuối cùng", Toast.LENGTH_SHORT).show()
                 }

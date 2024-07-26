@@ -161,13 +161,13 @@ class BorrowDetailActivity : AppCompatActivity() {
             .setTitle("Xác nhận")
             .setMessage("Bạn có chắc chắn muốn xóa phiếu mượn này không?")
             .setPositiveButton("Có") { _, _ ->
-//                val rowsAffected = borrowRecordDao.delete(maPM)
-//                if (rowsAffected > 0) {
+                val rowsAffected = borrowRecordDao.delete(maPM)
+                if (rowsAffected > 0) {
                     Toast.makeText(this, "Đã xóa phiếu mượn thành công", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Toast.makeText(this, "Xóa phiếu mượn thất bại", Toast.LENGTH_SHORT).show()
-//                }
-//                finish()
+                } else {
+                    Toast.makeText(this, "Xóa phiếu mượn thất bại", Toast.LENGTH_SHORT).show()
+                }
+                finish()
             }
             .setNegativeButton("Không") { dialog, _ ->
                 dialog.dismiss()

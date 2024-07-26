@@ -54,7 +54,7 @@ class BorrowRecordFragment : Fragment() {
 
         val btnAdd = view.findViewById<FloatingActionButton>(R.id.btnAdd)
         btnAdd.setOnClickListener {
-            val intent = Intent(activity, ReaderAddActivity::class.java)
+            val intent = Intent(activity, BorrowAddActivity::class.java)
             startActivity(intent)
         }
 

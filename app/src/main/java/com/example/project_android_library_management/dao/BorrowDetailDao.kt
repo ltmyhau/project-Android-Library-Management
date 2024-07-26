@@ -41,6 +41,7 @@ class BorrowDetailDao(private val databaseHelper: DatabaseHelper) {
 
     fun delete(borrowRecordId: String): Int {
         val db = databaseHelper.writableDatabase
+        db.execSQL("PRAGMA foreign_keys = ON;")
         val rowsAffected = db.delete("CTPhieuMuon", "MaPM = ?", arrayOf(borrowRecordId))
         db.close()
         return rowsAffected
