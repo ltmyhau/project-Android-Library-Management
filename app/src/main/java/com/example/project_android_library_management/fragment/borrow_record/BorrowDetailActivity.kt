@@ -119,7 +119,7 @@ class BorrowDetailActivity : AppCompatActivity() {
     }
 
     private fun loadBookBorrows(maPM: String) {
-        val bookBorrows = borrowDetailDao.getBorrowDetailById(maPM)
+        val bookBorrows = borrowDetailDao.getBorrowDetailsById(maPM)
 
         if (bookBorrows != null) {
             rcvBooks.layoutManager = LinearLayoutManager(this)

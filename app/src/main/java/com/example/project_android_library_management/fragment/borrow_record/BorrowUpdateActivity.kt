@@ -90,7 +90,7 @@ class BorrowUpdateActivity : AppCompatActivity() {
 
         loadBorrowDetails(maPM)
 
-        bookBorrows = borrowDetailDao.getBorrowDetailById(maPM)
+        bookBorrows = borrowDetailDao.getBorrowDetailsById(maPM)
         loadBookBorrows(bookBorrows)
 
         edtLibrarianName.setOnClickListener {

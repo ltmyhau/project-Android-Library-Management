@@ -53,7 +53,7 @@ class BorrowDetailDao(private val databaseHelper: DatabaseHelper) {
         return BorrowDetail(maPM, maSach, soLuong)
     }
 
-    fun getBorrowDetailById(maPM: String?): ArrayList<BorrowDetail> {
+    fun getBorrowDetailsById(maPM: String?): ArrayList<BorrowDetail> {
         val borrowDetails = ArrayList<BorrowDetail>()
         val db = databaseHelper.openDatabase()
         val cursor: Cursor = db.rawQuery("SELECT * FROM CTPhieuMuon WHERE MaPM = ?", arrayOf(maPM))
@@ -65,5 +65,17 @@ class BorrowDetailDao(private val databaseHelper: DatabaseHelper) {
         cursor.close()
         db.close()
         return borrowDetails
+    }
+
+    fun getBorrowDetailByIdAndBookId(maPM: String, maSach: String): BorrowDetail? {
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery("SELECT * FROM CTPhieuMuon WHERE MaPM = ? AND MaSach = ?", arrayOf(maPM, maSach))
+        var borrowDetail: BorrowDetail? = null
+        if (cursor.moveToFirst()) {
+            borrowDetail = cursor(cursor)
+        }
+        cursor.close()
+        db.close()
+        return borrowDetail
     }
 }

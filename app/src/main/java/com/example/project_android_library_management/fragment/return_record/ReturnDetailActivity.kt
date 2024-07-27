@@ -96,11 +96,7 @@ class ReturnDetailActivity : AppCompatActivity() {
         loadReturnDetails(maPT)
         loadBookReturns(maPT)
 
-        if (checkFines()) {
-            finesLayout.visibility = View.VISIBLE
-        } else {
-            finesLayout.visibility = View.GONE
-        }
+        finesLayout.visibility = if (checkFines()) View.VISIBLE else View.GONE
 
         Log.e("SACHMUON", bookBorrows.toString())
         Log.e("SACHTRA", bookReturns.toString())
@@ -153,7 +149,7 @@ class ReturnDetailActivity : AppCompatActivity() {
             val borrowRecordDao = BorrowRecordDao(databaseHelper)
             val borrowRecord = borrowRecordDao.getBorrowRecordById(returnRecord.MaPM)
 
-            bookBorrows = borrowDetailDao.getBorrowDetailById(returnRecord.MaPM)
+            bookBorrows = borrowDetailDao.getBorrowDetailsById(returnRecord.MaPM)
 
             reader?.let { tvReaderName.text = reader.HoTen }
             librarian?.let { tvLibrarianName.text = librarian.HoTen }
@@ -239,19 +235,19 @@ class ReturnDetailActivity : AppCompatActivity() {
     private fun checkFines(): Boolean {
         var isFines = false
 
+        val daysOverdue = calculateDaysBetweenDates(expectedReturnDate, actualReturnDate)
+        if (daysOverdue > 0) {
+            totalCompensation += calculateOverdueFine()
+            val overdueFine = String.format("%.0f", calculateOverdueFine())
+            addTableRow(finesTableLayout, "Quá hạn ${daysOverdue} ngày", overdueFine)
+            isFines = true
+        }
+
         totalCompensation = calculateCompensation(bookBorrows, bookReturns)
         if (totalCompensation > 0) {
             isFines = true
         }
 
-        val overdueDays = calculateDaysBetweenDates(expectedReturnDate, actualReturnDate)
-        if (overdueDays > 0) {
-            totalCompensation += calculateOverdueFine()
-            val overdueFine = String.format("%.0f", calculateOverdueFine())
-            addTableRow(finesTableLayout, "Quá hạn ${overdueDays} ngày", overdueFine)
-            isFines = true
-        }
-        Log.e("TONGPHAT", totalCompensation.toString())
         return isFines
     }
 

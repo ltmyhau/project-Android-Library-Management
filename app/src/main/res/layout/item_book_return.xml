@@ -30,13 +30,13 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvAuthor"
+            android:id="@+id/tvBorrowQuantity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:drawableLeft="@drawable/ic_author"
+            android:drawableLeft="@drawable/ic_books"
             android:drawablePadding="4dp"
-            android:text="Tác giả"
+            android:text="Số lượng mượn"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -53,7 +53,7 @@
                 android:drawableLeft="@drawable/ic_books"
                 android:drawablePadding="4dp"
                 android:paddingRight="8dp"
-                android:text="Số lượng mượn:"
+                android:text="Số lượng trả:"
                 android:textSize="14sp" />
 
             <ImageButton
