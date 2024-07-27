@@ -27,9 +27,7 @@ import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.dao.ReaderDao
 import com.example.project_android_library_management.dao.ReturnDetailDao
 import com.example.project_android_library_management.dao.ReturnRecordDao
-import com.example.project_android_library_management.fragment.borrow_record.BorrowUpdateActivity
 import com.example.project_android_library_management.model.BorrowDetail
-import com.example.project_android_library_management.model.BorrowRecord
 import com.example.project_android_library_management.model.ReturnDetail
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -46,7 +44,6 @@ class ReturnDetailActivity : AppCompatActivity() {
     private var maPT: String = ""
     private var expectedReturnDate: String = ""
     private var actualReturnDate: String = ""
-    private var timeBorrow: Int = 0
     private var totalCompensation: Double = 0.0
     private var bookReturns: ArrayList<ReturnDetail> = arrayListOf()
     private var bookBorrows: ArrayList<BorrowDetail> = arrayListOf()
@@ -62,6 +59,7 @@ class ReturnDetailActivity : AppCompatActivity() {
     private lateinit var rcvBooks: RecyclerView
     private lateinit var finesLayout: LinearLayout
     private lateinit var finesTableLayout: TableLayout
+    private lateinit var finesTableRow: TableRow
 
     companion object {
         private const val REQUEST_CODE_UPDATE_RETURN = 1
@@ -92,6 +90,7 @@ class ReturnDetailActivity : AppCompatActivity() {
         rcvBooks = findViewById(R.id.rcvBooks)
         finesLayout = findViewById(R.id.finesLayout)
         finesTableLayout = findViewById(R.id.finesTableLayout)
+        finesTableRow = findViewById(R.id.finesTableRow)
 
         loadReturnDetails(maPT)
         loadBookReturns(maPT)
@@ -129,6 +128,15 @@ class ReturnDetailActivity : AppCompatActivity() {
             }
 
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_UPDATE_RETURN && resultCode == RESULT_OK) {
+            loadReturnDetails(maPT)
+            loadBookReturns(maPT)
+            finesLayout.visibility = if (checkFines()) View.VISIBLE else View.GONE
         }
     }
 
@@ -234,6 +242,8 @@ class ReturnDetailActivity : AppCompatActivity() {
 
     private fun checkFines(): Boolean {
         var isFines = false
+        totalCompensation = 0.0
+        removeOtherTableRows(finesTableLayout, finesTableRow)
 
         val daysOverdue = calculateDaysBetweenDates(expectedReturnDate, actualReturnDate)
         if (daysOverdue > 0) {
@@ -295,6 +305,15 @@ class ReturnDetailActivity : AppCompatActivity() {
         tableRow.addView(textView2)
 
         tableLayout.addView(tableRow)
+    }
+
+    fun removeOtherTableRows(tableLayout: TableLayout, headerRow: TableRow) {
+        for (i in tableLayout.childCount - 1 downTo 0) {
+            val child = tableLayout.getChildAt(i)
+            if (child is TableRow && child != headerRow) {
+                tableLayout.removeViewAt(i)
+            }
+        }
     }
 
     private fun editReturnRecord(maPM: String) {

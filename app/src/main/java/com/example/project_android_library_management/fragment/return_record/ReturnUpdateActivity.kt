@@ -30,7 +30,9 @@ import com.example.project_android_library_management.dao.ReaderDao
 import com.example.project_android_library_management.dao.ReturnDetailDao
 import com.example.project_android_library_management.dao.ReturnRecordDao
 import com.example.project_android_library_management.model.BorrowDetail
+import com.example.project_android_library_management.model.BorrowRecord
 import com.example.project_android_library_management.model.ReturnDetail
+import com.example.project_android_library_management.model.ReturnRecord
 import com.example.project_android_library_management.search.SearchBookActivity
 import com.example.project_android_library_management.search.SearchLibrarianActivity
 import com.google.android.material.textfield.TextInputEditText
@@ -131,7 +133,7 @@ class ReturnUpdateActivity : AppCompatActivity() {
         val btnEdit = findViewById<AppCompatButton>(R.id.btnEdit)
         btnEdit.text = "Lưu thông tin"
         btnEdit.setOnClickListener {
-//            saveReturnRecord()
+            saveReturnRecord()
         }
     }
 
@@ -223,10 +225,13 @@ class ReturnUpdateActivity : AppCompatActivity() {
             edtActualReturnDate.setText(actualReturnDate)
             edtFines.setText(String.format("%.0f", returnRecord.TienPhat))
 
+            readerId = returnRecord.MaDG
+            librarianId = returnRecord.MaTT
+
             val readerDao = ReaderDao(databaseHelper)
-            val reader = readerDao.getReaderById(returnRecord.MaDG)
+            val reader = readerDao.getReaderById(readerId)
             val libraryDao = LibrarianDao(databaseHelper)
-            val librarian = libraryDao.getLibrarianById(returnRecord.MaTT)
+            val librarian = libraryDao.getLibrarianById(librarianId)
             val borrowRecordDao = BorrowRecordDao(databaseHelper)
             val borrowRecord = borrowRecordDao.getBorrowRecordById(returnRecord.MaPM)
 
@@ -318,7 +323,7 @@ class ReturnUpdateActivity : AppCompatActivity() {
 
     private fun checkFines(): Boolean {
         var isFines = false
-
+        totalCompensation = 0.0
         removeOtherTableRows(finesTableLayout, finesTableRow)
 
         calculateOverdueFine()
@@ -331,7 +336,7 @@ class ReturnUpdateActivity : AppCompatActivity() {
             isFines = true
         }
 
-        totalCompensation = calculateCompensation(bookBorrows, bookReturns)
+        totalCompensation += calculateCompensation(bookBorrows, bookReturns)
         if (totalCompensation > 0) {
             edtFines.setText(String.format("%.0f", totalCompensation))
             isFines = true
@@ -394,6 +399,97 @@ class ReturnUpdateActivity : AppCompatActivity() {
             if (child is TableRow && child != headerRow) {
                 tableLayout.removeViewAt(i)
             }
+        }
+    }
+
+    private fun saveReturnRecord() {
+        val returnDate = edtActualReturnDate.text.toString()
+        val fines = edtFines.text.toString().toDouble()
+        val borrowId = edtBorowId.text.toString()
+
+        if (validateFields()) {
+            val returnRecord = ReturnRecord(maPT, returnDate, fines, borrowId, librarianId, readerId)
+            val rowsAffected = returnRecordDao.update(returnRecord)
+            if (rowsAffected > 0 && saveBookReturn()) {
+                Toast.makeText(this, "Cập nhật thông tin phiếu trả thành công", Toast.LENGTH_SHORT)
+                    .show()
+                val resultIntent = Intent()
+                resultIntent.putExtra("RETURN_ID", maPT)
+                setResult(RESULT_OK, resultIntent)
+                finish()
+            } else {
+                Toast.makeText(this, "Cập nhật thông tin phiếu trả thất bại", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+    private fun saveBookReturn(): Boolean {
+        var allSuccess = true
+
+        try {
+            val rowsDeleted = returnDetailDao.delete(maPT)
+            if (rowsDeleted <= 0) {
+                allSuccess = false
+            }
+        } catch (e: Exception) {
+            allSuccess = false
+        }
+
+        if (allSuccess) {
+            for (returnDetail in bookReturns) {
+                val rowsAffected = returnDetailDao.insert(returnDetail)
+                if (rowsAffected <= 0) {
+                    allSuccess = false
+                    break
+                }
+            }
+        }
+        return allSuccess
+    }
+
+    private fun validateFields(): Boolean {
+        if (edtLibrarianName.text.isNullOrEmpty() || edtLibrarianName.text.toString() == "Thủ thư") {
+            edtLibrarianName.error = ""
+            Toast.makeText(this, "Vui lòng chọn thủ thư", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (edtReaderName.text.isNullOrEmpty() || edtReaderName.text.toString() == "Độc giả") {
+            edtReaderName.error = ""
+            Toast.makeText(this, "Vui lòng chọn độc giả", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (edtBorowId.text.isNullOrEmpty() || edtBorowId.text.toString() == "Mã phiếu mượn") {
+            edtBorowId.error = ""
+            Toast.makeText(this, "Vui lòng chọn phiếu mượn", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (edtActualReturnDate.text.isNullOrEmpty()) {
+            edtActualReturnDate.error = "Ngày trả (yyyy-MM-dd) không được để trống"
+            edtActualReturnDate.requestFocus()
+            return false
+        } else if (!validateDate(edtActualReturnDate.text.toString())) {
+            edtActualReturnDate.error = "Ngày trả (yyyy-MM-dd) không hợp lệ"
+            edtActualReturnDate.requestFocus()
+            return false
+        }
+        if (bookReturns.isEmpty()) {
+            Toast.makeText(this, "Vui lòng chọn sách cần trả", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
+        isLenient = false
+    }
+
+    private fun validateDate(dateString: String): Boolean {
+        return try {
+            dateFormat.parse(dateString)
+            true
+        } catch (e: ParseException) {
+            false
         }
     }
 }
