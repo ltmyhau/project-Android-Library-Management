@@ -25,6 +25,7 @@ class BorrowDetailActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var borrowRecordDao: BorrowRecordDao
     private lateinit var borrowDetailDao: BorrowDetailDao
+
     private var maPM: String = ""
 
     private lateinit var tvBorrowRecordID: TextView
@@ -36,6 +37,10 @@ class BorrowDetailActivity : AppCompatActivity() {
     private lateinit var tvDeposit: TextView
     private lateinit var tvNotes: TextView
     private lateinit var rcvBooks: RecyclerView
+
+    companion object {
+        private const val REQUEST_CODE_UPDATE_BORROW = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,7 +123,7 @@ class BorrowDetailActivity : AppCompatActivity() {
 
         if (bookBorrows != null) {
             rcvBooks.layoutManager = LinearLayoutManager(this)
-            val bookAdapter = BookAdapter(null, bookBorrows, null)
+            val bookAdapter = BookAdapter(null, bookBorrows, null, null)
             rcvBooks.adapter = bookAdapter
         } else {
             Toast.makeText(this, "Không tìm thấy chi tiết phiếu mượn", Toast.LENGTH_SHORT).show()
@@ -136,10 +141,6 @@ class BorrowDetailActivity : AppCompatActivity() {
             val returnDateStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
             tvReturnDate.setText(returnDateStr)
         }
-    }
-
-    companion object {
-        private const val REQUEST_CODE_UPDATE_BORROW = 1
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,12 +1,13 @@
-package com.example.project_android_library_management
+package com.example.project_android_library_management.search
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.project_android_library_management.DatabaseHelper
+import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.SearchBookAdapter
-import com.example.project_android_library_management.adapter.SearchReaderAdapter
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.model.Book
 

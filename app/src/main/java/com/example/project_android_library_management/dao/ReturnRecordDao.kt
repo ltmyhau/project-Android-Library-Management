@@ -30,9 +30,10 @@ class ReturnRecordDao(private val databaseHelper: DatabaseHelper) {
         val contentValues = ContentValues().apply {
             put("MaPT", returnRecord.MaPT)
             put("NgayTra", returnRecord.NgayTra)
-            put("SoTienPhat", returnRecord.SoTienPhat)
-            put("SoTienHoan", returnRecord.SoTienHoan)
+            put("TienPhat", returnRecord.TienPhat)
             put("MaPM", returnRecord.MaPM)
+            put("MaTT", returnRecord.MaTT)
+            put("MaDG", returnRecord.MaDG)
         }
         val result = db.insert("PhieuTra", null, contentValues)
         db.close()
@@ -44,9 +45,10 @@ class ReturnRecordDao(private val databaseHelper: DatabaseHelper) {
 
         val contentValues = ContentValues().apply {
             put("NgayTra", returnRecord.NgayTra)
-            put("SoTienPhat", returnRecord.SoTienPhat)
-            put("SoTienHoan", returnRecord.SoTienHoan)
+            put("TienPhat", returnRecord.TienPhat)
             put("MaPM", returnRecord.MaPM)
+            put("MaTT", returnRecord.MaTT)
+            put("MaDG", returnRecord.MaDG)
         }
 
         val rowsAffected = db.update("PhieuTra", contentValues, "MaPT = ?", arrayOf(returnRecord.MaPT))
@@ -66,11 +68,12 @@ class ReturnRecordDao(private val databaseHelper: DatabaseHelper) {
     private fun cursor(cursor: Cursor): ReturnRecord {
         val maPT = cursor.getString(cursor.getColumnIndexOrThrow("MaPT"))
         val ngayTra = cursor.getString(cursor.getColumnIndexOrThrow("NgayTra"))
-        val soTienPhat = cursor.getDouble(cursor.getColumnIndexOrThrow("SoTienPhat"))
-        val soTienHoan = cursor.getDouble(cursor.getColumnIndexOrThrow("SoTienHoan"))
+        val tienPhat = cursor.getDouble(cursor.getColumnIndexOrThrow("TienPhat"))
         val maPM = cursor.getString(cursor.getColumnIndexOrThrow("MaPM"))
+        val maTT = cursor.getString(cursor.getColumnIndexOrThrow("MaTT"))
+        val maDG = cursor.getString(cursor.getColumnIndexOrThrow("MaDG"))
 
-        return ReturnRecord(maPT, ngayTra, soTienPhat, soTienHoan, maPM)
+        return ReturnRecord(maPT, ngayTra, tienPhat, maPM, maTT, maDG)
     }
 
     fun getAllReturnRecord(): ArrayList<ReturnRecord> {

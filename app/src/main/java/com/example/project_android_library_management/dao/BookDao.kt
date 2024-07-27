@@ -124,4 +124,16 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
 
         return book
     }
+
+    fun getBookPrice(bookId: String?): Double {
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery("SELECT GiaBan FROM Sach WHERE MaSach = ?", arrayOf(bookId))
+        var price = 0.0
+        if (cursor.moveToFirst()) {
+            price = cursor.getDouble(cursor.getColumnIndexOrThrow("GiaBan"))
+        }
+        cursor.close()
+        db.close()
+        return price
+    }
 }

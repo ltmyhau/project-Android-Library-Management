@@ -1,19 +1,21 @@
-package com.example.project_android_library_management
+package com.example.project_android_library_management.search
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.project_android_library_management.adapter.SearchLibrarianAdapter
-import com.example.project_android_library_management.dao.LibrarianDao
-import com.example.project_android_library_management.model.Librarian
+import com.example.project_android_library_management.DatabaseHelper
+import com.example.project_android_library_management.R
+import com.example.project_android_library_management.adapter.SearchPublisherAdapter
+import com.example.project_android_library_management.dao.PublisherDao
+import com.example.project_android_library_management.model.Publisher
 
-class SearchLibrarianActivity : AppCompatActivity() {
+class SearchPublisherActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
-    private lateinit var librarianDao: LibrarianDao
-    private lateinit var searchLibrarianAdapter: SearchLibrarianAdapter
-    private lateinit var librarianList: ArrayList<Librarian>
+    private lateinit var publisherDao: PublisherDao
+    private lateinit var searchPublisherAdapter: SearchPublisherAdapter
+    private lateinit var publisherList: ArrayList<Publisher>
 
     private lateinit var edtSearch: SearchView
     private lateinit var rcvList: RecyclerView
@@ -32,11 +34,11 @@ class SearchLibrarianActivity : AppCompatActivity() {
         rcvList.layoutManager = LinearLayoutManager(this)
 
         databaseHelper = DatabaseHelper(this)
-        librarianDao = LibrarianDao(databaseHelper)
-        librarianList = librarianDao.getAllLibrarian()
+        publisherDao = PublisherDao(databaseHelper)
+        publisherList = publisherDao.getAllPublisher()
 
-        searchLibrarianAdapter = SearchLibrarianAdapter(this, librarianList)
-        rcvList.adapter = searchLibrarianAdapter
+        searchPublisherAdapter = SearchPublisherAdapter(this, publisherList)
+        rcvList.adapter = searchPublisherAdapter
 
     }
 

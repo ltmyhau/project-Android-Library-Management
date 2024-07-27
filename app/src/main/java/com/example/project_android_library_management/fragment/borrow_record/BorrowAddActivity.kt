@@ -3,7 +3,6 @@ package com.example.project_android_library_management.fragment.borrow_record
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
@@ -16,9 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
-import com.example.project_android_library_management.SearchBookActivity
-import com.example.project_android_library_management.SearchLibrarianActivity
-import com.example.project_android_library_management.SearchReaderActivity
+import com.example.project_android_library_management.search.SearchBookActivity
+import com.example.project_android_library_management.search.SearchLibrarianActivity
+import com.example.project_android_library_management.search.SearchReaderActivity
 import com.example.project_android_library_management.adapter.BookBorrowAdapter
 import com.example.project_android_library_management.dao.BorrowDetailDao
 import com.example.project_android_library_management.dao.BorrowRecordDao
@@ -259,7 +258,7 @@ class BorrowAddActivity : AppCompatActivity() {
     }
 
     private fun updateDepositAmount() {
-        val depositPerBook = 25000.0
+        val depositPerBook = 50000.0
         val totalBooks = bookBorrows.sumOf { it.SoLuong }
         val totalDeposit = totalBooks * depositPerBook
         edtDeposit.setText(String.format("%.0f", totalDeposit))

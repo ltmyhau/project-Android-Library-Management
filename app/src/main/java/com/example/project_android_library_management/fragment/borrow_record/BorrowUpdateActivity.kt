@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
-import com.example.project_android_library_management.SearchBookActivity
-import com.example.project_android_library_management.SearchLibrarianActivity
-import com.example.project_android_library_management.SearchReaderActivity
+import com.example.project_android_library_management.search.SearchBookActivity
+import com.example.project_android_library_management.search.SearchLibrarianActivity
+import com.example.project_android_library_management.search.SearchReaderActivity
 import com.example.project_android_library_management.adapter.BookBorrowAdapter
 import com.example.project_android_library_management.dao.BorrowDetailDao
 import com.example.project_android_library_management.dao.BorrowRecordDao
@@ -31,7 +31,6 @@ import com.google.android.material.textfield.TextInputLayout
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class BorrowUpdateActivity : AppCompatActivity() {
@@ -294,7 +293,7 @@ class BorrowUpdateActivity : AppCompatActivity() {
     }
 
     private fun updateDepositAmount() {
-        val depositPerBook = 25000.0
+        val depositPerBook = 50000.0
         val totalBooks = bookBorrows.sumOf { it.SoLuong }
         val totalDeposit = totalBooks * depositPerBook
         edtDeposit.setText(String.format("%.0f", totalDeposit))

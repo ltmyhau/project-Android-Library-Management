@@ -42,9 +42,9 @@ class ReturnRecordFragment : Fragment() {
 
         returnRecordAdapter = ReturnRecordAdapter(returncordList, object : ReturnRecordAdapter.OnItemClickListener {
             override fun onItemClick(returnRecord: ReturnRecord) {
-//                val intent = Intent(context, ReturnDetailActivity::class.java)
-//                intent.putExtra("RETURN_ID", returnRecord.MaPT)
-//                startActivityForResult(intent, REQUEST_CODE_RETURN_LIST)
+                val intent = Intent(context, ReturnDetailActivity::class.java)
+                intent.putExtra("RETURN_ID", returnRecord.MaPT)
+                startActivityForResult(intent, REQUEST_CODE_RETURN_LIST)
             }
         })
 

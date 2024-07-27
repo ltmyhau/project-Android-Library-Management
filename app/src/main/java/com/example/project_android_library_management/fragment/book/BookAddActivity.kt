@@ -17,11 +17,10 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
-import com.example.project_android_library_management.SearchPublisherActivity
+import com.example.project_android_library_management.search.SearchPublisherActivity
 import com.example.project_android_library_management.dao.BookCategoryDao
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.dao.PublisherDao
-import com.example.project_android_library_management.fragment.book.BookUpdateActivity.Companion
 import com.example.project_android_library_management.model.Book
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
