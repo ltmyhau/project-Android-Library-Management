@@ -9,20 +9,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
+import com.example.project_android_library_management.dao.BorrowRecordDao
 import com.example.project_android_library_management.dao.ReaderDao
-import com.example.project_android_library_management.model.BorrowRecord
+import com.example.project_android_library_management.model.ReturnRecord
 import java.io.File
 
-class BorrowRecordAdapter(
-    private val borrowRecordList: MutableList<BorrowRecord>,
+class ReturnRecordAdapter(
+    private val returnRecordList: MutableList<ReturnRecord>,
     private val itemClickListener: OnItemClickListener
-) : RecyclerView.Adapter<BorrowRecordAdapter.BorrowRecordViewHolder>() {
+) : RecyclerView.Adapter<ReturnRecordAdapter.ReturnRecordViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(borrowRecord: BorrowRecord)
+        fun onItemClick(borrowRecord: ReturnRecord)
     }
 
-    inner class BorrowRecordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ReturnRecordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgAvatar: ImageView = itemView.findViewById(R.id.imgAvatar)
         val tvRecordID: TextView = itemView.findViewById(R.id.tvRecordID)
         val tvReaderName: TextView = itemView.findViewById(R.id.tvReaderName)
@@ -32,26 +33,29 @@ class BorrowRecordAdapter(
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    val selected = borrowRecordList[position]
+                    val selected = returnRecordList[position]
                     itemClickListener.onItemClick(selected)
                 }
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BorrowRecordViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReturnRecordViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_record, parent, false)
-        return BorrowRecordViewHolder(itemView)
+        return ReturnRecordViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: BorrowRecordViewHolder, position: Int) {
-        val borrowRecord = borrowRecordList[position]
+    override fun onBindViewHolder(holder: ReturnRecordViewHolder, position: Int) {
+        val returnRecord = returnRecordList[position]
+
+        val borrowRecordDao = BorrowRecordDao(DatabaseHelper(holder.itemView.context))
+        val borrowRecord = borrowRecordDao.getBorrowRecordById(returnRecord.MaPM)
 
         val readerDao = ReaderDao(DatabaseHelper(holder.itemView.context))
-        val reader = readerDao.getReaderById(borrowRecord.MaDG)
+        val reader = readerDao.getReaderById(borrowRecord?.MaDG)
 
-        holder.tvRecordID.text = borrowRecord.MaPM
-        holder.tvDate.text = borrowRecord.NgayMuon
+        holder.tvRecordID.text = returnRecord.MaPT
+        holder.tvDate.text = returnRecord.NgayTra
 
         if (reader != null) {
             holder.tvReaderName.text = reader.HoTen
@@ -71,12 +75,12 @@ class BorrowRecordAdapter(
     }
 
     override fun getItemCount(): Int {
-        return borrowRecordList.size
+        return returnRecordList.size
     }
 
-    fun updateData(newBorrowRecordList: List<BorrowRecord>) {
-        borrowRecordList.clear()
-        borrowRecordList.addAll(newBorrowRecordList)
+    fun updateData(newReturnRecordList: List<ReturnRecord>) {
+        returnRecordList.clear()
+        returnRecordList.addAll(newReturnRecordList)
         notifyDataSetChanged()
     }
 

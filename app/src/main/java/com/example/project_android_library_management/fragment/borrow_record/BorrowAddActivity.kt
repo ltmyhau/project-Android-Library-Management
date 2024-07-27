@@ -160,7 +160,7 @@ class BorrowAddActivity : AppCompatActivity() {
                     }
                 }
                 if (!bookExists) {
-                    val newBookDetail = BorrowDetail(maPM, bookId, 1, null)
+                    val newBookDetail = BorrowDetail(maPM, bookId, 1)
                     bookBorrows.add(newBookDetail)
                 }
                 updateDepositAmount()

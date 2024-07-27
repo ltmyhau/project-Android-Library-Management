@@ -13,12 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.BookAdapter
-import com.example.project_android_library_management.adapter.BookBorrowAdapter
 import com.example.project_android_library_management.dao.BorrowDetailDao
 import com.example.project_android_library_management.dao.BorrowRecordDao
 import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.dao.ReaderDao
-import com.example.project_android_library_management.fragment.reader.ReaderUpdateActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -36,6 +34,7 @@ class BorrowDetailActivity : AppCompatActivity() {
     private lateinit var tvBorrowDate: TextView
     private lateinit var tvReturnDate: TextView
     private lateinit var tvDeposit: TextView
+    private lateinit var tvNotes: TextView
     private lateinit var rcvBooks: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,13 +49,14 @@ class BorrowDetailActivity : AppCompatActivity() {
         borrowRecordDao = BorrowRecordDao(databaseHelper)
         borrowDetailDao = BorrowDetailDao(databaseHelper)
 
-        tvBorrowRecordID = findViewById(R.id.tvBorrowRecordID)
+        tvBorrowRecordID = findViewById(R.id.tvRecordID)
         tvReaderName = findViewById(R.id.tvReaderName)
         tvLibrarianName = findViewById(R.id.tvLibrarianName)
         tvTimeBorrow = findViewById(R.id.tvTimeBorrow)
         tvBorrowDate = findViewById(R.id.tvBorrowDate)
         tvReturnDate = findViewById(R.id.tvReturnDate)
         tvDeposit = findViewById(R.id.tvDeposit)
+        tvNotes = findViewById(R.id.tvNotes)
         rcvBooks = findViewById(R.id.rcvBooks)
 
         loadBorrowDetails(maPM)
@@ -98,7 +98,7 @@ class BorrowDetailActivity : AppCompatActivity() {
             tvBorrowDate.text = borrowRecord.NgayMuon
             calculateReturnDate(borrowRecord.NgayMuon, borrowRecord.SoNgayMuon)
             tvDeposit.text = String.format("%.0f", borrowRecord.TienCoc)
-
+            tvNotes.text = borrowRecord.GhiChu
 
             val readerDao = ReaderDao(databaseHelper)
             val reader = readerDao.getReaderById(borrowRecord.MaDG)

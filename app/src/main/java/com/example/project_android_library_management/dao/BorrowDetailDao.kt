@@ -14,7 +14,6 @@ class BorrowDetailDao(private val databaseHelper: DatabaseHelper) {
             put("MaPM", borrowDetail.MaPM)
             put("MaSach", borrowDetail.MaSach)
             put("SoLuong", borrowDetail.SoLuong)
-            put("GhiChu", borrowDetail.GhiChu)
         }
         val result = db.insert("CTPhieuMuon", null, contentValues)
         db.close()
@@ -28,7 +27,6 @@ class BorrowDetailDao(private val databaseHelper: DatabaseHelper) {
             put("MaPM", borrowDetail.MaPM)
             put("MaSach", borrowDetail.MaSach)
             put("SoLuong", borrowDetail.SoLuong)
-            put("GhiChu", borrowDetail.GhiChu)
         }
 
         val whereClause = "MaPM = ? AND MaSach = ?"
@@ -51,9 +49,8 @@ class BorrowDetailDao(private val databaseHelper: DatabaseHelper) {
         val maPM = cursor.getString(cursor.getColumnIndexOrThrow("MaPM"))
         val maSach = cursor.getString(cursor.getColumnIndexOrThrow("MaSach"))
         val soLuong = cursor.getInt(cursor.getColumnIndexOrThrow("SoLuong"))
-        val ghiChu = cursor.getString(cursor.getColumnIndexOrThrow("GhiChu"))
 
-        return BorrowDetail(maPM, maSach, soLuong, ghiChu)
+        return BorrowDetail(maPM, maSach, soLuong)
     }
 
     fun getBorrowDetailById(maPM: String?): ArrayList<BorrowDetail> {

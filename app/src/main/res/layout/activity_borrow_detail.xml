@@ -44,7 +44,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvBorrowRecordID"
+                        android:id="@+id/tvRecordID"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
@@ -196,6 +196,30 @@
                         android:background="@drawable/line_left"
                         android:padding="8dp"
                         android:text="Tiền cọc"
+                        android:textSize="16sp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_border">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:text="Ghi chú"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvNotes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:background="@drawable/line_left"
+                        android:padding="8dp"
+                        android:text="Ghi chú"
                         android:textSize="16sp" />
                 </TableRow>
             </TableLayout>
