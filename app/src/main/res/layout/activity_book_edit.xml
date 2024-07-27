@@ -46,13 +46,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/gray_background"
-                    android:hint="Mã sách"
-                    android:paddingStart="48dp"
-                    android:paddingLeft="48dp"
+                    android:clickable="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:clickable="false"
-                    android:longClickable="false" />
+                    android:hint="Mã sách"
+                    android:longClickable="false"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -117,8 +117,8 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:id="@+id/categoryLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -156,9 +156,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/white_background"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:hint="Nhà xuất bản"
+                    android:longClickable="false"
                     android:paddingStart="48dp"
-                    android:paddingLeft="48dp" />
+                    android:paddingLeft="48dp"
+                    android:textColor="#000000" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

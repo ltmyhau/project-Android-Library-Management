@@ -7,8 +7,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
@@ -18,10 +16,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
+import com.example.project_android_library_management.SearchPublisherActivity
 import com.example.project_android_library_management.dao.BookCategoryDao
 import com.example.project_android_library_management.dao.BookDao
+import com.example.project_android_library_management.dao.PublisherDao
 import com.example.project_android_library_management.model.Book
-import com.example.project_android_library_management.model.BookCategory
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
 import java.io.FileOutputStream
@@ -32,9 +31,11 @@ class BookUpdateActivity : AppCompatActivity() {
     private lateinit var spnCategory: AutoCompleteTextView
     private lateinit var bookDao: BookDao
     private lateinit var bookCategoryDao: BookCategoryDao
+    private lateinit var publisherDao: PublisherDao
 
     private var bookCategoryId: String = ""
     private var imagePath: String? = null
+    private var publisherId: String = ""
 
     private lateinit var imgBookCover: ImageView
     private lateinit var edtBookId: TextInputEditText
@@ -50,6 +51,7 @@ class BookUpdateActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_CODE_PICK_IMAGE = 1
+        private const val REQUEST_CODE_PUBLISHER_ID = 2
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +65,7 @@ class BookUpdateActivity : AppCompatActivity() {
         databaseHelper = DatabaseHelper(this)
         bookDao = BookDao(databaseHelper)
         bookCategoryDao = BookCategoryDao(databaseHelper)
-
+        publisherDao = PublisherDao(databaseHelper)
 
         imgBookCover = findViewById(R.id.imgBookCover)
         edtBookId = findViewById(R.id.edtBookId)
@@ -89,6 +91,11 @@ class BookUpdateActivity : AppCompatActivity() {
 
         imgBookCover.setOnClickListener {
             openImagePicker()
+        }
+
+        edtPublisher.setOnClickListener {
+            val intent = Intent(this, SearchPublisherActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_PUBLISHER_ID)
         }
     }
 
@@ -133,7 +140,7 @@ class BookUpdateActivity : AppCompatActivity() {
             edtISBN.setText(book.ISBN)
             edtTitle.setText(book.TenSach)
             edtAuthor.setText(book.TacGia)
-            edtPublisher.setText(book.NXB)
+            edtPublisher.setText(book.MaNXB)
             edtYear.setText(book.NamXB.toString())
             edtPages.setText(book.SoTrang.toString())
             edtStock.setText(book.SoLuongTon.toString())
@@ -177,6 +184,13 @@ class BookUpdateActivity : AppCompatActivity() {
                     imgBookCover.setImageBitmap(bitmap)
                 }
             }
+        } else if (requestCode == REQUEST_CODE_PUBLISHER_ID && resultCode == RESULT_OK) {
+            publisherId = data?.getStringExtra("PUBLISHER_ID") ?: ""
+            if (publisherId != null && publisherId.isNotEmpty()) {
+                val publisher = publisherDao.getPublisherById(publisherId)
+                edtPublisher.setText(publisher?.TenNXB ?: "")
+                edtPublisher.error = null
+            }
         }
     }
 
@@ -208,7 +222,6 @@ class BookUpdateActivity : AppCompatActivity() {
         val isbn = edtISBN.text.toString()
         val title = edtTitle.text.toString()
         val author = edtAuthor.text.toString()
-        val publisher = edtPublisher.text.toString()
         val year = edtYear.text.toString().toIntOrNull() ?: 0
         val pages = edtPages.text.toString().toIntOrNull() ?: 0
         val stock = edtStock.text.toString().toIntOrNull() ?: 0
@@ -216,7 +229,7 @@ class BookUpdateActivity : AppCompatActivity() {
         val description = edtDescription.text.toString()
 
         if (validateFields()) {
-            val book = Book(bookId, isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
+            val book = Book(bookId, isbn, title, author, publisherId, year, pages, stock, price, description, imagePath, bookCategoryId)
             val rowsAffected = bookDao.update(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Cập nhật thông tin sách thành công", Toast.LENGTH_SHORT).show()
@@ -246,9 +259,9 @@ class BookUpdateActivity : AppCompatActivity() {
             edtAuthor.requestFocus()
             return false
         }
-        if (edtPublisher.text.isNullOrEmpty()) {
-            edtPublisher.error = "Nhà xuất bản không được để trống"
-            edtPublisher.requestFocus()
+        if (edtPublisher.text.isNullOrEmpty() || edtPublisher.text.toString() == "Nhà xuất bản") {
+            edtPublisher.error = ""
+            Toast.makeText(this, "Vui lòng chọn nhà xuất bản", Toast.LENGTH_SHORT).show()
             return false
         }
         if (edtYear.text.isNullOrEmpty()) {
@@ -258,7 +271,7 @@ class BookUpdateActivity : AppCompatActivity() {
         } else {
             val year = edtYear.text.toString().toIntOrNull()
             if (year == null || year <= 0) {
-                edtYear.error = "Năm xuất bản phải là số dương"
+                edtYear.error = "Năm xuất bản không hợp lệ"
                 edtYear.requestFocus()
                 return false
             }

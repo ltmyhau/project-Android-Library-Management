@@ -17,8 +17,11 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
+import com.example.project_android_library_management.SearchPublisherActivity
 import com.example.project_android_library_management.dao.BookCategoryDao
 import com.example.project_android_library_management.dao.BookDao
+import com.example.project_android_library_management.dao.PublisherDao
+import com.example.project_android_library_management.fragment.book.BookUpdateActivity.Companion
 import com.example.project_android_library_management.model.Book
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
@@ -30,9 +33,11 @@ class BookAddActivity : AppCompatActivity() {
     private lateinit var spnCategory: AutoCompleteTextView
     private lateinit var bookDao: BookDao
     private lateinit var bookCategoryDao: BookCategoryDao
+    private lateinit var publisherDao: PublisherDao
 
     private var bookCategoryId: String = ""
     private var imagePath: String? = null
+    private var publisherId: String = ""
 
     private lateinit var imgBookCover: ImageView
     private lateinit var edtBookId: TextInputEditText
@@ -48,6 +53,7 @@ class BookAddActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_CODE_PICK_IMAGE = 1
+        private const val REQUEST_CODE_PUBLISHER_ID = 2
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +65,7 @@ class BookAddActivity : AppCompatActivity() {
         databaseHelper = DatabaseHelper(this)
         bookDao = BookDao(databaseHelper)
         bookCategoryDao = BookCategoryDao(databaseHelper)
+        publisherDao = PublisherDao(databaseHelper)
 
         imgBookCover = findViewById(R.id.imgBookCover)
         edtBookId = findViewById(R.id.edtBookId)
@@ -85,6 +92,11 @@ class BookAddActivity : AppCompatActivity() {
 
         imgBookCover.setOnClickListener {
             openImagePicker()
+        }
+
+        edtPublisher.setOnClickListener {
+            val intent = Intent(this, SearchPublisherActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_PUBLISHER_ID)
         }
     }
 
@@ -139,6 +151,13 @@ class BookAddActivity : AppCompatActivity() {
                     imgBookCover.setImageBitmap(bitmap)
                 }
             }
+        } else if (requestCode == REQUEST_CODE_PUBLISHER_ID && resultCode == RESULT_OK) {
+            publisherId = data?.getStringExtra("PUBLISHER_ID") ?: ""
+            if (publisherId != null && publisherId.isNotEmpty()) {
+                val publisher = publisherDao.getPublisherById(publisherId)
+                edtPublisher.setText(publisher?.TenNXB ?: "")
+                edtPublisher.error = null
+            }
         }
     }
 
@@ -170,7 +189,6 @@ class BookAddActivity : AppCompatActivity() {
         val isbn = edtISBN.text.toString()
         val title = edtTitle.text.toString()
         val author = edtAuthor.text.toString()
-        val publisher = edtPublisher.text.toString()
         val year = edtYear.text.toString().toIntOrNull() ?: 0
         val pages = edtPages.text.toString().toIntOrNull() ?: 0
         val stock = edtStock.text.toString().toIntOrNull() ?: 0
@@ -178,7 +196,7 @@ class BookAddActivity : AppCompatActivity() {
         val description = edtDescription.text.toString()
 
         if (validateFields()) {
-            val book = Book(bookId, isbn, title, author, publisher, year, pages, stock, price, description, imagePath, bookCategoryId)
+            val book = Book(bookId, isbn, title, author, publisherId, year, pages, stock, price, description, imagePath, bookCategoryId)
             val rowsAffected = bookDao.insert(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()
@@ -205,9 +223,9 @@ class BookAddActivity : AppCompatActivity() {
             edtAuthor.requestFocus()
             return false
         }
-        if (edtPublisher.text.isNullOrEmpty()) {
-            edtPublisher.error = "Nhà xuất bản không được để trống"
-            edtPublisher.requestFocus()
+        if (edtPublisher.text.isNullOrEmpty() || edtPublisher.text.toString() == "Nhà xuất bản") {
+            edtPublisher.error = ""
+            Toast.makeText(this, "Vui lòng chọn nhà xuất bản", Toast.LENGTH_SHORT).show()
             return false
         }
         if (edtYear.text.isNullOrEmpty()) {
@@ -217,7 +235,7 @@ class BookAddActivity : AppCompatActivity() {
         } else {
             val year = edtYear.text.toString().toIntOrNull()
             if (year == null || year <= 0) {
-                edtYear.error = "Năm xuất bản phải là số dương"
+                edtYear.error = "Năm xuất bản không hợp lệ"
                 edtYear.requestFocus()
                 return false
             }

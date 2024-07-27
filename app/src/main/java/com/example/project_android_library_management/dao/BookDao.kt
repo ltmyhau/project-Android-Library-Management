@@ -33,7 +33,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
             put("ISBN", book.ISBN)
             put("TenSach", book.TenSach)
             put("TacGia", book.TacGia)
-            put("NXB", book.NXB)
+            put("MaNXB", book.MaNXB)
             put("NamXB", book.NamXB)
             put("SoTrang", book.SoTrang)
             put("SoLuongTon", book.SoLuongTon)
@@ -54,7 +54,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
             put("ISBN", book.ISBN)
             put("TenSach", book.TenSach)
             put("TacGia", book.TacGia)
-            put("NXB", book.NXB)
+            put("MaNXB", book.MaNXB)
             put("NamXB", book.NamXB)
             put("SoTrang", book.SoTrang)
             put("SoLuongTon", book.SoLuongTon)
@@ -82,7 +82,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         val isbn = cursor.getString(cursor.getColumnIndexOrThrow("ISBN"))
         val tenSach = cursor.getString(cursor.getColumnIndexOrThrow("TenSach"))
         val tacGia = cursor.getString(cursor.getColumnIndexOrThrow("TacGia"))
-        val nxb = cursor.getString(cursor.getColumnIndexOrThrow("NXB"))
+        val maNXB = cursor.getString(cursor.getColumnIndexOrThrow("MaNXB"))
         val namXB = cursor.getInt(cursor.getColumnIndexOrThrow("NamXB"))
         val soTrang = cursor.getInt(cursor.getColumnIndexOrThrow("SoTrang"))
         val soLuongTon = cursor.getInt(cursor.getColumnIndexOrThrow("SoLuongTon"))
@@ -91,7 +91,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
         val maTL = cursor.getString(cursor.getColumnIndexOrThrow("MaTL"))
 
-        return Book(maSach, isbn, tenSach, tacGia, nxb, namXB, soTrang, soLuongTon, giaBan, moTa, hinhAnh, maTL)
+        return Book(maSach, isbn, tenSach, tacGia, maNXB, namXB, soTrang, soLuongTon, giaBan, moTa, hinhAnh, maTL)
     }
 
     fun getAllBooks(): ArrayList<Book> {

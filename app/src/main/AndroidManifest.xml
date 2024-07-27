@@ -28,6 +28,11 @@
             android:label="Chọn độc giả"
             android:theme="@style/Theme.ActionBar" />
         <activity
+            android:name=".SearchPublisherActivity"
+            android:exported="false"
+            android:label="Chọn nhà xuất bản"
+            android:theme="@style/Theme.ActionBar" />
+        <activity
             android:name=".fragment.borrow_record.BorrowAddActivity"
             android:exported="false"
             android:label="Thêm phiếu mượn mới"

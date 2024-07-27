@@ -5,7 +5,7 @@ data class Book(
     val ISBN: String,
     val TenSach: String,
     val TacGia: String,
-    val NXB: String?,
+    val MaNXB: String,
     val NamXB: Int?,
     val SoTrang: Int?,
     val SoLuongTon: Int,

@@ -50,6 +50,6 @@
         android:background="@drawable/primary_background"
         android:padding="8dp"
         app:tint="@color/white"
-        app:srcCompat="@drawable/ic_select" />
+        app:srcCompat="@drawable/ic_add_16" />
 
 </LinearLayout>

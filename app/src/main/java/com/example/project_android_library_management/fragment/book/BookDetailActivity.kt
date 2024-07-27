@@ -14,6 +14,8 @@ import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.BookCategoryDao
 import com.example.project_android_library_management.dao.BookDao
+import com.example.project_android_library_management.dao.LibrarianDao
+import com.example.project_android_library_management.dao.PublisherDao
 import java.io.File
 
 class BookDetailActivity : AppCompatActivity() {
@@ -70,7 +72,6 @@ class BookDetailActivity : AppCompatActivity() {
         if (book != null) {
             tvTitle.text = book.TenSach
             tvAuthor.text = book.TacGia
-            tvPublisher.text = book.NXB
             tvCategory.text = bookCategoryDao.getBookCategoryNameById(book.MaTL)
             tvBookId.text = book.MaSach
             tvIBPN.text = book.ISBN
@@ -79,6 +80,11 @@ class BookDetailActivity : AppCompatActivity() {
             tvStock.text = book.SoLuongTon.toString()
             tvPrice.text =String.format("%.0f", book.GiaBan)
             tvDescription.text = book.MoTa
+
+            val publisherDao = PublisherDao(databaseHelper)
+            val publisher = publisherDao.getPublisherById(book.MaNXB)
+
+            publisher?.let { tvPublisher.text = publisher.TenNXB }
 
             val imagePath = book.HinhAnh
             if (imagePath != null) {
