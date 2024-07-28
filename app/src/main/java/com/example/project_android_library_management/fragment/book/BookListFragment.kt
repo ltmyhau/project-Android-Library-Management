@@ -15,6 +15,7 @@ import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.BookAdapter
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.model.Book
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class BookListFragment : Fragment() {
     private lateinit var rcvBook: RecyclerView
@@ -50,6 +51,12 @@ class BookListFragment : Fragment() {
         })
 
         rcvBook.adapter = bookAdapter
+
+        val btnAdd = view.findViewById<FloatingActionButton>(R.id.btnAdd)
+        btnAdd.setOnClickListener {
+            val intent = Intent(activity, BookAddActivity::class.java)
+            startActivity(intent)
+        }
 
         return view
     }

@@ -142,4 +142,20 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         return books
     }
 
+    fun getBooksByCategoryId(categotyId: String?): ArrayList<Book> {
+        val books = ArrayList<Book>()
+        val db = databaseHelper.openDatabase()
+
+        val cursor: Cursor = db.rawQuery("SELECT * FROM Sach WHERE MaTL = ?", arrayOf(categotyId))
+        if (cursor.moveToFirst()) {
+            do {
+                books.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+
+        return books
+    }
 }

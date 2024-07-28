@@ -28,6 +28,13 @@ class SearchBookActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        val toolbarTitle = intent.getStringExtra("TOOLBAR_TITLE")
+        val hideBtnSelect = intent.getBooleanExtra("HIDE_BTN_SELECT", false)
+
+        if (toolbarTitle != null) {
+            supportActionBar?.title = toolbarTitle
+        }
+
         edtSearch = findViewById(R.id.edtSearch)
         edtSearch.requestFocus()
 
@@ -44,7 +51,7 @@ class SearchBookActivity : AppCompatActivity() {
             bookDao.getAllBooks()
         }
 
-        searchBookAdapter = SearchBookAdapter(this, bookList)
+        searchBookAdapter = SearchBookAdapter(this, bookList, hideBtnSelect)
 
         rcvList.adapter = searchBookAdapter
     }

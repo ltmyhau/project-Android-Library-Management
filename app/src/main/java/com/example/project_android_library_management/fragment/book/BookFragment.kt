@@ -38,12 +38,6 @@ class BookFragment : Fragment() {
             }
         }.attach()
 
-        val btnAdd = view.findViewById<FloatingActionButton>(R.id.btnAdd)
-        btnAdd.setOnClickListener {
-            val intent = Intent(activity, BookAddActivity::class.java)
-            startActivity(intent)
-        }
-
         return view
     }
 

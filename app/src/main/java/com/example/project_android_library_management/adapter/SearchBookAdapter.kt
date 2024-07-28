@@ -12,12 +12,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.R
+import com.example.project_android_library_management.fragment.book.BookDetailActivity
 import com.example.project_android_library_management.model.Book
 import java.io.File
 
 class SearchBookAdapter(
     private val context: Context,
     private val bookList: MutableList<Book>,
+    private val hideBtnSelect: Boolean
 ) : RecyclerView.Adapter<SearchBookAdapter.SearchBookViewHolder>() {
 
     inner class SearchBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -51,15 +53,27 @@ class SearchBookAdapter(
         }
 
         val clickListener = View.OnClickListener {
-            val intent = Intent()
-            intent.putExtra("BOOK_ID", book.MaSach)
-            Toast.makeText(context, "Đã thêm sách ${book.TenSach}", Toast.LENGTH_SHORT).show()
-            (context as Activity).setResult(Activity.RESULT_OK, intent)
-            (context as Activity).finish()
+            if (hideBtnSelect) {
+                val intent = Intent(holder.itemView.context, BookDetailActivity::class.java)
+                intent.putExtra("BOOK_ID", book.MaSach)
+                holder.itemView.context.startActivity(intent)
+            } else {
+                val intent = Intent()
+                intent.putExtra("BOOK_ID", book.MaSach)
+                Toast.makeText(context, "Đã thêm sách ${book.TenSach}", Toast.LENGTH_SHORT).show()
+                (context as Activity).setResult(Activity.RESULT_OK, intent)
+                (context as Activity).finish()
+            }
         }
 
         holder.btnAdd.setOnClickListener(clickListener)
         holder.itemView.setOnClickListener(clickListener)
+
+        if (hideBtnSelect) {
+            holder.btnAdd.visibility = View.GONE
+        } else {
+            holder.btnAdd.visibility = View.VISIBLE
+        }
     }
 
     override fun getItemCount(): Int {

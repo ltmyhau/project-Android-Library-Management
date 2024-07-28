@@ -19,8 +19,8 @@ class BookCategoryDao(private val databaseHelper: DatabaseHelper) {
         return categoryName
     }
 
-    fun getAllBookCategories(): List<BookCategory> {
-        val categories = mutableListOf<BookCategory>()
+    fun getAllBookCategories(): ArrayList<BookCategory> {
+        val categories = ArrayList<BookCategory>()
         val db = databaseHelper.openDatabase()
         val cursor = db.rawQuery("SELECT * FROM TheLoai", null)
         if (cursor.moveToFirst()) {

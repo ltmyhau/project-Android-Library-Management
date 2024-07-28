@@ -3,6 +3,7 @@ package com.example.project_android_library_management.fragment.book
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView

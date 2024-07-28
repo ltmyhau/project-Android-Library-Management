@@ -234,10 +234,6 @@ class OrderAddActivity : AppCompatActivity() {
             if (rowsAffected > 0 && addOrderDetail()) {
                 Toast.makeText(this, "Thêm phiếu đặt thành công", Toast.LENGTH_SHORT)
                     .show()
-//                val resultIntent = Intent()
-//                resultIntent.putExtra("ORDER_ID", maPD)
-//                setResult(RESULT_OK, resultIntent)
-//                finish()
                 val intent = Intent(this, OrderDetailActivity::class.java)
                 intent.putExtra("ORDER_ID", maPD)
                 startActivity(intent)

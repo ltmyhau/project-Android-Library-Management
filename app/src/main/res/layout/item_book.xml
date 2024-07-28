@@ -25,6 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="Tên sách"
             android:textColor="@color/primary"
             android:textSize="20sp"
@@ -57,6 +59,6 @@
         android:layout_margin="8dp"
         android:background="@color/white"
         android:padding="4dp"
-        app:tint="@color/primary"
-        app:srcCompat="@drawable/ic_book_add" />
+        app:srcCompat="@drawable/ic_book_add"
+        app:tint="@color/primary" />
 </LinearLayout>
