@@ -1,9 +1,7 @@
 package com.example.project_android_library_management.adapter
 
 import android.app.AlertDialog
-import android.content.Context
 import android.graphics.BitmapFactory
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,14 +14,14 @@ import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.dao.BorrowDetailDao
-import com.example.project_android_library_management.dao.BorrowRecordDao
 import com.example.project_android_library_management.dao.ReturnRecordDao
 import com.example.project_android_library_management.model.BorrowDetail
 import com.example.project_android_library_management.model.ReturnDetail
 import java.io.File
 
 class BookReturnAdapter(
-    private val returnDetails: MutableList<ReturnDetail>
+    private val returnDetails: MutableList<ReturnDetail>,
+    private val borrowId: String
 ) : RecyclerView.Adapter<BookReturnAdapter.BookReturnViewHolder>() {
 
     interface OnQuantityChangeListener {
@@ -55,17 +53,12 @@ class BookReturnAdapter(
         val returnDetail = returnDetails[position]
         var borrowQuantity = 0
 
-        val returnRecordDao = ReturnRecordDao(DatabaseHelper(holder.itemView.context))
-        val returnRecord = returnRecordDao.getReturnRecordById(returnDetail.MaPT)
+        val borrowDetailDao = BorrowDetailDao(DatabaseHelper(holder.itemView.context))
+        val borrowDetail = borrowDetailDao.getBorrowDetailByIdAndBookId(borrowId, returnDetail.MaSach)
 
-        if (returnRecord != null) {
-            val borrowDetailDao = BorrowDetailDao(DatabaseHelper(holder.itemView.context))
-            val borrowDetail = borrowDetailDao.getBorrowDetailByIdAndBookId(returnRecord.MaPM, returnDetail.MaSach)
-
-            if (borrowDetail != null) {
-                borrowQuantity = borrowDetail.SoLuong
-                holder.tvBorrowQuantity.text = "Số lượng mượn: ${borrowQuantity}"
-            }
+        if (borrowDetail != null) {
+            borrowQuantity = borrowDetail.SoLuong
+            holder.tvBorrowQuantity.text = "Số lượng mượn: ${borrowQuantity}"
         }
 
         val bookDao = BookDao(DatabaseHelper(holder.itemView.context))

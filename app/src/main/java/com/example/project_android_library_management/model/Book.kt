@@ -1,5 +1,7 @@
 package com.example.project_android_library_management.model
 
+import java.io.Serializable
+
 data class Book(
     val MaSach: String,
     val ISBN: String,
@@ -13,4 +15,4 @@ data class Book(
     val MoTa: String?,
     val HinhAnh: String?,
     val MaTL: String
-)
+) : Serializable

@@ -87,7 +87,8 @@ class BorrowAddActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         edtBorrowDate.setText(sdf.format(Date()))
 
-        edtBorrowId.setText(borrowRecordDao.generateNewId())
+        maPM = borrowRecordDao.generateNewId()
+        edtBorrowId.setText(maPM)
 
         loadTimeBorrowSpinner()
 
@@ -265,7 +266,6 @@ class BorrowAddActivity : AppCompatActivity() {
     }
 
     private fun addBorrowRecord() {
-        maPM = edtBorrowId.text.toString()
         val borrowDate = edtBorrowDate.text.toString()
         val deposit = edtDeposit.text.toString().toDoubleOrNull() ?: 0.0
         val notes = edtNotes.text.toString()
@@ -287,14 +287,11 @@ class BorrowAddActivity : AppCompatActivity() {
 
     private fun addBookBorrow(): Boolean {
         var allSuccess = true
-
-        if (allSuccess) {
-            for (borrowDetail in bookBorrows) {
-                val rowsAffected = borrowDetailDao.insert(borrowDetail)
-                if (rowsAffected <= 0) {
-                    allSuccess = false
-                    break
-                }
+        for (borrowDetail in bookBorrows) {
+            val rowsAffected = borrowDetailDao.insert(borrowDetail)
+            if (rowsAffected <= 0) {
+                allSuccess = false
+                break
             }
         }
         return allSuccess

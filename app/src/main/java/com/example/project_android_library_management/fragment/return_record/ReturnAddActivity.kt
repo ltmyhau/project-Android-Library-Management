@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
-import com.example.project_android_library_management.adapter.BookAdapter
 import com.example.project_android_library_management.adapter.BookReturnAdapter
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.dao.BorrowDetailDao
@@ -29,27 +28,31 @@ import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.dao.ReaderDao
 import com.example.project_android_library_management.dao.ReturnDetailDao
 import com.example.project_android_library_management.dao.ReturnRecordDao
+import com.example.project_android_library_management.fragment.return_record.ReturnUpdateActivity.Companion
 import com.example.project_android_library_management.model.Book
 import com.example.project_android_library_management.model.BorrowDetail
 import com.example.project_android_library_management.model.BorrowRecord
 import com.example.project_android_library_management.model.ReturnDetail
 import com.example.project_android_library_management.model.ReturnRecord
 import com.example.project_android_library_management.search.SearchBookActivity
+import com.example.project_android_library_management.search.SearchBorrowActivity
 import com.example.project_android_library_management.search.SearchLibrarianActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class ReturnUpdateActivity : AppCompatActivity() {
+class ReturnAddActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var readerDao: ReaderDao
     private lateinit var librarianDao: LibrarianDao
     private lateinit var returnRecordDao: ReturnRecordDao
     private lateinit var returnDetailDao: ReturnDetailDao
+    private lateinit var borrowRecordDao: BorrowRecordDao
     private lateinit var borrowDetailDao: BorrowDetailDao
     private lateinit var bookDao: BookDao
 
@@ -73,6 +76,7 @@ class ReturnUpdateActivity : AppCompatActivity() {
     private lateinit var edtExpectedReturnDate: TextInputEditText
     private lateinit var edtFines: TextInputEditText
     private lateinit var rcvBooks: RecyclerView
+    private lateinit var booksLayout: LinearLayout
     private lateinit var finesLayout: LinearLayout
     private lateinit var finesTableLayout: TableLayout
     private lateinit var finesTableRow: TableRow
@@ -81,6 +85,7 @@ class ReturnUpdateActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_CODE_LIBRARIAN_ID = 1
         private const val REQUEST_CODE_BOOK_ID = 2
+        private const val REQUEST_CODE_BORROW_ID = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,13 +94,12 @@ class ReturnUpdateActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        maPT = intent.getStringExtra("RETURN_ID") ?: ""
-
         databaseHelper = DatabaseHelper(this)
         readerDao = ReaderDao(databaseHelper)
         librarianDao = LibrarianDao(databaseHelper)
         returnRecordDao = ReturnRecordDao(databaseHelper)
         returnDetailDao = ReturnDetailDao(databaseHelper)
+        borrowRecordDao = BorrowRecordDao(databaseHelper)
         borrowDetailDao = BorrowDetailDao(databaseHelper)
         bookDao = BookDao(databaseHelper)
 
@@ -107,21 +111,37 @@ class ReturnUpdateActivity : AppCompatActivity() {
         edtExpectedReturnDate = findViewById(R.id.edtExpectedReturnDate)
         edtFines = findViewById(R.id.edtFines)
         rcvBooks = findViewById(R.id.rcvBooks)
+        booksLayout = findViewById(R.id.booksLayout)
         finesLayout = findViewById(R.id.finesLayout)
         finesTableLayout = findViewById(R.id.finesTableLayout)
         finesTableRow = findViewById(R.id.finesTableRow)
 
-        loadReturnDetails(maPT)
+        finesLayout.visibility = View.GONE
+        booksLayout.visibility = View.GONE
 
-        bookReturns = returnDetailDao.getReturnDetailById(maPT)
-        loadBookReturns(bookReturns)
-
-        finesLayout.visibility = if (checkFines()) View.VISIBLE else View.GONE
+        maPT = returnRecordDao.generateNewId()
+        edtReturnId.setText(maPT)
 
         edtLibrarianName.setOnClickListener {
             val intent = Intent(this, SearchLibrarianActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_LIBRARIAN_ID)
         }
+
+        val borrowList = borrowRecordDao.getAllBorrowRecord()
+        val returnList = returnRecordDao.getAllReturnRecord()
+        val returnedMaPMs = returnList.map { it.MaPM }.toSet()
+        val borrowListNotReturned = ArrayList(borrowList.filter { it.MaPM !in returnedMaPMs })
+
+        edtBorowId.setOnClickListener {
+            val intent = Intent(this, SearchBorrowActivity::class.java)
+            intent.putExtra("SOURCE", "BorrowRecordNotReturned")
+            intent.putExtra("BORROW_LIST", borrowListNotReturned)
+            startActivityForResult(intent, REQUEST_CODE_BORROW_ID)
+        }
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        actualReturnDate = sdf.format(Date())
+        edtActualReturnDate.setText(actualReturnDate)
 
         val actualReturnDateLayout = findViewById<TextInputLayout>(R.id.actualReturnDateLayout)
         actualReturnDateLayout.setStartIconOnClickListener {
@@ -129,7 +149,6 @@ class ReturnUpdateActivity : AppCompatActivity() {
         }
 
         btnAddBook = findViewById(R.id.btnAddBook)
-        checkDifferenceAndDisplayButton()
         btnAddBook.setOnClickListener {
             val intent = Intent(this, SearchBookActivity::class.java)
             intent.putExtra("SOURCE", "BookListNotReturned")
@@ -138,9 +157,9 @@ class ReturnUpdateActivity : AppCompatActivity() {
         }
 
         val btnEdit = findViewById<AppCompatButton>(R.id.btnEdit)
-        btnEdit.text = "Lưu thông tin"
+        btnEdit.text = "Thêm"
         btnEdit.setOnClickListener {
-            saveReturnRecord()
+            addReturnRecord()
         }
     }
 
@@ -157,6 +176,35 @@ class ReturnUpdateActivity : AppCompatActivity() {
                 val librarian = librarianDao.getLibrarianById(librarianId)
                 edtLibrarianName.setText(librarian?.HoTen ?: "")
                 edtLibrarianName.error = null
+            }
+        } else if (requestCode == REQUEST_CODE_BORROW_ID && resultCode == RESULT_OK) {
+            borrowId = data?.getStringExtra("BORROW_ID") ?: ""
+            if (borrowId.isNotEmpty()) {
+                bookBorrows = borrowDetailDao.getBorrowDetailsById(borrowId)
+                edtBorowId.error = null
+                edtBorowId.setText(borrowId)
+                for (bookBorrow in bookBorrows) {
+                    val bookReturn = ReturnDetail(maPT, bookBorrow.MaSach, bookBorrow.SoLuong)
+                    if (bookReturn != null) {
+                        bookReturns.add(bookReturn)
+                    }
+                }
+                booksLayout.visibility = View.VISIBLE
+                loadBookReturns(bookReturns)
+
+                val borrowRecordDao = BorrowRecordDao(databaseHelper)
+                val borrowRecord = borrowRecordDao.getBorrowRecordById(borrowId)
+                borrowRecord?.let {
+                    expectedReturnDate =
+                        addDaysToDate(borrowRecord.NgayMuon, borrowRecord.SoNgayMuon)
+                    edtExpectedReturnDate.setText(expectedReturnDate)
+                    readerId = borrowRecord.MaDG
+                    val reader = readerDao.getReaderById(readerId)
+                    edtReaderName.setText(reader?.HoTen ?: "")
+                }
+
+                finesLayout.visibility = if (checkFines()) View.VISIBLE else View.GONE
+                checkDifferenceAndDisplayButton()
             }
         } else if (requestCode == REQUEST_CODE_BOOK_ID && resultCode == RESULT_OK) {
             val bookId = data?.getStringExtra("BOOK_ID") ?: ""
@@ -223,47 +271,13 @@ class ReturnUpdateActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
 
-    private fun loadReturnDetails(maPT: String) {
-        val returnRecord = returnRecordDao.getReturnRecordById(maPT)
-
-        if (returnRecord != null) {
-            readerId = returnRecord.MaDG
-            librarianId = returnRecord.MaTT
-            borrowId = returnRecord.MaPM
-
-            edtReturnId.setText(returnRecord.MaPT)
-            edtBorowId.setText(returnRecord.MaPM)
-            actualReturnDate = returnRecord.NgayTra
-            edtActualReturnDate.setText(actualReturnDate)
-            edtFines.setText(String.format("%.0f", returnRecord.TienPhat))
-
-            val readerDao = ReaderDao(databaseHelper)
-            val reader = readerDao.getReaderById(readerId)
-            val libraryDao = LibrarianDao(databaseHelper)
-            val librarian = libraryDao.getLibrarianById(librarianId)
-            val borrowRecordDao = BorrowRecordDao(databaseHelper)
-            val borrowRecord = borrowRecordDao.getBorrowRecordById(returnRecord.MaPM)
-
-            bookBorrows = borrowDetailDao.getBorrowDetailsById(returnRecord.MaPM)
-
-            reader?.let { edtReaderName.setText(reader.HoTen) }
-            librarian?.let { edtLibrarianName.setText(librarian.HoTen) }
-            borrowRecord?.let {
-                expectedReturnDate = addDaysToDate(borrowRecord.NgayMuon, borrowRecord.SoNgayMuon)
-                edtExpectedReturnDate.setText(expectedReturnDate)
-            }
-        } else {
-            Toast.makeText(this, "Không tìm thấy phiếu mượn", Toast.LENGTH_SHORT).show()
-            finish()
-        }
-    }
-
     private fun loadBookReturns(bookReturns: ArrayList<ReturnDetail>) {
         if (bookReturns != null) {
             rcvBooks.layoutManager = LinearLayoutManager(this)
             val bookReturnAdapter = BookReturnAdapter(bookReturns, borrowId)
 
-            bookReturnAdapter.setOnQuantityChangeListener(object : BookReturnAdapter.OnQuantityChangeListener {
+            bookReturnAdapter.setOnQuantityChangeListener(object :
+                BookReturnAdapter.OnQuantityChangeListener {
                 override fun onQuantityChange() {
                     finesLayout.visibility = if (checkFines()) View.VISIBLE else View.GONE
                     checkDifferenceAndDisplayButton()
@@ -302,7 +316,10 @@ class ReturnUpdateActivity : AppCompatActivity() {
         }
     }
 
-    fun calculateCompensation(borrowDetails: List<BorrowDetail>, returnDetails: List<ReturnDetail>): Double {
+    fun calculateCompensation(
+        borrowDetails: List<BorrowDetail>,
+        returnDetails: List<ReturnDetail>
+    ): Double {
         val borrowMap = borrowDetails.groupBy { it.MaSach }
             .mapValues { entry -> entry.value.sumOf { it.SoLuong } }
 
@@ -322,7 +339,11 @@ class ReturnUpdateActivity : AppCompatActivity() {
 
                     if (!processedBooks.contains(bookId)) {
                         val penalty = String.format("%.0f", missingQuantity * book.GiaBan)
-                        addTableRow(finesTableLayout, "Mất ${missingQuantity} sách ${book.TenSach}", penalty)
+                        addTableRow(
+                            finesTableLayout,
+                            "Mất ${missingQuantity} sách ${book.TenSach}",
+                            penalty
+                        )
                         processedBooks.add(bookId)
                     }
                 }
@@ -432,39 +453,31 @@ class ReturnUpdateActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveReturnRecord() {
-        val returnDate = edtActualReturnDate.text.toString()
-        val fines = edtFines.text.toString().toDouble()
-        val borrowId = edtBorowId.text.toString()
-
+    private fun addReturnRecord() {
         if (validateFields()) {
-            val returnRecord = ReturnRecord(maPT, returnDate, fines, borrowId, librarianId, readerId)
-            val rowsAffected = returnRecordDao.update(returnRecord)
-            if (rowsAffected > 0 && saveBookReturn()) {
-                Toast.makeText(this, "Cập nhật thông tin phiếu trả thành công", Toast.LENGTH_SHORT)
+            val returnDate = edtActualReturnDate.text.toString()
+            val fines = edtFines.text.toString().toDouble()
+            val borrowId = edtBorowId.text.toString()
+
+            val returnRecord =
+                ReturnRecord(maPT, returnDate, fines, borrowId, librarianId, readerId)
+            val rowsAffected = returnRecordDao.insert(returnRecord)
+            if (rowsAffected > 0 && addBookReturn()) {
+                Toast.makeText(this, "Thêm phiếu trả thành công", Toast.LENGTH_SHORT)
                     .show()
                 val resultIntent = Intent()
                 resultIntent.putExtra("RETURN_ID", maPT)
                 setResult(RESULT_OK, resultIntent)
                 finish()
             } else {
-                Toast.makeText(this, "Cập nhật thông tin phiếu trả thất bại", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Thêm phiếu trả thất bại", Toast.LENGTH_SHORT)
                     .show()
             }
         }
     }
 
-    private fun saveBookReturn(): Boolean {
+    private fun addBookReturn(): Boolean {
         var allSuccess = true
-
-        try {
-            val rowsDeleted = returnDetailDao.delete(maPT)
-            if (rowsDeleted <= 0) {
-                allSuccess = false
-            }
-        } catch (e: Exception) {
-            allSuccess = false
-        }
 
         if (allSuccess) {
             for (returnDetail in bookReturns) {
@@ -482,11 +495,6 @@ class ReturnUpdateActivity : AppCompatActivity() {
         if (edtLibrarianName.text.isNullOrEmpty() || edtLibrarianName.text.toString() == "Thủ thư") {
             edtLibrarianName.error = ""
             Toast.makeText(this, "Vui lòng chọn thủ thư", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (edtReaderName.text.isNullOrEmpty() || edtReaderName.text.toString() == "Độc giả") {
-            edtReaderName.error = ""
-            Toast.makeText(this, "Vui lòng chọn độc giả", Toast.LENGTH_SHORT).show()
             return false
         }
         if (edtBorowId.text.isNullOrEmpty() || edtBorowId.text.toString() == "Mã phiếu mượn") {

@@ -125,15 +125,21 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         return book
     }
 
-    fun getBookPrice(bookId: String?): Double {
+    fun getBooksByCategoryId(categoryId: String?): ArrayList<Book> {
+        val books = ArrayList<Book>()
         val db = databaseHelper.openDatabase()
-        val cursor: Cursor = db.rawQuery("SELECT GiaBan FROM Sach WHERE MaSach = ?", arrayOf(bookId))
-        var price = 0.0
+
+        val cursor: Cursor = db.rawQuery("SELECT * FROM Sach WHERE MaTL = ?", arrayOf(categoryId))
         if (cursor.moveToFirst()) {
-            price = cursor.getDouble(cursor.getColumnIndexOrThrow("GiaBan"))
+            do {
+                books.add(cursor(cursor))
+            } while (cursor.moveToNext())
         }
+
         cursor.close()
         db.close()
-        return price
+
+        return books
     }
+
 }

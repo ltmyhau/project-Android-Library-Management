@@ -1,5 +1,6 @@
 package com.example.project_android_library_management.fragment.return_record
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -52,10 +53,27 @@ class ReturnRecordFragment : Fragment() {
 
         val btnAdd = view.findViewById<FloatingActionButton>(R.id.btnAdd)
         btnAdd.setOnClickListener {
-//            val intent = Intent(activity, ReturnAddActivity::class.java)
-//            startActivity(intent)
+            val intent = Intent(activity, ReturnAddActivity::class.java)
+            startActivity(intent)
         }
 
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_RETURN_LIST && resultCode == Activity.RESULT_OK) {
+            loadReturnRecordList()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadReturnRecordList()
+    }
+
+    private fun loadReturnRecordList() {
+        val returnRecord = returnRecordDao.getAllReturnRecord()
+        returnRecordAdapter.updateData(returnRecord)
     }
 }

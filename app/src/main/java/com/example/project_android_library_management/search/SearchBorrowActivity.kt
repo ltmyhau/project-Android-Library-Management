@@ -8,15 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.SearchBookAdapter
-import com.example.project_android_library_management.dao.BookDao
-import com.example.project_android_library_management.dao.BorrowDetailDao
+import com.example.project_android_library_management.adapter.SearchBorrowAdapter
+import com.example.project_android_library_management.dao.BorrowRecordDao
 import com.example.project_android_library_management.model.Book
+import com.example.project_android_library_management.model.BorrowRecord
 
-class SearchBookActivity : AppCompatActivity() {
+class SearchBorrowActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
-    private lateinit var bookDao: BookDao
-    private lateinit var searchBookAdapter: SearchBookAdapter
-    private lateinit var bookList: ArrayList<Book>
+    private lateinit var borrowRecordDao: BorrowRecordDao
+    private lateinit var searchBorrowAdapter: SearchBorrowAdapter
+    private lateinit var borrowRecordList: ArrayList<BorrowRecord>
 
     private lateinit var edtSearch: SearchView
     private lateinit var rcvList: RecyclerView
@@ -35,20 +36,19 @@ class SearchBookActivity : AppCompatActivity() {
         rcvList.layoutManager = LinearLayoutManager(this)
 
         databaseHelper = DatabaseHelper(this)
-        bookDao = BookDao(databaseHelper)
+        borrowRecordDao = BorrowRecordDao(databaseHelper)
 
         val source = intent.getStringExtra("SOURCE")
-        bookList = if (source == "BookListNotReturned") {
-            intent.getSerializableExtra("BOOK_LIST") as ArrayList<Book>
+        borrowRecordList = if (source == "BorrowRecordNotReturned") {
+            intent.getSerializableExtra("BORROW_LIST") as ArrayList<BorrowRecord>
         } else {
-            bookDao.getAllBooks()
+            borrowRecordDao.getAllBorrowRecord()
         }
 
-        searchBookAdapter = SearchBookAdapter(this, bookList)
+        searchBorrowAdapter = SearchBorrowAdapter(this, borrowRecordList)
+        rcvList.adapter = searchBorrowAdapter
 
-        rcvList.adapter = searchBookAdapter
     }
-
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
