@@ -28,6 +28,7 @@ class ReturnRecordAdapter(
         val tvRecordID: TextView = itemView.findViewById(R.id.tvRecordID)
         val tvReaderName: TextView = itemView.findViewById(R.id.tvReaderName)
         val tvDate: TextView = itemView.findViewById(R.id.tvDate)
+        val btnSelect: ImageView = itemView.findViewById(R.id.btnSelect)
 
         init {
             itemView.setOnClickListener {
@@ -72,6 +73,8 @@ class ReturnRecordAdapter(
                 holder.imgAvatar.setImageResource(R.drawable.avatar)
             }
         }
+
+        holder.btnSelect.visibility = View.GONE
     }
 
     override fun getItemCount(): Int {

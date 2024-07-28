@@ -9,23 +9,23 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
-import com.example.project_android_library_management.dao.ReaderDao
-import com.example.project_android_library_management.model.BorrowRecord
+import com.example.project_android_library_management.dao.PublisherDao
+import com.example.project_android_library_management.model.OrderBook
 import java.io.File
 
-class BorrowRecordAdapter(
-    private val borrowRecordList: MutableList<BorrowRecord>,
+class OrderBookAdapter(
+    private val orderBookList: MutableList<OrderBook>,
     private val itemClickListener: OnItemClickListener
-) : RecyclerView.Adapter<BorrowRecordAdapter.BorrowRecordViewHolder>() {
+) : RecyclerView.Adapter<OrderBookAdapter.OrderBookViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(borrowRecord: BorrowRecord)
+        fun onItemClick(orderBook: OrderBook)
     }
 
-    inner class BorrowRecordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class OrderBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgAvatar: ImageView = itemView.findViewById(R.id.imgAvatar)
-        val tvRecordID: TextView = itemView.findViewById(R.id.tvRecordID)
-        val tvReaderName: TextView = itemView.findViewById(R.id.tvReaderName)
+        val tvOrderID: TextView = itemView.findViewById(R.id.tvRecordID)
+        val tvPublisher: TextView = itemView.findViewById(R.id.tvReaderName)
         val tvDate: TextView = itemView.findViewById(R.id.tvDate)
         val btnSelect: ImageView = itemView.findViewById(R.id.btnSelect)
 
@@ -33,32 +33,33 @@ class BorrowRecordAdapter(
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    val selected = borrowRecordList[position]
+                    val selected = orderBookList[position]
                     itemClickListener.onItemClick(selected)
                 }
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BorrowRecordViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderBookViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_record, parent, false)
-        return BorrowRecordViewHolder(itemView)
+        return OrderBookViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: BorrowRecordViewHolder, position: Int) {
-        val borrowRecord = borrowRecordList[position]
+    override fun onBindViewHolder(holder: OrderBookViewHolder, position: Int) {
+        val orderBook = orderBookList[position]
 
-        val readerDao = ReaderDao(DatabaseHelper(holder.itemView.context))
-        val reader = readerDao.getReaderById(borrowRecord.MaDG)
+        val publisherDao = PublisherDao(DatabaseHelper(holder.itemView.context))
+        val publisher = publisherDao.getPublisherById(orderBook.MaNXB)
 
-        holder.tvRecordID.text = borrowRecord.MaPM
-        holder.tvDate.text = borrowRecord.NgayMuon
+        holder.tvOrderID.text = orderBook.MaPD
+        holder.tvDate.text = orderBook.NgayDat
+        holder.tvPublisher.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_publisher_16, 0, 0, 0)
 
-        if (reader != null) {
-            holder.tvReaderName.text = reader.HoTen
+        if (publisher != null) {
+            holder.tvPublisher.text = publisher.TenNXB
 
-            if (reader.HinhAnh != null) {
-                val imgFile = File(reader.HinhAnh)
+            if (publisher.HinhAnh != null) {
+                val imgFile = File(publisher.HinhAnh)
                 if (imgFile.exists()) {
                     val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
                     holder.imgAvatar.setImageBitmap(bitmap)
@@ -74,12 +75,12 @@ class BorrowRecordAdapter(
     }
 
     override fun getItemCount(): Int {
-        return borrowRecordList.size
+        return orderBookList.size
     }
 
-    fun updateData(newBorrowRecordList: List<BorrowRecord>) {
-        borrowRecordList.clear()
-        borrowRecordList.addAll(newBorrowRecordList)
+    fun updateData(newOrderBookList: List<OrderBook>) {
+        orderBookList.clear()
+        orderBookList.addAll(newOrderBookList)
         notifyDataSetChanged()
     }
 

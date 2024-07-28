@@ -2,6 +2,7 @@ package com.example.project_android_library_management.fragment.borrow_record
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -123,7 +124,7 @@ class BorrowDetailActivity : AppCompatActivity() {
 
         if (bookBorrows != null) {
             rcvBooks.layoutManager = LinearLayoutManager(this)
-            val bookAdapter = BookAdapter(null, bookBorrows, null, null)
+            val bookAdapter = BookAdapter(null, bookBorrows, null, null, null)
             rcvBooks.adapter = bookAdapter
         } else {
             Toast.makeText(this, "Không tìm thấy chi tiết phiếu mượn", Toast.LENGTH_SHORT).show()

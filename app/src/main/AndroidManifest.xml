@@ -13,6 +13,14 @@
         android:theme="@style/Theme.ProjectAndroidLibraryManagement"
         tools:targetApi="31">
         <activity
+            android:name=".fragment.order_book.OrderAddActivity"
+            android:exported="false" />
+        <activity
+            android:name=".fragment.order_book.OrderDetailActivity"
+            android:exported="false"
+            android:label="Chi tiết phiếu đặt"
+            android:theme="@style/Theme.ActionBar" />
+        <activity
             android:name=".fragment.return_record.ReturnAddActivity"
             android:exported="false"
             android:label="Thêm phiếu trả"

@@ -1,6 +1,7 @@
 package com.example.project_android_library_management.adapter
 
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.model.Book
 import com.example.project_android_library_management.model.BorrowDetail
+import com.example.project_android_library_management.model.OrderDetail
 import com.example.project_android_library_management.model.ReturnDetail
 import java.io.File
 
@@ -19,6 +21,7 @@ class BookAdapter(
     private val bookList: MutableList<Book>?,
     private val borrowDetails: MutableList<BorrowDetail>?,
     private val returnDetails: MutableList<ReturnDetail>?,
+    private val orderDetails: MutableList<OrderDetail>?,
     private val itemClickListener: OnItemClickListener?
 ) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
 
@@ -116,11 +119,34 @@ class BookAdapter(
                 }
             }
             holder.tvQuantity.text = "Số lượng: ${returnDetail.SoLuong}"
+        } else if (orderDetails != null) {
+            val orderDetail = orderDetails[position]
+
+            val bookDao = BookDao(DatabaseHelper(holder.itemView.context))
+            val book = bookDao.getBookById(orderDetail.MaSach)
+
+            if (book != null) {
+                holder.tvTitle.text = book.TenSach
+                holder.tvAuthor.text = book.TacGia
+
+                if (book.HinhAnh != null) {
+                    val imgFile = File(book.HinhAnh)
+                    if (imgFile.exists()) {
+                        val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+                        holder.imgBookCover.setImageBitmap(bitmap)
+                    } else {
+                        holder.imgBookCover.setImageResource(R.drawable.book_cover)
+                    }
+                } else {
+                    holder.imgBookCover.setImageResource(R.drawable.book_cover)
+                }
+            }
+            holder.tvQuantity.text = "Số lượng: ${orderDetail.SoLuong}"
         }
     }
 
     override fun getItemCount(): Int {
-        return bookList?.size ?: borrowDetails?.size ?: returnDetails?.size ?: 0
+        return bookList?.size ?: borrowDetails?.size ?: returnDetails?.size ?: orderDetails?.size ?: 0
     }
 
     fun updateData(newBookList: List<Book>) {

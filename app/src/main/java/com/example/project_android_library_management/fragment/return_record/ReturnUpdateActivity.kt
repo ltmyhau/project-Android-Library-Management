@@ -111,6 +111,8 @@ class ReturnUpdateActivity : AppCompatActivity() {
         finesTableLayout = findViewById(R.id.finesTableLayout)
         finesTableRow = findViewById(R.id.finesTableRow)
 
+        edtBorowId.setBackgroundResource(R.drawable.gray_background)
+
         loadReturnDetails(maPT)
 
         bookReturns = returnDetailDao.getReturnDetailById(maPT)

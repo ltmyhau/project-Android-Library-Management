@@ -178,7 +178,7 @@ class ReturnDetailActivity : AppCompatActivity() {
 
         if (bookReturns != null) {
             rcvBooks.layoutManager = LinearLayoutManager(this)
-            val bookAdapter = BookAdapter(null, null, bookReturns, null)
+            val bookAdapter = BookAdapter(null, null, bookReturns, null, null)
             rcvBooks.adapter = bookAdapter
         } else {
             Toast.makeText(this, "Không tìm thấy chi tiết phiếu trả", Toast.LENGTH_SHORT).show()
