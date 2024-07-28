@@ -120,7 +120,7 @@ class BookFragment : Fragment() {
         }
     }
 
-    fun removeVietnameseAccents(str: String): String {
+    private fun removeVietnameseAccents(str: String): String {
         val normalizedString = java.text.Normalizer.normalize(str, java.text.Normalizer.Form.NFD)
         val pattern = "\\p{M}".toRegex()
         return pattern.replace(normalizedString, "")
