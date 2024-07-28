@@ -21,6 +21,7 @@ import com.example.project_android_library_management.search.SearchPublisherActi
 import com.example.project_android_library_management.dao.BookCategoryDao
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.dao.PublisherDao
+import com.example.project_android_library_management.fragment.order_book.OrderDetailActivity
 import com.example.project_android_library_management.model.Book
 import com.google.android.material.textfield.TextInputEditText
 import java.io.File
@@ -199,6 +200,9 @@ class BookAddActivity : AppCompatActivity() {
             val rowsAffected = bookDao.insert(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, BookDetailActivity::class.java)
+                intent.putExtra("BOOK_ID", bookId)
+                startActivity(intent)
                 finish()
             } else {
                 Toast.makeText(this, "Thêm sách mới thất bại", Toast.LENGTH_SHORT).show()

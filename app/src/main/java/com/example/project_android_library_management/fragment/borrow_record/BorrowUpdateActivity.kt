@@ -80,7 +80,7 @@ class BorrowUpdateActivity : AppCompatActivity() {
         edtReaderName = findViewById(R.id.edtReaderName)
         edtLibrarianName = findViewById(R.id.edtLibrarianName)
         spnTimeBorrow = findViewById(R.id.spnTimeBorrow)
-        edtBorrowDate = findViewById(R.id.edtBorrowDate)
+        edtBorrowDate = findViewById(R.id.edtOrderDate)
         edtReturnDate = findViewById(R.id.edtReturnDate)
         edtDeposit = findViewById(R.id.edtDeposit)
         edtNotes = findViewById(R.id.edtNotes)
@@ -330,7 +330,6 @@ class BorrowUpdateActivity : AppCompatActivity() {
                 allSuccess = false
             }
         } catch (e: Exception) {
-            Log.e("RefreshBookBorrow", "Lỗi xóa chi tiết phiếu mượn", e)
             allSuccess = false
         }
 

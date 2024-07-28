@@ -28,6 +28,7 @@ import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.dao.ReaderDao
 import com.example.project_android_library_management.dao.ReturnDetailDao
 import com.example.project_android_library_management.dao.ReturnRecordDao
+import com.example.project_android_library_management.fragment.order_book.OrderDetailActivity
 import com.example.project_android_library_management.fragment.return_record.ReturnUpdateActivity.Companion
 import com.example.project_android_library_management.model.Book
 import com.example.project_android_library_management.model.BorrowDetail
@@ -151,7 +152,7 @@ class ReturnAddActivity : AppCompatActivity() {
         btnAddBook = findViewById(R.id.btnAddBook)
         btnAddBook.setOnClickListener {
             val intent = Intent(this, SearchBookActivity::class.java)
-            intent.putExtra("SOURCE", "BookListNotReturned")
+            intent.putExtra("SOURCE", "BookList")
             intent.putExtra("BOOK_LIST", bookList)
             startActivityForResult(intent, REQUEST_CODE_BOOK_ID)
         }
@@ -183,6 +184,7 @@ class ReturnAddActivity : AppCompatActivity() {
                 bookBorrows = borrowDetailDao.getBorrowDetailsById(borrowId)
                 edtBorowId.error = null
                 edtBorowId.setText(borrowId)
+                bookReturns = ArrayList()
                 for (bookBorrow in bookBorrows) {
                     val bookReturn = ReturnDetail(maPT, bookBorrow.MaSach, bookBorrow.SoLuong)
                     if (bookReturn != null) {
@@ -465,9 +467,13 @@ class ReturnAddActivity : AppCompatActivity() {
             if (rowsAffected > 0 && addBookReturn()) {
                 Toast.makeText(this, "Thêm phiếu trả thành công", Toast.LENGTH_SHORT)
                     .show()
-                val resultIntent = Intent()
-                resultIntent.putExtra("RETURN_ID", maPT)
-                setResult(RESULT_OK, resultIntent)
+//                val resultIntent = Intent()
+//                resultIntent.putExtra("RETURN_ID", maPT)
+//                setResult(RESULT_OK, resultIntent)
+//                finish()
+                val intent = Intent(this, ReturnDetailActivity::class.java)
+                intent.putExtra("RETURN_ID", maPT)
+                startActivity(intent)
                 finish()
             } else {
                 Toast.makeText(this, "Thêm phiếu trả thất bại", Toast.LENGTH_SHORT)

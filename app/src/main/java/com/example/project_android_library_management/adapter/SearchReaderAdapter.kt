@@ -48,13 +48,16 @@ class SearchReaderAdapter(
             holder.imgAvatar.setImageResource(R.drawable.avatar)
         }
 
-        holder.btnSelect.setOnClickListener {
+        val clickListener = View.OnClickListener {
             val intent = Intent()
             intent.putExtra("READER_ID", reader.MaDG)
             Toast.makeText(context, "Đã chọn độc giả ${reader.HoTen}", Toast.LENGTH_SHORT).show()
             (context as Activity).setResult(Activity.RESULT_OK, intent)
             (context as Activity).finish()
         }
+
+        holder.btnSelect.setOnClickListener(clickListener)
+        holder.itemView.setOnClickListener(clickListener)
     }
 
     override fun getItemCount(): Int {

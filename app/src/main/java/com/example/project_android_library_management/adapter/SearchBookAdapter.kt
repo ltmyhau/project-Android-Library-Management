@@ -50,13 +50,16 @@ class SearchBookAdapter(
             holder.imgBookCover.setImageResource(R.drawable.book_cover)
         }
 
-        holder.btnAdd.setOnClickListener {
+        val clickListener = View.OnClickListener {
             val intent = Intent()
             intent.putExtra("BOOK_ID", book.MaSach)
             Toast.makeText(context, "Đã thêm sách ${book.TenSach}", Toast.LENGTH_SHORT).show()
             (context as Activity).setResult(Activity.RESULT_OK, intent)
             (context as Activity).finish()
         }
+
+        holder.btnAdd.setOnClickListener(clickListener)
+        holder.itemView.setOnClickListener(clickListener)
     }
 
     override fun getItemCount(): Int {

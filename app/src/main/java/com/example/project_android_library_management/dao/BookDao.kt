@@ -125,11 +125,11 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         return book
     }
 
-    fun getBooksByCategoryId(categoryId: String?): ArrayList<Book> {
+    fun getBooksByPublisherId(publisherId: String?): ArrayList<Book> {
         val books = ArrayList<Book>()
         val db = databaseHelper.openDatabase()
 
-        val cursor: Cursor = db.rawQuery("SELECT * FROM Sach WHERE MaTL = ?", arrayOf(categoryId))
+        val cursor: Cursor = db.rawQuery("SELECT * FROM Sach WHERE MaNXB = ?", arrayOf(publisherId))
         if (cursor.moveToFirst()) {
             do {
                 books.add(cursor(cursor))

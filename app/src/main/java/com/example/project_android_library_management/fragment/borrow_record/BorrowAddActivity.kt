@@ -23,6 +23,7 @@ import com.example.project_android_library_management.dao.BorrowDetailDao
 import com.example.project_android_library_management.dao.BorrowRecordDao
 import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.dao.ReaderDao
+import com.example.project_android_library_management.fragment.order_book.OrderDetailActivity
 import com.example.project_android_library_management.model.BorrowDetail
 import com.example.project_android_library_management.model.BorrowRecord
 import com.google.android.material.textfield.TextInputEditText
@@ -78,7 +79,7 @@ class BorrowAddActivity : AppCompatActivity() {
         edtReaderName = findViewById(R.id.edtReaderName)
         edtLibrarianName = findViewById(R.id.edtLibrarianName)
         spnTimeBorrow = findViewById(R.id.spnTimeBorrow)
-        edtBorrowDate = findViewById(R.id.edtBorrowDate)
+        edtBorrowDate = findViewById(R.id.edtOrderDate)
         edtReturnDate = findViewById(R.id.edtReturnDate)
         edtDeposit = findViewById(R.id.edtDeposit)
         edtNotes = findViewById(R.id.edtNotes)
@@ -275,9 +276,13 @@ class BorrowAddActivity : AppCompatActivity() {
             val rowsAffected = borrowRecordDao.insert(borrowRecord)
             if (rowsAffected > 0 && addBookBorrow()) {
                 Toast.makeText(this, "Thêm phiếu mượn thành công", Toast.LENGTH_SHORT).show()
-                val resultIntent = Intent()
-                resultIntent.putExtra("BORROW_ID", maPM)
-                setResult(RESULT_OK, resultIntent)
+//                val resultIntent = Intent()
+//                resultIntent.putExtra("BORROW_ID", maPM)
+//                setResult(RESULT_OK, resultIntent)
+//                finish()
+                val intent = Intent(this, BorrowDetailActivity::class.java)
+                intent.putExtra("BORROW_ID", maPM)
+                startActivity(intent)
                 finish()
             } else {
                 Toast.makeText(this, "Thêm phiếu mượn thất bại", Toast.LENGTH_SHORT).show()

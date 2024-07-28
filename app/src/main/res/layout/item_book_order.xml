@@ -14,9 +14,8 @@
         app:srcCompat="@drawable/book_cover" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
@@ -48,13 +47,13 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvBorrowQuantity"
+            android:id="@+id/tvAuthor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:drawableLeft="@drawable/ic_books"
+            android:drawableLeft="@drawable/ic_author"
             android:drawablePadding="4dp"
-            android:text="Số lượng mượn"
+            android:text="Tác giả"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -71,7 +70,7 @@
                 android:drawableLeft="@drawable/ic_books"
                 android:drawablePadding="4dp"
                 android:paddingRight="8dp"
-                android:text="Số lượng trả:"
+                android:text="Số lượng mượn:"
                 android:textSize="14sp" />
 
             <ImageButton
@@ -84,16 +83,16 @@
                 android:src="@drawable/ic_minus"
                 app:tint="@color/white" />
 
-            <TextView
-                android:id="@+id/tvQuantity"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edtQuantity"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingTop="8dp"
-                android:paddingRight="16dp"
+                android:paddingTop="4dp"
                 android:paddingBottom="8dp"
-                android:text="1" />
+                android:text="1000"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/btnIncrease"

@@ -20,6 +20,7 @@ import androidx.appcompat.widget.AppCompatButton
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.ReaderDao
+import com.example.project_android_library_management.fragment.order_book.OrderDetailActivity
 import com.example.project_android_library_management.model.Reader
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -206,6 +207,9 @@ class ReaderAddActivity : AppCompatActivity() {
             val rowsAffected = readerDao.insert(reader)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Thêm độc giả mới thành công", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ReaderDetailActivity::class.java)
+                intent.putExtra("READER_ID", readerId)
+                startActivity(intent)
                 finish()
             } else {
                 Toast.makeText(this, "Thêm độc giả mới thất bại", Toast.LENGTH_SHORT).show()

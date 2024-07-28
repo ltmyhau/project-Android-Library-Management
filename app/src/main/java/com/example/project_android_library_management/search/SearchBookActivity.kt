@@ -38,7 +38,7 @@ class SearchBookActivity : AppCompatActivity() {
         bookDao = BookDao(databaseHelper)
 
         val source = intent.getStringExtra("SOURCE")
-        bookList = if (source == "BookListNotReturned") {
+        bookList = if (source == "BookList") {
             intent.getSerializableExtra("BOOK_LIST") as ArrayList<Book>
         } else {
             bookDao.getAllBooks()

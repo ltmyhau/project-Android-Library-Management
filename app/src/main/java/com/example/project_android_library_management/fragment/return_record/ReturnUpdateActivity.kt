@@ -134,7 +134,7 @@ class ReturnUpdateActivity : AppCompatActivity() {
         checkDifferenceAndDisplayButton()
         btnAddBook.setOnClickListener {
             val intent = Intent(this, SearchBookActivity::class.java)
-            intent.putExtra("SOURCE", "BookListNotReturned")
+            intent.putExtra("SOURCE", "BookList")
             intent.putExtra("BOOK_LIST", bookList)
             startActivityForResult(intent, REQUEST_CODE_BOOK_ID)
         }

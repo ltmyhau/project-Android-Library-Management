@@ -19,15 +19,33 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvTitle"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:text="Tên sách"
-            android:textColor="@color/primary"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="Tên sách"
+                android:textColor="@color/primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@color/white"
+                android:padding="4dp"
+                app:srcCompat="@drawable/baseline_delete_24"
+                app:tint="@color/primary" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvAuthor"
@@ -68,14 +86,13 @@
 
             <TextView
                 android:id="@+id/tvQuantity"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingTop="8dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="8dp"
-                android:text="1" />
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="1000"
+                android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/btnIncrease"
@@ -90,15 +107,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/btnDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="@color/white"
-        android:padding="4dp"
-        app:tint="@color/primary"
-        app:srcCompat="@drawable/baseline_delete_24" />
 
 </LinearLayout>
