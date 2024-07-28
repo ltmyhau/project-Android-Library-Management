@@ -77,4 +77,10 @@ class BookListFragment : Fragment() {
         val books = bookDao.getAllBooks()
         bookAdapter.updateData(books)
     }
+
+    fun updateBookList(newBookList: List<Book>) {
+        bookList.clear()
+        bookList.addAll(newBookList)
+        bookAdapter.notifyDataSetChanged()
+    }
 }

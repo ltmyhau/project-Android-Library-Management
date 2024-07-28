@@ -39,6 +39,7 @@ class ReaderUpdateActivity : AppCompatActivity() {
     private var maDG: String = ""
 
     private lateinit var imgAvatar: ImageView
+    private lateinit var imgEditIcon: ImageView
     private lateinit var edtReaderId: TextInputEditText
     private lateinit var edtReaderName: TextInputEditText
     private lateinit var edtDateOfBirth: TextInputEditText
@@ -64,6 +65,7 @@ class ReaderUpdateActivity : AppCompatActivity() {
         readerDao = ReaderDao(databaseHelper)
 
         imgAvatar = findViewById(R.id.imgAvatar)
+        imgEditIcon = findViewById(R.id.imgEditIcon)
         edtReaderId = findViewById(R.id.edtReaderId)
         edtReaderName = findViewById(R.id.edtReaderName)
         edtDateOfBirth = findViewById(R.id.edtDateOfBirth)
@@ -81,6 +83,9 @@ class ReaderUpdateActivity : AppCompatActivity() {
             saveReaderDetails()
         }
 
+        imgEditIcon.setOnClickListener {
+            openImagePicker()
+        }
         imgAvatar.setOnClickListener {
             openImagePicker()
         }

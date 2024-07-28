@@ -11,6 +11,7 @@ import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.BookCategoryAdapter
 import com.example.project_android_library_management.dao.BookCategoryDao
+import com.example.project_android_library_management.model.Book
 import com.example.project_android_library_management.model.BookCategory
 
 class BookCategoryFragment : Fragment() {
@@ -37,5 +38,11 @@ class BookCategoryFragment : Fragment() {
         rcvCategory.adapter = bookCategoryAdapter
 
         return view
+    }
+
+    fun updateCategoryList(newCategoryList: List<BookCategory>) {
+        bookCategoryList.clear()
+        bookCategoryList.addAll(newCategoryList)
+        bookCategoryAdapter.notifyDataSetChanged()
     }
 }

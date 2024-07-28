@@ -38,6 +38,7 @@ class BookUpdateActivity : AppCompatActivity() {
     private var publisherId: String = ""
 
     private lateinit var imgBookCover: ImageView
+    private lateinit var imgEditIcon: ImageView
     private lateinit var edtBookId: TextInputEditText
     private lateinit var edtISBN: TextInputEditText
     private lateinit var edtTitle: TextInputEditText
@@ -68,6 +69,7 @@ class BookUpdateActivity : AppCompatActivity() {
         publisherDao = PublisherDao(databaseHelper)
 
         imgBookCover = findViewById(R.id.imgBookCover)
+        imgEditIcon = findViewById(R.id.imgEditIcon)
         edtBookId = findViewById(R.id.edtBookId)
         edtISBN = findViewById(R.id.edtISBN)
         edtTitle = findViewById(R.id.edtTitle)
@@ -89,6 +91,9 @@ class BookUpdateActivity : AppCompatActivity() {
             saveBookDetails()
         }
 
+        imgEditIcon.setOnClickListener {
+            openImagePicker()
+        }
         imgBookCover.setOnClickListener {
             openImagePicker()
         }

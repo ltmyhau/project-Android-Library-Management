@@ -40,6 +40,7 @@ class ReaderAddActivity : AppCompatActivity() {
     private var imagePath: String? = null
 
     private lateinit var imgAvatar: ImageView
+    private lateinit var imgEditIcon: ImageView
     private lateinit var edtReaderId: TextInputEditText
     private lateinit var edtReaderName: TextInputEditText
     private lateinit var edtDateOfBirth: TextInputEditText
@@ -63,6 +64,7 @@ class ReaderAddActivity : AppCompatActivity() {
         readerDao = ReaderDao(databaseHelper)
 
         imgAvatar = findViewById(R.id.imgAvatar)
+        imgEditIcon = findViewById(R.id.imgEditIcon)
         edtReaderId = findViewById(R.id.edtReaderId)
         edtReaderName = findViewById(R.id.edtReaderName)
         edtDateOfBirth = findViewById(R.id.edtDateOfBirth)
@@ -85,6 +87,9 @@ class ReaderAddActivity : AppCompatActivity() {
             addNewReader()
         }
 
+        imgEditIcon.setOnClickListener {
+            openImagePicker()
+        }
         imgAvatar.setOnClickListener {
             openImagePicker()
         }

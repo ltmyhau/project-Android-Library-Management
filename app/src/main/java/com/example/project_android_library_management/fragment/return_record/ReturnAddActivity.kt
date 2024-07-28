@@ -134,6 +134,10 @@ class ReturnAddActivity : AppCompatActivity() {
         val borrowListNotReturned = ArrayList(borrowList.filter { it.MaPM !in returnedMaPMs })
 
         edtBorowId.setOnClickListener {
+            if (borrowListNotReturned.isEmpty()) {
+                Toast.makeText(this, "Không có phiếu mượn nào chưa được trả", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val intent = Intent(this, SearchBorrowActivity::class.java)
             intent.putExtra("SOURCE", "BorrowRecordNotReturned")
             intent.putExtra("BORROW_LIST", borrowListNotReturned)

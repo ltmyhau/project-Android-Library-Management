@@ -37,7 +37,6 @@ class BookDetailActivity : AppCompatActivity() {
     private lateinit var tvPrice: TextView
     private lateinit var tvDescription: TextView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_detail)

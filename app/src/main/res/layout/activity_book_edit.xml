@@ -23,18 +23,32 @@
                 android:id="@+id/imgBookCover"
                 android:layout_width="130dp"
                 android:layout_height="170dp"
+                app:srcCompat="@drawable/book_cover"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/book_cover" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imgEditIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginTop="-24dp"
+                android:layout_marginEnd="-8dp"
+                android:background="@drawable/transparent_background"
+                android:elevation="4dp"
+                android:padding="4dp"
+                app:layout_constraintEnd_toEndOf="@+id/imgBookCover"
+                app:layout_constraintTop_toBottomOf="@+id/imgBookCover"
+                app:srcCompat="@drawable/baseline_edit_24" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/bookIdLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
