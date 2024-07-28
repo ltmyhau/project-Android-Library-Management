@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
@@ -14,6 +15,7 @@ import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.OrderBookAdapter
 import com.example.project_android_library_management.dao.OrderBookDao
 import com.example.project_android_library_management.model.OrderBook
+import com.example.project_android_library_management.model.ReturnRecord
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class OrderBookFragment : Fragment() {
@@ -22,6 +24,7 @@ class OrderBookFragment : Fragment() {
     private lateinit var orderBookAdapter: OrderBookAdapter
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var orderBookDao: OrderBookDao
+    private lateinit var edtSearch: SearchView
 
     companion object {
         private const val REQUEST_CODE_ORDER_LIST = 1
@@ -33,6 +36,7 @@ class OrderBookFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_order_book, container, false)
 
+        edtSearch = view.findViewById(R.id.edtSearch)
         rcvOrderBoooks = view.findViewById(R.id.rcvOrderBoooks)
         rcvOrderBoooks.layoutManager = LinearLayoutManager(context)
         rcvOrderBoooks.setHasFixedSize(true)
@@ -57,6 +61,22 @@ class OrderBookFragment : Fragment() {
             startActivity(intent)
         }
 
+        edtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+        })
+
         return view
     }
 
@@ -75,5 +95,16 @@ class OrderBookFragment : Fragment() {
     private fun loadOrderBookList() {
         val orderBook = orderBookDao.getAllOrderBook()
         orderBookAdapter.updateData(orderBook)
+    }
+
+    fun updateOrderBookList(newList: List<OrderBook>) {
+        orderBookList.clear()
+        orderBookList.addAll(newList)
+        orderBookAdapter.notifyDataSetChanged()
+    }
+
+    private fun performSearch(query: String) {
+        val listSearch = orderBookDao.searchOrderBook(query)
+        updateOrderBookList(listSearch)
     }
 }

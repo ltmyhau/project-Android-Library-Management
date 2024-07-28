@@ -87,42 +87,18 @@ class BookFragment : Fragment() {
     }
 
     private fun performSearch(query: String) {
-        val normalizedQuery = removeVietnameseAccents(query).toLowerCase()
-
         if (currentTabPosition == 0) {
             val bookDao = BookDao(DatabaseHelper(requireContext()))
-            val allBooks = bookDao.getAllBooks()
-            val filteredBooks = allBooks.filter {
-                val normalizedId = removeVietnameseAccents(it.MaSach).toLowerCase()
-                val normalizedIsbn = removeVietnameseAccents(it.ISBN).toLowerCase()
-                val normalizedTitle = removeVietnameseAccents(it.TenSach).toLowerCase()
-                val normalizedAuthor = removeVietnameseAccents(it.TacGia).toLowerCase()
-                normalizedId.contains(normalizedQuery) ||
-                normalizedIsbn.contains(normalizedQuery) ||
-                normalizedTitle.contains(normalizedQuery) ||
-                normalizedAuthor.contains(normalizedQuery)
-            }
+            val listSearch = bookDao.searchBook(query)
             if (::bookListFragment.isInitialized) {
-                bookListFragment.updateBookList(filteredBooks)
+                bookListFragment.updateBookList(listSearch)
             }
         } else if (currentTabPosition == 1) {
             val bookCategoryDao = BookCategoryDao(DatabaseHelper(requireContext()))
-            val allBookCategories = bookCategoryDao.getAllBookCategories()
-            val filteredBookCategories = allBookCategories.filter {
-                val normalizedId = removeVietnameseAccents(it.MaLoai).toLowerCase()
-                val normalizedCategory = removeVietnameseAccents(it.TenLoai).toLowerCase()
-                normalizedId.contains(normalizedQuery) ||
-                normalizedCategory.contains(normalizedQuery)
-            }
+            val listSearch = bookCategoryDao.searchBookCategories(query)
             if (::bookCategoryFragment.isInitialized) {
-                bookCategoryFragment.updateCategoryList(filteredBookCategories)
+                bookCategoryFragment.updateCategoryList(listSearch)
             }
         }
-    }
-
-    private fun removeVietnameseAccents(str: String): String {
-        val normalizedString = java.text.Normalizer.normalize(str, java.text.Normalizer.Form.NFD)
-        val pattern = "\\p{M}".toRegex()
-        return pattern.replace(normalizedString, "")
     }
 }

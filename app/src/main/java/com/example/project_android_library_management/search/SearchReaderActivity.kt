@@ -28,7 +28,6 @@ class SearchReaderActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         edtSearch = findViewById(R.id.edtSearch)
-        edtSearch.requestFocus()
 
         rcvList = findViewById(R.id.rcvList)
         rcvList.layoutManager = LinearLayoutManager(this)
@@ -40,10 +39,36 @@ class SearchReaderActivity : AppCompatActivity() {
         searchReaderAdapter = SearchReaderAdapter(this, readerList)
         rcvList.adapter = searchReaderAdapter
 
+        edtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    fun updateReaderList(newList: List<Reader>) {
+        readerList.clear()
+        readerList.addAll(newList)
+        searchReaderAdapter.notifyDataSetChanged()
+    }
+
+    private fun performSearch(query: String) {
+        val listSearch = readerDao.searchReader(query)
+        updateReaderList(listSearch)
     }
 }

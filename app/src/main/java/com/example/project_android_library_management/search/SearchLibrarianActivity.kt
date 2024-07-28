@@ -10,6 +10,7 @@ import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.SearchLibrarianAdapter
 import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.model.Librarian
+import com.example.project_android_library_management.model.Reader
 
 class SearchLibrarianActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
@@ -28,7 +29,6 @@ class SearchLibrarianActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         edtSearch = findViewById(R.id.edtSearch)
-        edtSearch.requestFocus()
 
         rcvList = findViewById(R.id.rcvList)
         rcvList.layoutManager = LinearLayoutManager(this)
@@ -40,10 +40,36 @@ class SearchLibrarianActivity : AppCompatActivity() {
         searchLibrarianAdapter = SearchLibrarianAdapter(this, librarianList)
         rcvList.adapter = searchLibrarianAdapter
 
+        edtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    fun updateReaderList(newList: List<Librarian>) {
+        librarianList.clear()
+        librarianList.addAll(newList)
+        searchLibrarianAdapter.notifyDataSetChanged()
+    }
+
+    private fun performSearch(query: String) {
+        val listSearch = librarianDao.searchLibrarian(query)
+        updateReaderList(listSearch)
     }
 }

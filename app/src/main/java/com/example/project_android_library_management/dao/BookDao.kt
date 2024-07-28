@@ -91,7 +91,20 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
         val maTL = cursor.getString(cursor.getColumnIndexOrThrow("MaTL"))
 
-        return Book(maSach, isbn, tenSach, tacGia, maNXB, namXB, soTrang, soLuongTon, giaBan, moTa, hinhAnh, maTL)
+        return Book(
+            maSach,
+            isbn,
+            tenSach,
+            tacGia,
+            maNXB,
+            namXB,
+            soTrang,
+            soLuongTon,
+            giaBan,
+            moTa,
+            hinhAnh,
+            maTL
+        )
     }
 
     fun getAllBooks(): ArrayList<Book> {
@@ -156,6 +169,33 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         cursor.close()
         db.close()
 
+        return books
+    }
+
+    fun searchBook(query: String): ArrayList<Book> {
+        val books = ArrayList<Book>()
+        val db = databaseHelper.openDatabase()
+
+        val cursor: Cursor = db.rawQuery(
+            """
+                SELECT * FROM Sach
+                WHERE LOWER(MaSach) LIKE ? OR
+                      LOWER(ISBN) LIKE ? OR
+                      LOWER(TenSach) LIKE ? OR
+                      LOWER(TacGia) LIKE ? OR
+                      LOWER(MaNXB) LIKE ? OR
+                      LOWER(MaTL) LIKE ?
+            """.trimIndent(),
+            arrayOf("%$query%", "%$query%", "%$query%", "%$query%", "%$query%", "%$query%")
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                books.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
         return books
     }
 }

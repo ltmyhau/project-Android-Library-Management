@@ -101,4 +101,25 @@ class OrderBookDao(private val databaseHelper: DatabaseHelper) {
 
         return orderBook
     }
+
+    fun searchOrderBook(query: String): ArrayList<OrderBook> {
+        val orderBooks = ArrayList<OrderBook>()
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery(
+            """
+                SELECT * FROM PhieuDat
+                WHERE LOWER(MaPD) LIKE ? OR
+                      LOWER(MaTT) LIKE ? OR
+                      LOWER(MaNXB) LIKE ?
+            """.trimIndent(),
+            arrayOf("%$query%", "%$query%", "%$query%")
+        )
+        if (cursor.moveToFirst()) {
+            do {
+                orderBooks.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return orderBooks
+    }
 }

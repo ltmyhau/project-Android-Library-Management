@@ -51,7 +51,8 @@ class ReturnRecordDao(private val databaseHelper: DatabaseHelper) {
             put("MaDG", returnRecord.MaDG)
         }
 
-        val rowsAffected = db.update("PhieuTra", contentValues, "MaPT = ?", arrayOf(returnRecord.MaPT))
+        val rowsAffected =
+            db.update("PhieuTra", contentValues, "MaPT = ?", arrayOf(returnRecord.MaPT))
         db.close()
         return rowsAffected
     }
@@ -101,6 +102,29 @@ class ReturnRecordDao(private val databaseHelper: DatabaseHelper) {
         cursor.close()
         db.close()
 
+        return returnRecord
+    }
+
+    fun searchReturnRecord(query: String): ArrayList<ReturnRecord> {
+        val returnRecord = ArrayList<ReturnRecord>()
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery(
+            """
+                SELECT * FROM PhieuTra
+                WHERE LOWER(MaPT) LIKE ? OR
+                      LOWER(TienPhat) LIKE ? OR
+                      LOWER(MaPM) LIKE ? OR
+                      LOWER(MaTT) LIKE ? OR
+                      LOWER(MaDG) LIKE ?
+            """.trimIndent(),
+            arrayOf("%$query%", "%$query%", "%$query%", "%$query%", "%$query%")
+        )
+        if (cursor.moveToFirst()) {
+            do {
+                returnRecord.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
         return returnRecord
     }
 }

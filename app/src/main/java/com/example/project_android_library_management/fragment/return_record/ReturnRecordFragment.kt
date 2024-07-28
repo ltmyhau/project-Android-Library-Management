@@ -7,12 +7,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.ReturnRecordAdapter
 import com.example.project_android_library_management.dao.ReturnRecordDao
+import com.example.project_android_library_management.model.BorrowRecord
 import com.example.project_android_library_management.model.ReturnRecord
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -22,6 +24,7 @@ class ReturnRecordFragment : Fragment() {
     private lateinit var returnRecordAdapter: ReturnRecordAdapter
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var returnRecordDao: ReturnRecordDao
+    private lateinit var edtSearch: SearchView
 
     companion object {
         private const val REQUEST_CODE_RETURN_LIST = 1
@@ -33,6 +36,7 @@ class ReturnRecordFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_return_record, container, false)
 
+        edtSearch = view.findViewById(R.id.edtSearch)
         rcvReturnRecord = view.findViewById(R.id.rcvReturnRecord)
         rcvReturnRecord.layoutManager = LinearLayoutManager(context)
         rcvReturnRecord.setHasFixedSize(true)
@@ -57,6 +61,22 @@ class ReturnRecordFragment : Fragment() {
             startActivity(intent)
         }
 
+        edtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+        })
+
         return view
     }
 
@@ -75,5 +95,16 @@ class ReturnRecordFragment : Fragment() {
     private fun loadReturnRecordList() {
         val returnRecord = returnRecordDao.getAllReturnRecord()
         returnRecordAdapter.updateData(returnRecord)
+    }
+
+    fun updateReturnRecordList(newList: List<ReturnRecord>) {
+        returncordList.clear()
+        returncordList.addAll(newList)
+        returnRecordAdapter.notifyDataSetChanged()
+    }
+
+    private fun performSearch(query: String) {
+        val listSearch = returnRecordDao.searchReturnRecord(query)
+        updateReturnRecordList(listSearch)
     }
 }

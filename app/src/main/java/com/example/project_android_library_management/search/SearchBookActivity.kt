@@ -11,12 +11,14 @@ import com.example.project_android_library_management.adapter.SearchBookAdapter
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.dao.BorrowDetailDao
 import com.example.project_android_library_management.model.Book
+import com.example.project_android_library_management.model.OrderBook
 
 class SearchBookActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var bookDao: BookDao
     private lateinit var searchBookAdapter: SearchBookAdapter
     private lateinit var bookList: ArrayList<Book>
+    private lateinit var bookListCopy: ArrayList<Book>
 
     private lateinit var edtSearch: SearchView
     private lateinit var rcvList: RecyclerView
@@ -36,7 +38,6 @@ class SearchBookActivity : AppCompatActivity() {
         }
 
         edtSearch = findViewById(R.id.edtSearch)
-        edtSearch.requestFocus()
 
         rcvList = findViewById(R.id.rcvList)
         rcvList.layoutManager = LinearLayoutManager(this)
@@ -51,14 +52,48 @@ class SearchBookActivity : AppCompatActivity() {
             bookDao.getAllBooks()
         }
 
+        bookListCopy = ArrayList(bookList)
+
         searchBookAdapter = SearchBookAdapter(this, bookList, hideBtnSelect)
 
         rcvList.adapter = searchBookAdapter
-    }
 
+        edtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+        })
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    fun updateBookList(newList: List<Book>) {
+        bookList.clear()
+        bookList.addAll(newList)
+        searchBookAdapter.notifyDataSetChanged()
+    }
+
+    private fun performSearch(query: String) {
+        val normalizedQuery = query.toLowerCase()
+        val listSearch = bookListCopy.filter {
+            it.MaSach.toLowerCase().contains(normalizedQuery) ||
+            it.ISBN.toLowerCase().contains(normalizedQuery) ||
+            it.TenSach.toLowerCase().contains(normalizedQuery) ||
+            it.TacGia.toLowerCase().contains(normalizedQuery)
+        }
+        updateBookList(listSearch)
     }
 }

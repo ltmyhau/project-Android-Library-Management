@@ -44,4 +44,27 @@ class PublisherDao(private val databaseHelper: DatabaseHelper) {
 
         return publisher
     }
+
+    fun searchPublisher(query: String): List<Publisher> {
+        val publishers = ArrayList<Publisher>()
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery(
+            """
+                SELECT * FROM NhaXuatBan
+                WHERE LOWER(MaNXB) LIKE ? OR
+                      LOWER(TenNXB) LIKE ? OR
+                      LOWER(Email) LIKE ? OR
+                      LOWER(DienThoai) LIKE ?
+            """.trimIndent(),
+            arrayOf("%$query%", "%$query%", "%$query%", "%$query%")
+        )
+        if (cursor.moveToFirst()) {
+            do {
+                publishers.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return publishers
+    }
 }

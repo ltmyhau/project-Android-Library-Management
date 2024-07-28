@@ -27,7 +27,7 @@ class LibrarianDao(private val databaseHelper: DatabaseHelper) {
             do {
                 librarians.add(cursor(cursor))
             } while (cursor.moveToNext())
-            }
+        }
         cursor.close()
         db.close()
         return librarians
@@ -45,5 +45,27 @@ class LibrarianDao(private val databaseHelper: DatabaseHelper) {
         db.close()
 
         return librarian
+    }
+
+    fun searchLibrarian(query: String): List<Librarian> {
+        val librarians = ArrayList<Librarian>()
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery(
+            """
+                SELECT * FROM ThuThu
+                WHERE LOWER(MaTT) LIKE ? OR
+                      LOWER(HoTen) LIKE ? OR
+                      LOWER(DienThoai) LIKE ?
+            """.trimIndent(),
+            arrayOf("%$query%", "%$query%", "%$query%")
+        )
+        if (cursor.moveToFirst()) {
+            do {
+                librarians.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return librarians
     }
 }

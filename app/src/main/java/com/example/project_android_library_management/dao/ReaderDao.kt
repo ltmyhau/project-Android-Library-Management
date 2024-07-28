@@ -67,9 +67,6 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
     fun delete(maDG: String): Int {
         val db = databaseHelper.writableDatabase
         db.execSQL("PRAGMA foreign_keys = ON;")
-//        val rowsAffected = db.delete("DocGia", "MaDG = ?", arrayOf(maDG))
-//        db.close()
-//        return rowsAffected
         return try {
             val rowsAffected = db.delete("DocGia", "MaDG = ?", arrayOf(maDG))
             rowsAffected
@@ -91,7 +88,17 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
         val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
         val ngayLamThe = cursor.getString(cursor.getColumnIndexOrThrow("NgayLamThe"))
 
-        return Reader(maDG, hoTen, ngaySinh, gioiTinh, dienThoai, email, diaChi, hinhAnh, ngayLamThe)
+        return Reader(
+            maDG,
+            hoTen,
+            ngaySinh,
+            gioiTinh,
+            dienThoai,
+            email,
+            diaChi,
+            hinhAnh,
+            ngayLamThe
+        )
     }
 
     fun getAllReaders(): ArrayList<Reader> {
@@ -123,5 +130,30 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
         db.close()
 
         return reader
+    }
+
+    fun searchReader(query: String): ArrayList<Reader> {
+        val readers = ArrayList<Reader>()
+        val db = databaseHelper.openDatabase()
+
+        val cursor: Cursor = db.rawQuery(
+            """
+                SELECT * FROM DocGia
+                WHERE LOWER(MaDG) LIKE ? OR
+                      LOWER(HoTen) LIKE ? OR
+                      LOWER(DienThoai) LIKE ? OR
+                      LOWER(Email) LIKE ?
+            """.trimIndent(),
+            arrayOf("%$query%", "%$query%", "%$query%", "%$query%")
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                readers.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        return readers
     }
 }

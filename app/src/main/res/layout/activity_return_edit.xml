@@ -70,37 +70,13 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/readerNameLayout"
+                android:id="@+id/borrowIdLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/librarianNameLayout"
                 app:layout_constraintStart_toStartOf="@+id/librarianNameLayout"
                 app:layout_constraintTop_toBottomOf="@+id/librarianNameLayout"
-                app:startIconDrawable="@drawable/ic_reader">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtReaderName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/gray_background"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="Độc giả"
-                    android:longClickable="false"
-                    android:paddingStart="48dp"
-                    android:paddingLeft="48dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/borrowIdLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/readerNameLayout"
-                app:layout_constraintStart_toStartOf="@+id/readerNameLayout"
-                app:layout_constraintTop_toBottomOf="@+id/readerNameLayout"
                 app:startIconDrawable="@drawable/ic_key">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -118,13 +94,37 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/actualReturnDateLayout"
+                android:id="@+id/readerNameLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/borrowIdLayout"
                 app:layout_constraintStart_toStartOf="@+id/borrowIdLayout"
                 app:layout_constraintTop_toBottomOf="@+id/borrowIdLayout"
+                app:startIconDrawable="@drawable/ic_reader">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtReaderName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gray_background"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Độc giả"
+                    android:longClickable="false"
+                    android:paddingStart="48dp"
+                    android:paddingLeft="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/actualReturnDateLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/readerNameLayout"
+                app:layout_constraintStart_toStartOf="@+id/readerNameLayout"
+                app:layout_constraintTop_toBottomOf="@+id/readerNameLayout"
                 app:startIconDrawable="@drawable/ic_calendar">
 
                 <com.google.android.material.textfield.TextInputEditText

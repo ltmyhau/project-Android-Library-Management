@@ -9,6 +9,7 @@ import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.SearchPublisherAdapter
 import com.example.project_android_library_management.dao.PublisherDao
+import com.example.project_android_library_management.model.Librarian
 import com.example.project_android_library_management.model.Publisher
 
 class SearchPublisherActivity : AppCompatActivity() {
@@ -28,7 +29,6 @@ class SearchPublisherActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         edtSearch = findViewById(R.id.edtSearch)
-        edtSearch.requestFocus()
 
         rcvList = findViewById(R.id.rcvList)
         rcvList.layoutManager = LinearLayoutManager(this)
@@ -40,10 +40,36 @@ class SearchPublisherActivity : AppCompatActivity() {
         searchPublisherAdapter = SearchPublisherAdapter(this, publisherList)
         rcvList.adapter = searchPublisherAdapter
 
+        edtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    fun updatePublisherList(newList: List<Publisher>) {
+        publisherList.clear()
+        publisherList.addAll(newList)
+        searchPublisherAdapter.notifyDataSetChanged()
+    }
+
+    private fun performSearch(query: String) {
+        val listSearch = publisherDao.searchPublisher(query)
+        updatePublisherList(listSearch)
     }
 }

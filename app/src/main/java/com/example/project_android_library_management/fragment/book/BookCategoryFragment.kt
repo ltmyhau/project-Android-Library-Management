@@ -40,9 +40,9 @@ class BookCategoryFragment : Fragment() {
         return view
     }
 
-    fun updateCategoryList(newCategoryList: List<BookCategory>) {
+    fun updateCategoryList(newList: List<BookCategory>) {
         bookCategoryList.clear()
-        bookCategoryList.addAll(newCategoryList)
+        bookCategoryList.addAll(newList)
         bookCategoryAdapter.notifyDataSetChanged()
     }
 }

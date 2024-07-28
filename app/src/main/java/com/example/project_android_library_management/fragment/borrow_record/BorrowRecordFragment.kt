@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,6 @@ import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.BorrowRecordAdapter
 import com.example.project_android_library_management.dao.BorrowRecordDao
-import com.example.project_android_library_management.fragment.reader.ReaderAddActivity
 import com.example.project_android_library_management.model.BorrowRecord
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -23,6 +23,7 @@ class BorrowRecordFragment : Fragment() {
     private lateinit var borrowRecordAdapter: BorrowRecordAdapter
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var borrowRecordDao: BorrowRecordDao
+    private lateinit var edtSearch: SearchView
 
     companion object {
         private const val REQUEST_CODE_BORROW_LIST = 1
@@ -34,6 +35,7 @@ class BorrowRecordFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_borrow_record, container, false)
 
+        edtSearch = view.findViewById(R.id.edtSearch)
         rcvBorrowRecord = view.findViewById(R.id.rcvBorrowRecord)
         rcvBorrowRecord.layoutManager = LinearLayoutManager(context)
         rcvBorrowRecord.setHasFixedSize(true)
@@ -58,6 +60,22 @@ class BorrowRecordFragment : Fragment() {
             startActivity(intent)
         }
 
+        edtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    performSearch(it)
+                }
+                return true
+            }
+        })
+
         return view
     }
 
@@ -78,4 +96,14 @@ class BorrowRecordFragment : Fragment() {
         borrowRecordAdapter.updateData(borrowRecord)
     }
 
+    fun updateBorrowRecordList(newList: List<BorrowRecord>) {
+        borrowRecordList.clear()
+        borrowRecordList.addAll(newList)
+        borrowRecordAdapter.notifyDataSetChanged()
+    }
+
+    private fun performSearch(query: String) {
+        val listSearch = borrowRecordDao.searchBorrowRecord(query)
+        updateBorrowRecordList(listSearch)
+    }
 }

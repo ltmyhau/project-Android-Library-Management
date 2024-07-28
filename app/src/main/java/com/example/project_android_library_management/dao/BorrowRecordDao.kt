@@ -54,7 +54,8 @@ class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
             put("MaTT", borrowRecord.MaTT)
         }
 
-        val rowsAffected = db.update("PhieuMuon", contentValues, "MaPM = ?", arrayOf(borrowRecord.MaPM))
+        val rowsAffected =
+            db.update("PhieuMuon", contentValues, "MaPM = ?", arrayOf(borrowRecord.MaPM))
         db.close()
         return rowsAffected
     }
@@ -106,5 +107,28 @@ class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
         db.close()
 
         return borrowRecord
+    }
+
+    fun searchBorrowRecord(query: String): ArrayList<BorrowRecord> {
+        val borrowRecords = ArrayList<BorrowRecord>()
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery(
+            """
+                SELECT * FROM PhieuMuon
+                WHERE LOWER(MaPM) LIKE ? OR
+                      LOWER(SoNgayMuon) LIKE ? OR
+                      LOWER(TienCoc) LIKE ? OR
+                      LOWER(MaDG) LIKE ? OR
+                      LOWER(MaTT) LIKE ?
+            """.trimIndent(),
+            arrayOf("%$query%", "%$query%", "%$query%", "%$query%", "%$query%")
+        )
+        if (cursor.moveToFirst()) {
+            do {
+                borrowRecords.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return borrowRecords
     }
 }

@@ -78,9 +78,9 @@ class BookListFragment : Fragment() {
         bookAdapter.updateData(books)
     }
 
-    fun updateBookList(newBookList: List<Book>) {
+    fun updateBookList(newList: List<Book>) {
         bookList.clear()
-        bookList.addAll(newBookList)
+        bookList.addAll(newList)
         bookAdapter.notifyDataSetChanged()
     }
 }

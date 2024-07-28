@@ -13,11 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.ReaderAdapter
-import com.example.project_android_library_management.dao.BookCategoryDao
-import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.dao.ReaderDao
-import com.example.project_android_library_management.fragment.book.BookAddActivity
-import com.example.project_android_library_management.model.BookCategory
 import com.example.project_android_library_management.model.Reader
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -100,32 +96,14 @@ class ReaderFragment : Fragment() {
         readerAdapter.updateData(readers)
     }
 
-    fun updateReaderList(newReaderList: List<Reader>) {
+    fun updateReaderList(newList: List<Reader>) {
         readerList.clear()
-        readerList.addAll(newReaderList)
+        readerList.addAll(newList)
         readerAdapter.notifyDataSetChanged()
     }
 
     private fun performSearch(query: String) {
-        val normalizedQuery = removeVietnameseAccents(query).toLowerCase()
-
-        val allReaders = readerDao.getAllReaders()
-        val filteredBooks = allReaders.filter {
-            val normalizedId = removeVietnameseAccents(it.MaDG).toLowerCase()
-            val normalizedName = removeVietnameseAccents(it.HoTen).toLowerCase()
-            val normalizedPhone = removeVietnameseAccents(it.DienThoai).toLowerCase()
-            val normalizedEmail = removeVietnameseAccents(it.Email).toLowerCase()
-            normalizedId.contains(normalizedQuery) ||
-                    normalizedName.contains(normalizedQuery) ||
-                    normalizedPhone.contains(normalizedQuery) ||
-                    normalizedEmail.contains(normalizedQuery)
-        }
-        updateReaderList(filteredBooks)
-    }
-
-    private fun removeVietnameseAccents(str: String): String {
-        val normalizedString = java.text.Normalizer.normalize(str, java.text.Normalizer.Form.NFD)
-        val pattern = "\\p{M}".toRegex()
-        return pattern.replace(normalizedString, "")
+        val listSearch = readerDao.searchReader(query)
+        updateReaderList(listSearch)
     }
 }
