@@ -40,6 +40,7 @@ class BookFragment : Fragment() {
     private lateinit var btnFilter: ImageView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
+    private lateinit var btnClose: ImageView
     private lateinit var spnPublisher: AutoCompleteTextView
     private lateinit var edtFromYear: EditText
     private lateinit var edtToYear: EditText
@@ -63,6 +64,7 @@ class BookFragment : Fragment() {
         drawerLayout = view.findViewById(R.id.drawer_layout)
         navView = view.findViewById(R.id.nav_view)
         val headerView = navView.getHeaderView(0)
+        btnClose = headerView.findViewById(R.id.btnClose)
         spnPublisher = headerView.findViewById(R.id.spnPublisher)
         edtFromYear = headerView.findViewById(R.id.edtFromYear)
         edtToYear = headerView.findViewById(R.id.edtToYear)
@@ -115,6 +117,11 @@ class BookFragment : Fragment() {
         btnFilter.setOnClickListener {
             drawerLayout.openDrawer(navView)
             loadPublisherSpinner()
+        }
+
+        btnClose.setOnClickListener {
+            drawerLayout.closeDrawer(navView)
+            resetFilter()
         }
 
         btnReset.setOnClickListener {

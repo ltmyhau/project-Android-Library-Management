@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.util.Log
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.model.BorrowRecord
+import com.example.project_android_library_management.model.Reader
 
 class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
 
@@ -123,6 +124,73 @@ class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
             """.trimIndent(),
             arrayOf("%$query%", "%$query%", "%$query%", "%$query%", "%$query%")
         )
+        if (cursor.moveToFirst()) {
+            do {
+                borrowRecords.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return borrowRecords
+    }
+
+    fun searchBorrowByFilter(
+        status: List<String>,
+        fromDay: String,
+        toDay: String,
+        reader: String,
+        librarian: String
+    ): ArrayList<BorrowRecord> {
+        val borrowRecords = ArrayList<BorrowRecord>()
+        val db = databaseHelper.openDatabase()
+
+        val query = StringBuilder(
+            """
+                SELECT pm.*, dg.HoTen AS TenDocGia, tt.HoTen AS TenThuThu,
+                    CASE
+                        WHEN pt.MaPT IS NOT NULL THEN 'Đã trả'
+                        WHEN DATE('now') > DATE(pm.NgayMuon, '+' || pm.SoNgayMuon || ' days') THEN 'Quá hạn'
+                        ELSE 'Chưa trả'
+                    END AS TrangThai
+                FROM PhieuMuon pm
+                    LEFT JOIN PhieuTra pt ON pm.MaPM = pt.MaPM
+                    LEFT JOIN DocGia dg ON pm.MaDG = dg.MaDG
+                    LEFT JOIN ThuThu tt ON pm.MaTT = tt.MaTT
+                WHERE 1=1
+            """.trimIndent()
+        )
+
+        val args = ArrayList<String>()
+        if (status.isNotEmpty()) {
+            query.append(" AND (CASE " +
+                    "WHEN pt.MaPT IS NOT NULL THEN 'Đã trả' " +
+                    "WHEN DATE('now') > DATE(pm.NgayMuon, '+' || pm.SoNgayMuon || ' days') THEN 'Quá hạn' " +
+                    "ELSE 'Chưa trả' " +
+                    "END) IN (${status.joinToString { "?" }})")
+            args.addAll(status)
+        }
+
+        if (fromDay.isNotEmpty()) {
+            query.append(" AND NgayMuon >= ?")
+            args.add(fromDay)
+        }
+        if (toDay.isNotEmpty()) {
+            query.append(" AND NgayMuon <= ?")
+            args.add(toDay)
+        }
+        if (reader.isNotEmpty()) {
+            query.append(" AND (pm.MaDG LIKE ? OR dg.HoTen LIKE ?)")
+            args.add("%$reader%")
+            args.add("%$reader%")
+        }
+        if (librarian.isNotEmpty()) {
+            query.append(" AND (pm.MaTT LIKE ? OR tt.HoTen LIKE ?)")
+            args.add("%$librarian%")
+            args.add("%$librarian%")
+        }
+
+        val cursor: Cursor =
+            db.rawQuery(query.toString(), args.toArray(arrayOfNulls<String>(args.size)))
+
         if (cursor.moveToFirst()) {
             do {
                 borrowRecords.add(cursor(cursor))

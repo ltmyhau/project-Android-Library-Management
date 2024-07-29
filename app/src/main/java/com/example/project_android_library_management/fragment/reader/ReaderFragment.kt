@@ -47,6 +47,7 @@ class ReaderFragment : Fragment() {
     private lateinit var btnFilter: ImageView
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
+    private lateinit var btnClose: ImageView
     private lateinit var chkMale: CheckBox
     private lateinit var chkFemale: CheckBox
     private lateinit var chkOther: CheckBox
@@ -76,6 +77,7 @@ class ReaderFragment : Fragment() {
         drawerLayout = view.findViewById(R.id.drawer_layout)
         navView = view.findViewById(R.id.nav_view)
         val headerView = navView.getHeaderView(0)
+        btnClose = headerView.findViewById(R.id.btnClose)
         chkMale = headerView.findViewById(R.id.chkMale)
         chkFemale = headerView.findViewById(R.id.chkFemale)
         chkOther = headerView.findViewById(R.id.chkOther)
@@ -124,6 +126,11 @@ class ReaderFragment : Fragment() {
 
         btnFilter.setOnClickListener {
             drawerLayout.openDrawer(navView)
+        }
+
+        btnClose.setOnClickListener {
+            drawerLayout.closeDrawer(navView)
+            resetFilter()
         }
 
         btnReset.setOnClickListener {

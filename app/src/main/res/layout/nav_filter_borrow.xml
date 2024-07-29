@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Theo giới tính"
+        android:text="Theo tình trạng"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -49,50 +49,50 @@
         android:paddingLeft="8dp">
 
         <CheckBox
-            android:id="@+id/chkMale"
-            android:layout_width="50dp"
+            android:id="@+id/chkReturned"
+            android:layout_width="70dp"
             android:layout_height="32dp"
-            android:layout_margin="8dp"
+            android:layout_margin="4dp"
             android:background="@drawable/checkbox_border"
             android:button="@android:color/transparent"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="8dp"
             android:paddingBottom="2dp"
-            android:text="Nam" />
+            android:text="Đã trả" />
 
         <CheckBox
-            android:id="@+id/chkFemale"
-            android:layout_width="50dp"
+            android:id="@+id/chkNotReturned"
+            android:layout_width="70dp"
             android:layout_height="32dp"
-            android:layout_margin="8dp"
+            android:layout_margin="4dp"
             android:background="@drawable/checkbox_border"
             android:button="@android:color/transparent"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="8dp"
             android:paddingBottom="2dp"
-            android:text="Nữ" />
+            android:text="Chưa trả" />
 
         <CheckBox
-            android:id="@+id/chkOther"
-            android:layout_width="50dp"
+            android:id="@+id/chkOverdue"
+            android:layout_width="70dp"
             android:layout_height="32dp"
-            android:layout_margin="8dp"
+            android:layout_margin="4dp"
             android:background="@drawable/checkbox_border"
             android:button="@android:color/transparent"
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="8dp"
             android:paddingBottom="2dp"
-            android:text="Khác" />
+            android:text="Quá hạn" />
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Theo ngày làm thẻ"
+        android:text="Theo ngày mượn"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -135,6 +135,54 @@
             android:paddingLeft="48dp"
             android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Theo độc giả"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/edtReader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_weight="1"
+        android:background="@drawable/table_border"
+        android:drawableStart="@drawable/ic_reader"
+        android:drawableTint="@color/text_color"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:hint="Độc giả"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Theo thủ thư"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/edtLibrarian"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_weight="1"
+        android:background="@drawable/table_border"
+        android:drawableStart="@drawable/ic_librarian"
+        android:drawableTint="@color/text_color"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:hint="Thủ thư"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
