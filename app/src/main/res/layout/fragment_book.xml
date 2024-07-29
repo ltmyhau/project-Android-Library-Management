@@ -1,43 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.book.BookFragment">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/edtSearch"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/search_edit_text"
-            android:focusable="false"
-            app:closeIcon="@drawable/baseline_clear_24"
-            app:iconifiedByDefault="false"
-            app:queryHint="Tìm kiếm..."
-            app:searchHintIcon="@null"
-            app:searchIcon="@drawable/baseline_search_24" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/view_pager"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-</FrameLayout>
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/edtSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/search_edit_text"
+                    android:focusable="false"
+                    app:closeIcon="@drawable/baseline_clear_24"
+                    app:iconifiedByDefault="false"
+                    app:queryHint="Tìm kiếm..."
+                    app:searchHintIcon="@null"
+                    app:searchIcon="@drawable/baseline_search_24">
+
+                </androidx.appcompat.widget.SearchView>
+
+                <ImageView
+                    android:id="@+id/btnFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:paddingLeft="8dp"
+                    android:src="@drawable/ic_filter"
+                    app:tint="@color/primary" />
+
+            </LinearLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:tabGravity="fill"
+                app:tabMode="fixed" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        app:headerLayout="@layout/nav_filter_book" />
+</androidx.drawerlayout.widget.DrawerLayout>

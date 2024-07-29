@@ -198,4 +198,37 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         cursor.close()
         return books
     }
+
+    fun searchBookByFilter (publisherId: String, fromYear: Int?, toYear: Int?, author: String): ArrayList<Book> {
+        val books = ArrayList<Book>()
+        val db = databaseHelper.openDatabase()
+
+        val query = StringBuilder("SELECT * FROM Sach WHERE 1=1")
+        val args = ArrayList<String>()
+        if (publisherId.isNotEmpty()) {
+            query.append(" AND LOWER(MaNXB) LIKE ?")
+            args.add("%${publisherId.toLowerCase()}%")
+        }
+        if (fromYear != null) {
+            query.append(" AND NamXB >= ?")
+            args.add(fromYear.toString())
+        }
+        if (toYear != null) {
+            query.append(" AND NamXB <= ?")
+            args.add(toYear.toString())
+        }
+        if (author.isNotEmpty()) {
+            query.append(" AND LOWER(TacGia) LIKE ?")
+            args.add("%${author.toLowerCase()}%")
+        }
+        val cursor: Cursor = db.rawQuery(query.toString(), args.toArray(arrayOfNulls<String>(args.size)))
+
+        if (cursor.moveToFirst()) {
+            do {
+                books.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return books
+    }
 }
