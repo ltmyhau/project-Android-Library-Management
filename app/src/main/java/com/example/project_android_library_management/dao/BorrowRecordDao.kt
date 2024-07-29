@@ -110,6 +110,33 @@ class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
         return borrowRecord
     }
 
+    fun getStatusBorrowRecordById(maPM: String?): String? {
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery(
+            """
+                SELECT pm.MaPM,
+                    CASE
+                        WHEN pt.MaPT IS NOT NULL THEN 'Đã trả'
+                        WHEN DATE('now') > DATE(pm.NgayMuon, '+' || pm.SoNgayMuon || ' days') THEN 'Quá hạn'
+                        ELSE 'Chưa trả'
+                    END AS TrangThai
+                FROM PhieuMuon pm
+                    LEFT JOIN PhieuTra pt ON pm.MaPM = pt.MaPM
+                WHERE pm.MaPM = ?
+            """.trimIndent(), arrayOf(maPM)
+        )
+        var status: String? = null
+
+        if (cursor.moveToFirst()) {
+            status = cursor.getString(cursor.getColumnIndexOrThrow("TrangThai"))
+        }
+
+        cursor.close()
+        db.close()
+
+        return status
+    }
+
     fun searchBorrowRecord(query: String): ArrayList<BorrowRecord> {
         val borrowRecords = ArrayList<BorrowRecord>()
         val db = databaseHelper.openDatabase()

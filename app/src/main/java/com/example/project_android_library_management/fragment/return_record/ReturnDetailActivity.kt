@@ -42,6 +42,7 @@ class ReturnDetailActivity : AppCompatActivity() {
     private lateinit var bookDao: BookDao
 
     private var maPT: String = ""
+    private var maPM: String = ""
     private var expectedReturnDate: String = ""
     private var actualReturnDate: String = ""
     private var totalCompensation: Double = 0.0
@@ -72,6 +73,7 @@ class ReturnDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         maPT = intent.getStringExtra("RETURN_ID") ?: ""
+        maPM = intent.getStringExtra("BORROW_ID") ?: ""
 
         databaseHelper = DatabaseHelper(this)
         returnRecordDao = ReturnRecordDao(databaseHelper)
@@ -91,6 +93,10 @@ class ReturnDetailActivity : AppCompatActivity() {
         finesLayout = findViewById(R.id.finesLayout)
         finesTableLayout = findViewById(R.id.finesTableLayout)
         finesTableRow = findViewById(R.id.finesTableRow)
+
+        if (maPT.isEmpty()) {
+            maPT = returnRecordDao.getReturnRecordByBorrowId(maPM)?.MaPT ?: ""
+        }
 
         loadReturnDetails(maPT)
         loadBookReturns(maPT)

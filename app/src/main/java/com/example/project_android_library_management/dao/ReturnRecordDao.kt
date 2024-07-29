@@ -58,11 +58,11 @@ class ReturnRecordDao(private val databaseHelper: DatabaseHelper) {
         return rowsAffected
     }
 
-    fun delete(maPM: String): Int {
+    fun delete(returnId: String): Int {
         val db = databaseHelper.writableDatabase
         db.execSQL("PRAGMA foreign_keys = ON;")
-        db.delete("CTPhieuTra", "MaPT = ?", arrayOf(maPM))
-        val rowsAffected = db.delete("PhieuTra", "MaPT = ?", arrayOf(maPM))
+        db.delete("CTPhieuTra", "MaPT = ?", arrayOf(returnId))
+        val rowsAffected = db.delete("PhieuTra", "MaPT = ?", arrayOf(returnId))
         db.close()
         return rowsAffected
     }
@@ -92,9 +92,23 @@ class ReturnRecordDao(private val databaseHelper: DatabaseHelper) {
         return returnRecord
     }
 
-    fun getReturnRecordById(maPM: String?): ReturnRecord? {
+    fun getReturnRecordById(returnId: String?): ReturnRecord? {
         val db = databaseHelper.openDatabase()
-        val cursor: Cursor = db.rawQuery("SELECT * FROM PhieuTra WHERE MaPT = ?", arrayOf(maPM))
+        val cursor: Cursor = db.rawQuery("SELECT * FROM PhieuTra WHERE MaPT = ?", arrayOf(returnId))
+        var returnRecord: ReturnRecord? = null
+        if (cursor.moveToFirst()) {
+            returnRecord = cursor(cursor)
+        }
+
+        cursor.close()
+        db.close()
+
+        return returnRecord
+    }
+
+    fun getReturnRecordByBorrowId(borrowId: String?): ReturnRecord? {
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery("SELECT * FROM PhieuTra WHERE MaPM = ?", arrayOf(borrowId))
         var returnRecord: ReturnRecord? = null
         if (cursor.moveToFirst()) {
             returnRecord = cursor(cursor)

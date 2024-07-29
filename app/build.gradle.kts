@@ -50,6 +50,12 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+        resources {
+            excludes += "META-INF/LICENSE.md"
+        }
+        resources {
+            excludes += "META-INF/NOTICE.md"
+        }
     }
 }
 
@@ -83,4 +89,6 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("com.sun.mail:android-mail:1.6.6")
+    implementation("com.sun.mail:android-activation:1.6.7")
 }
