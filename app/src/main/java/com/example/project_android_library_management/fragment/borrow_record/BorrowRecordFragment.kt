@@ -129,6 +129,7 @@ class BorrowRecordFragment : Fragment() {
         btnClose.setOnClickListener {
             drawerLayout.closeDrawer(navView)
             resetFilter()
+            applyFilter()
         }
 
         btnReset.setOnClickListener {
@@ -225,6 +226,8 @@ class BorrowRecordFragment : Fragment() {
         chkReturned.isChecked = false
         chkNotReturned.isChecked = false
         chkOverdue.isChecked = false
+        fromDateLayout.hint = "Từ ngày"
+        toDateLayout.hint = "Đến ngày"
         edtFromDay.text.clear()
         edtToDay.text.clear()
         edtReader.text.clear()

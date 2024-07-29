@@ -122,6 +122,7 @@ class BookFragment : Fragment() {
         btnClose.setOnClickListener {
             drawerLayout.closeDrawer(navView)
             resetFilter()
+            applyFilter()
         }
 
         btnReset.setOnClickListener {

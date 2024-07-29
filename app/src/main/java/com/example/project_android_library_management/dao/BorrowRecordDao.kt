@@ -168,7 +168,6 @@ class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
                     "END) IN (${status.joinToString { "?" }})")
             args.addAll(status)
         }
-
         if (fromDay.isNotEmpty()) {
             query.append(" AND NgayMuon >= ?")
             args.add(fromDay)

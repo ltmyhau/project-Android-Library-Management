@@ -131,6 +131,7 @@ class ReaderFragment : Fragment() {
         btnClose.setOnClickListener {
             drawerLayout.closeDrawer(navView)
             resetFilter()
+            applyFilter()
         }
 
         btnReset.setOnClickListener {
@@ -224,6 +225,8 @@ class ReaderFragment : Fragment() {
         chkMale.isChecked = false
         chkFemale.isChecked = false
         chkOther.isChecked = false
+        fromDateLayout.hint = "Từ ngày"
+        toDateLayout.hint = "Đến ngày"
         edtFromDay.text.clear()
         edtToDay.text.clear()
     }

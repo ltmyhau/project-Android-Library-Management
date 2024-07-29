@@ -2,6 +2,7 @@ package com.example.project_android_library_management.dao
 
 import android.content.ContentValues
 import android.database.Cursor
+import android.util.Log
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.model.ReturnRecord
 
@@ -119,6 +120,55 @@ class ReturnRecordDao(private val databaseHelper: DatabaseHelper) {
             """.trimIndent(),
             arrayOf("%$query%", "%$query%", "%$query%", "%$query%", "%$query%")
         )
+        if (cursor.moveToFirst()) {
+            do {
+                returnRecord.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return returnRecord
+    }
+
+    fun searchReturnByFilter(
+        fromDay: String,
+        toDay: String,
+        reader: String,
+        librarian: String
+    ): ArrayList<ReturnRecord> {
+        val returnRecord = ArrayList<ReturnRecord>()
+        val db = databaseHelper.openDatabase()
+        val query = StringBuilder(
+            """
+                SELECT pt.*, dg.HoTen AS TenDocGia, tt.HoTen AS TenThuThu 
+                FROM PhieuTra pt
+                    LEFT JOIN DocGia dg ON pt.MaDG = dg.MaDG 
+                    LEFT JOIN ThuThu tt ON pt.MaTT = tt.MaTT
+                WHERE 1=1
+            """.trimIndent()
+        )
+
+        val args = ArrayList<String>()
+        if (fromDay.isNotEmpty()) {
+            query.append(" AND NgayTra >= ?")
+            args.add(fromDay)
+        }
+        if (toDay.isNotEmpty()) {
+            query.append(" AND NgayTra <= ?")
+            args.add(toDay)
+        }
+        if (reader.isNotEmpty()) {
+            query.append(" AND (pt.MaDG LIKE ? OR dg.HoTen LIKE ?)")
+            args.add("%$reader%")
+            args.add("%$reader%")
+        }
+        if (librarian.isNotEmpty()) {
+            query.append(" AND (pt.MaTT LIKE ? OR tt.HoTen LIKE ?)")
+            args.add("%$librarian%")
+            args.add("%$librarian%")
+        }
+
+        val cursor: Cursor =
+            db.rawQuery(query.toString(), args.toArray(arrayOfNulls<String>(args.size)))
         if (cursor.moveToFirst()) {
             do {
                 returnRecord.add(cursor(cursor))

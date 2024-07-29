@@ -5,6 +5,7 @@ import android.database.Cursor
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.model.BorrowRecord
 import com.example.project_android_library_management.model.OrderBook
+import com.example.project_android_library_management.model.ReturnRecord
 
 class OrderBookDao(private val databaseHelper: DatabaseHelper) {
 
@@ -114,6 +115,47 @@ class OrderBookDao(private val databaseHelper: DatabaseHelper) {
             """.trimIndent(),
             arrayOf("%$query%", "%$query%", "%$query%")
         )
+        if (cursor.moveToFirst()) {
+            do {
+                orderBooks.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return orderBooks
+    }
+
+    fun searchOrderByFilter(fromDay: String,toDay: String, publisherId: String, librarian: String): ArrayList<OrderBook> {
+        val orderBooks = ArrayList<OrderBook>()
+        val db = databaseHelper.openDatabase()
+        val query = StringBuilder(
+            """
+                SELECT pd.*, tt.HoTen AS TenThuThu 
+                FROM PhieuDat pd
+                    LEFT JOIN ThuThu tt ON pd.MaTT = tt.MaTT
+                WHERE 1=1
+            """.trimIndent()
+        )
+
+        val args = ArrayList<String>()
+        if (fromDay.isNotEmpty()) {
+            query.append(" AND NgayDat >= ?")
+            args.add(fromDay)
+        }
+        if (toDay.isNotEmpty()) {
+            query.append(" AND NgayDat <= ?")
+            args.add(toDay)
+        }
+        if (publisherId.isNotEmpty()) {
+            query.append(" AND LOWER(MaNXB) LIKE ?")
+            args.add("%${publisherId.toLowerCase()}%")
+        }
+        if (librarian.isNotEmpty()) {
+            query.append(" AND (pd.MaTT LIKE ? OR tt.HoTen LIKE ?)")
+            args.add("%$librarian%")
+            args.add("%$librarian%")
+        }
+
+        val cursor: Cursor = db.rawQuery(query.toString(), args.toArray(arrayOfNulls<String>(args.size)))
         if (cursor.moveToFirst()) {
             do {
                 orderBooks.add(cursor(cursor))
