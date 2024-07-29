@@ -221,6 +221,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
             query.append(" AND LOWER(TacGia) LIKE ?")
             args.add("%${author.toLowerCase()}%")
         }
+
         val cursor: Cursor = db.rawQuery(query.toString(), args.toArray(arrayOfNulls<String>(args.size)))
 
         if (cursor.moveToFirst()) {

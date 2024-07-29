@@ -3,6 +3,7 @@ package com.example.project_android_library_management.dao
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.model.Reader
 
@@ -153,6 +154,36 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
             } while (cursor.moveToNext())
         }
 
+        cursor.close()
+        return readers
+    }
+
+    fun searchReaderByFilter(gender: List<String>, fromDay: String, toDay: String): ArrayList<Reader> {
+        val readers = ArrayList<Reader>()
+        val db = databaseHelper.openDatabase()
+        val query = StringBuilder("SELECT * FROM DocGia WHERE 1=1")
+
+        val args = ArrayList<String>()
+        if (gender.isNotEmpty()) {
+            query.append(" AND GioiTinh IN (${gender.joinToString { "?" }})")
+            args.addAll(gender)
+        }
+        if (fromDay.isNotEmpty()) {
+            query.append(" AND NgayLamThe >= ?")
+            args.add(fromDay)
+        }
+        if (toDay.isNotEmpty()) {
+            query.append(" AND NgayLamThe <= ?")
+            args.add(toDay)
+        }
+
+        val cursor: Cursor = db.rawQuery(query.toString(), args.toArray(arrayOfNulls<String>(args.size)))
+
+        if (cursor.moveToFirst()) {
+            do {
+                readers.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
         cursor.close()
         return readers
     }
