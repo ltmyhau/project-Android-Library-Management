@@ -137,6 +137,48 @@ class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
         return status
     }
 
+    fun getReturnedBorrowRecordsByReaderId(readerId: String): ArrayList<BorrowRecord>{
+        val borrowRecords = ArrayList<BorrowRecord>()
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery(
+            """
+                SELECT pm.*
+                FROM PhieuMuon pm
+                    JOIN PhieuTra pt ON pm.MaPM = pt.MaPM
+                WHERE pm.MaDG = ?
+            """.trimIndent(), arrayOf(readerId)
+        )
+        if (cursor.moveToFirst()) {
+            do {
+                borrowRecords.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return borrowRecords
+    }
+
+    fun getPendingOrOverdueBorrowRecordsByReaderId(readerId: String): ArrayList<BorrowRecord> {
+        val borrowRecords = ArrayList<BorrowRecord>()
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery(
+            """
+                SELECT pm.*
+                FROM PhieuMuon pm
+                    LEFT JOIN PhieuTra pt ON pm.MaPM = pt.MaPM
+                WHERE pm.MaDG = ? AND (pt.MaPT IS NULL OR DATE('now') > DATE(pm.NgayMuon, '+' || pm.SoNgayMuon || ' days'))
+        """.trimIndent(), arrayOf(readerId)
+        )
+        if (cursor.moveToFirst()) {
+            do {
+                borrowRecords.add(cursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return borrowRecords
+    }
+
     fun searchBorrowRecord(query: String): ArrayList<BorrowRecord> {
         val borrowRecords = ArrayList<BorrowRecord>()
         val db = databaseHelper.openDatabase()

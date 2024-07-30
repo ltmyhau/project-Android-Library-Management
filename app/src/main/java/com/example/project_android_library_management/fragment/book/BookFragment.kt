@@ -136,7 +136,7 @@ class BookFragment : Fragment() {
         return view
     }
 
-    private inner class ViewPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+    private inner class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int = 2
 
         override fun createFragment(position: Int): Fragment {

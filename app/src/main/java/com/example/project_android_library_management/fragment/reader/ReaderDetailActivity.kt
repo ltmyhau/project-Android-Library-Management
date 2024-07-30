@@ -4,17 +4,24 @@ import android.content.Intent
 import android.database.sqlite.SQLiteConstraintException
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.ReaderDao
-import com.example.project_android_library_management.fragment.book.BookUpdateActivity
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import java.io.File
 
 class ReaderDetailActivity : AppCompatActivity() {
@@ -52,6 +59,32 @@ class ReaderDetailActivity : AppCompatActivity() {
         tvAddress = findViewById(R.id.tvAddress)
 
         loadReaderDetails(maDG)
+
+        val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
+        val viewPager = findViewById<ViewPager2>(R.id.view_pager)
+
+        val pagerAdapter = ViewPagerAdapter(this)
+        viewPager.adapter = pagerAdapter
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> "Đang mượn"
+                1 -> "Đã trả"
+                else -> null
+            }
+        }.attach()
+    }
+
+    private inner class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+        override fun getItemCount(): Int = 2
+
+        override fun createFragment(position: Int): Fragment {
+            return when (position) {
+                0 -> RecordsByReaderFragment.newInstance(0, maDG)
+                1 -> RecordsByReaderFragment.newInstance(1, maDG)
+                else -> throw IllegalStateException("Invalid position $position")
+            }
+        }
     }
 
     private fun loadReaderDetails(maDG: String) {
@@ -128,13 +161,6 @@ class ReaderDetailActivity : AppCompatActivity() {
             .setTitle("Xác nhận")
             .setMessage("Bạn có chắc chắn muốn xóa độc giả này không?")
             .setPositiveButton("Có") { _, _ ->
-//                val rowsAffected = readerDao.delete(maDG)
-//                if (rowsAffected > 0) {
-//                    Toast.makeText(this, "Đã xóa độc giả thành công", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Toast.makeText(this, "Xóa độc giả thất bại", Toast.LENGTH_SHORT).show()
-//                }
-//                finish()
                 try {
                     val rowsAffected = readerDao.delete(maDG)
                     if (rowsAffected > 0) {

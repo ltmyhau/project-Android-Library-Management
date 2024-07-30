@@ -21,20 +21,19 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class BorrowRecordAdapter(
+class RecordReaderAdapter(
     private val borrowRecordList: MutableList<BorrowRecord>,
     private val itemClickListener: OnItemClickListener
-) : RecyclerView.Adapter<BorrowRecordAdapter.BorrowRecordViewHolder>() {
+) : RecyclerView.Adapter<RecordReaderAdapter.RecordReaderViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(borrowRecord: BorrowRecord)
     }
 
-    inner class BorrowRecordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgAvatar: ImageView = itemView.findViewById(R.id.imgAvatar)
+    inner class RecordReaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvRecordID: TextView = itemView.findViewById(R.id.tvRecordID)
-        val tvReaderName: TextView = itemView.findViewById(R.id.tvReaderName)
-        val tvDate: TextView = itemView.findViewById(R.id.tvDate)
+        val tvBorrowDate: TextView = itemView.findViewById(R.id.tvBorrowDate)
+        val tvDueDate: TextView = itemView.findViewById(R.id.tvDueDate)
         val tvStatus: TextView = itemView.findViewById(R.id.tvStatus)
         val tvShowDetail: TextView = itemView.findViewById(R.id.tvShowDetail)
         val tvSendEmail: TextView = itemView.findViewById(R.id.tvSendEmail)
@@ -50,19 +49,17 @@ class BorrowRecordAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BorrowRecordViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordReaderViewHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_borrow_record, parent, false)
-        return BorrowRecordViewHolder(itemView)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_record_reader, parent, false)
+        return RecordReaderViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: BorrowRecordViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecordReaderViewHolder, position: Int) {
         val borrowRecord = borrowRecordList[position]
 
         val readerDao = ReaderDao(DatabaseHelper(holder.itemView.context))
         val reader = readerDao.getReaderById(borrowRecord.MaDG)
-
-        holder.tvRecordID.text = borrowRecord.MaPM
 
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val borrowDate = formatter.parse(borrowRecord.NgayMuon) ?: return
@@ -81,24 +78,9 @@ class BorrowRecordAdapter(
             0
         }
 
-        holder.tvDate.text = formatter.format(dueDate)
-
-        if (reader != null) {
-            holder.tvReaderName.text = reader.HoTen
-
-            if (reader.HinhAnh != null) {
-                val imgFile = File(reader.HinhAnh)
-                if (imgFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                    holder.imgAvatar.setImageBitmap(bitmap)
-                } else {
-                    holder.imgAvatar.setImageResource(R.drawable.avatar)
-                }
-            } else {
-                holder.imgAvatar.setImageResource(R.drawable.avatar)
-            }
-        }
-
+        holder.tvRecordID.text = borrowRecord.MaPM
+        holder.tvBorrowDate.text = "Ngày mượn: ${borrowRecord.NgayMuon}"
+        holder.tvDueDate.text = "Ngày đến hạn: ${formatter.format(dueDate)}"
         holder.tvShowDetail.paintFlags = holder.tvShowDetail.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
         val borrowRecordDao = BorrowRecordDao(DatabaseHelper(holder.itemView.context))
