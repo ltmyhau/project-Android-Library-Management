@@ -13,7 +13,8 @@
     <color name="primary">#0077B6</color>
     <color name="primary_variant">#0096D6</color>
     <color name="secondary">#91D9FF</color>
-    <color name="secondary_variant">#CC8400</color>
+    <color name="secondary_variant">#B3E4FF</color>
     <color name="third">#CDEEFF</color>
-    <color name="third_variant">#B3D8E6</color>
+    <color name="third_variant">#A1C9E0</color>
+
 </resources>

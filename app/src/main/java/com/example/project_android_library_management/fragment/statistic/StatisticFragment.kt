@@ -2,6 +2,8 @@ package com.example.project_android_library_management.fragment.statistic
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +25,9 @@ class StatisticFragment : Fragment() {
     private lateinit var switchBookReader: SwitchCompat
     private lateinit var tvSwitchBook: TextView
     private lateinit var tvSwitchReader: TextView
+    private var selectedTab: String = "Ngày"
+    private lateinit var edtFromDay: EditText
+    private lateinit var edtToDay: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +51,10 @@ class StatisticFragment : Fragment() {
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    selectedTab = tab.text.toString()
+                    updateSelectedFragment(switchBookReader.isChecked)
+                }
                 when (tab?.text) {
                     "Tùy chỉnh" -> {
                         dateLayout.visibility = View.VISIBLE
@@ -62,9 +71,9 @@ class StatisticFragment : Fragment() {
         })
 
         val fromDateLayout: TextInputLayout = view.findViewById(R.id.fromDateLayout)
-        val edtFromDay: EditText = view.findViewById(R.id.edtFromDay)
+        edtFromDay = view.findViewById(R.id.edtFromDay)
         val toDateLayout: TextInputLayout = view.findViewById(R.id.toDateLayout)
-        val edtToDay: EditText = view.findViewById(R.id.edtToDay)
+        edtToDay = view.findViewById(R.id.edtToDay)
         fromDateLayout.setStartIconOnClickListener {
             showDatePickerDialog(edtFromDay)
             fromDateLayout.hint = ""
@@ -113,6 +122,9 @@ class StatisticFragment : Fragment() {
             updateSelectedFragment(switchBookReader.isChecked)
         }
 
+        edtFromDay.addTextChangedListener(dateTextWatcher)
+        edtToDay.addTextChangedListener(dateTextWatcher)
+
         return view
     }
 
@@ -133,9 +145,27 @@ class StatisticFragment : Fragment() {
 
     private fun updateSelectedFragment(isChecked: Boolean) {
         val fragment: Fragment = if (isChecked) {
-            StatisticReaderFragment()
+            if (selectedTab == "Tùy chỉnh") {
+                val fromDate = edtFromDay.text.toString()
+                val toDate = edtToDay.text.toString()
+                if (!areDatesValid(fromDate, toDate)) {
+                    return
+                }
+                StatisticReaderFragment.newInstance(fromDate, toDate)
+            } else {
+                StatisticReaderFragment.newInstance(selectedTab)
+            }
         } else {
-            StatisticBookFragment()
+            if (selectedTab == "Tùy chỉnh") {
+                val fromDate = edtFromDay.text.toString()
+                val toDate = edtToDay.text.toString()
+                if (!areDatesValid(fromDate, toDate)) {
+                    return
+                }
+                StatisticBookFragment.newInstance(fromDate, toDate)
+            } else {
+                StatisticBookFragment.newInstance(selectedTab)
+            }
         }
 
         childFragmentManager.beginTransaction()
@@ -168,5 +198,72 @@ class StatisticFragment : Fragment() {
             calendar.get(Calendar.DAY_OF_MONTH)
         )
         datePickerDialog.show()
+    }
+
+    private val dateTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            if (areDatesValid(edtFromDay.text.toString(), edtToDay.text.toString())) {
+                updateSelectedFragment(switchBookReader.isChecked)
+            }
+        }
+
+        override fun afterTextChanged(s: Editable?) {}
+    }
+
+    private fun areDatesValid(fromDay: String, toDay: String): Boolean {
+        if (fromDay.isEmpty() && toDay.isEmpty()) {
+            edtFromDay.error = null
+            edtToDay.error = null
+            if (edtFromDay.hasFocus()) {
+                edtFromDay.clearFocus()
+            }
+            if (edtToDay.hasFocus()) {
+                edtToDay.clearFocus()
+            }
+            return true
+        }
+
+        if (fromDay.isNotEmpty()) {
+            if (!validateDate(fromDay)) {
+                edtFromDay.error = "Ngày (yyyy-MM-dd) không hợp lệ"
+                edtFromDay.requestFocus()
+                return false
+            }
+            if (toDay.isEmpty()) {
+                edtToDay.error = "Ngày (yyyy-MM-dd) không được để trống"
+                edtToDay.requestFocus()
+                return false
+            }
+        }
+
+        if (toDay.isNotEmpty()) {
+            if (!validateDate(toDay)) {
+                edtToDay.error = "Ngày (yyyy-MM-dd) không hợp lệ"
+                edtToDay.requestFocus()
+                return false
+            }
+            if (fromDay.isEmpty()) {
+                edtFromDay.error = "Ngày (yyyy-MM-dd) không được để trống"
+                edtFromDay.requestFocus()
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
+        isLenient = false
+    }
+
+    private fun validateDate(dateString: String): Boolean {
+        return try {
+            dateFormat.parse(dateString)
+            true
+        } catch (e: ParseException) {
+            false
+        }
     }
 }
