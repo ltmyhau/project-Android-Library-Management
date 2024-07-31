@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -145,27 +149,13 @@ class StatisticFragment : Fragment() {
 
     private fun updateSelectedFragment(isChecked: Boolean) {
         val fragment: Fragment = if (isChecked) {
-            if (selectedTab == "Tùy chỉnh") {
-                val fromDate = edtFromDay.text.toString()
-                val toDate = edtToDay.text.toString()
-                if (!areDatesValid(fromDate, toDate)) {
-                    return
-                }
-                StatisticReaderFragment.newInstance(fromDate, toDate)
-            } else {
-                StatisticReaderFragment.newInstance(selectedTab)
-            }
+            val fromDate = edtFromDay.text.toString().takeIf { it.isNotEmpty() }
+            val toDate = edtToDay.text.toString().takeIf { it.isNotEmpty() }
+            StatisticReaderFragment.newInstance(selectedTab, fromDate, toDate)
         } else {
-            if (selectedTab == "Tùy chỉnh") {
-                val fromDate = edtFromDay.text.toString()
-                val toDate = edtToDay.text.toString()
-                if (!areDatesValid(fromDate, toDate)) {
-                    return
-                }
-                StatisticBookFragment.newInstance(fromDate, toDate)
-            } else {
-                StatisticBookFragment.newInstance(selectedTab)
-            }
+            val fromDate = edtFromDay.text.toString().takeIf { it.isNotEmpty() }
+            val toDate = edtToDay.text.toString().takeIf { it.isNotEmpty() }
+            StatisticBookFragment.newInstance(selectedTab, fromDate, toDate)
         }
 
         childFragmentManager.beginTransaction()

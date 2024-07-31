@@ -135,7 +135,9 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_gravity="bottom"
-            android:layout_margin="16dp" />
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -151,7 +153,27 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_gravity="bottom"
-            android:layout_margin="16dp" />
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Số lượng sách theo thể loại"
+            android:textColor="@color/primary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/bookCategoryBarChart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp" />
 
     </LinearLayout>
 

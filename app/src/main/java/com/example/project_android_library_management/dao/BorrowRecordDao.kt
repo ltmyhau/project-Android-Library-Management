@@ -2,10 +2,8 @@ package com.example.project_android_library_management.dao
 
 import android.content.ContentValues
 import android.database.Cursor
-import android.util.Log
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.model.BorrowRecord
-import com.example.project_android_library_management.model.Reader
 
 class BorrowRecordDao(private val databaseHelper: DatabaseHelper) {
 
