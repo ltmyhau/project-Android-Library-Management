@@ -36,14 +36,14 @@ import java.util.Locale
 class StatisticBookFragment : Fragment() {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var statisticDao: StatisticDao
-    private lateinit var pieChart: PieChart
-    private lateinit var barChart: BarChart
+    private lateinit var statusCountsPieChart: PieChart
+    private lateinit var bookMostBorrowedBarChart: BarChart
     private lateinit var bookCategoryBarChart: BarChart
 
     private lateinit var tvTotalBook: TextView
-    private lateinit var tvQuantityBorrow: TextView
-    private lateinit var tvQuantityReturn: TextView
-    private lateinit var tvQuantityNew: TextView
+    private lateinit var tvBookBorrow: TextView
+    private lateinit var tvBookReturn: TextView
+    private lateinit var tvBookNew: TextView
 
     companion object {
         private const val ARG_TAB = "arg_tab"
@@ -71,14 +71,14 @@ class StatisticBookFragment : Fragment() {
         databaseHelper = DatabaseHelper(requireContext())
         statisticDao = StatisticDao(databaseHelper)
 
+        tvTotalBook = view.findViewById(R.id.tvTotalBook)
+        tvBookBorrow = view.findViewById(R.id.tvBookBorrow)
+        tvBookReturn = view.findViewById(R.id.tvBookReturn)
+        tvBookNew = view.findViewById(R.id.tvBookNew)
+
         val selectedTab = arguments?.getString(ARG_TAB)
         var fromDate = arguments?.getString(ARG_FROM_DATE)
         var toDate = arguments?.getString(ARG_TO_DATE)
-
-        tvTotalBook = view.findViewById(R.id.tvTotalBook)
-        tvQuantityBorrow = view.findViewById(R.id.tvQuantityBorrow)
-        tvQuantityReturn = view.findViewById(R.id.tvQuantityReturn)
-        tvQuantityNew = view.findViewById(R.id.tvQuantityNew)
 
         if (fromDate == null || toDate == null) {
             val dates = when (selectedTab) {
@@ -97,11 +97,11 @@ class StatisticBookFragment : Fragment() {
 
         loadQuantityBook(fromDate, toDate)
 
-        pieChart = view.findViewById(R.id.pieChart)
-        setupPieChart(fromDate, toDate)
+        statusCountsPieChart = view.findViewById(R.id.statusCountsPieChart)
+        setupStatusCountsPieChart(fromDate, toDate)
 
-        barChart = view.findViewById(R.id.barChart)
-        setupBarChart(fromDate, toDate)
+        bookMostBorrowedBarChart = view.findViewById(R.id.bookMostBorrowedBarChart)
+        setupBookMostBorrowBarChart(fromDate, toDate)
 
         bookCategoryBarChart = view.findViewById(R.id.bookCategoryBarChart)
         setupBookCategoryBarChart()
@@ -111,39 +111,37 @@ class StatisticBookFragment : Fragment() {
 
     private fun loadQuantityBook(fromDate: String?, toDate: String?) {
         val totalBook = statisticDao.getTotalBook()
-        val quantityBorrow = statisticDao.getQuantityBorrow(fromDate, toDate)
-        val quantityReturn = statisticDao.getQuantityReturn(fromDate, toDate)
-        val quantityNew = statisticDao.getQuantityNew(fromDate, toDate)
+        val bookBorrow = statisticDao.getBookBorrow(fromDate, toDate)
+        val bookReturn = statisticDao.getBookReturn(fromDate, toDate)
+        val bookNew = statisticDao.getBookNew(fromDate, toDate)
 
         tvTotalBook.text = totalBook.toString()
-        tvQuantityBorrow.text = quantityBorrow.toString()
-        tvQuantityReturn.text = quantityReturn.toString()
-        tvQuantityNew.text = quantityNew.toString()
+        tvBookBorrow.text = bookBorrow.toString()
+        tvBookReturn.text = bookReturn.toString()
+        tvBookNew.text = bookNew.toString()
     }
 
-    private fun setupPieChart(fromDate: String?, toDate: String?) {
+    private fun setupStatusCountsPieChart(fromDate: String?, toDate: String?) {
         val statusCounts = statisticDao.getStatusCounts(fromDate, toDate)
         val entries = mutableListOf<PieEntry>()
-
-//        for (statusCount in statusCounts) {
-//            entries.add(PieEntry(statusCount.count.toFloat(), statusCount.status))
-//        }
 
         statusCounts.forEach { (status, count) ->
             entries.add(PieEntry(count.toFloat(), status))
         }
 
         if (entries.isEmpty()) {
-            Toast.makeText(pieChart.context, "Không có dữ liệu để hiển thị", Toast.LENGTH_SHORT).show()
+            Toast.makeText(statusCountsPieChart.context, "Không có dữ liệu để hiển thị", Toast.LENGTH_SHORT).show()
             return
         }
 
         val dataSet = PieDataSet(entries, "")
-        dataSet.colors = listOf(
+        val colorList = listOf(
             ContextCompat.getColor(requireContext(), R.color.secondary),
             ContextCompat.getColor(requireContext(), R.color.secondary_variant),
             ContextCompat.getColor(requireContext(), R.color.third)
         )
+        dataSet.colors = colorList
+
         val typeface = ResourcesCompat.getFont(requireContext(), R.font.oswald)
         dataSet.valueTypeface = typeface
         dataSet.valueTextSize = 14f
@@ -151,15 +149,21 @@ class StatisticBookFragment : Fragment() {
 
         dataSet.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                val total = pieChart.data?.getYValueSum() ?: 1f
+                val total = statusCountsPieChart.data?.getYValueSum() ?: 1f
                 val percentage = (value / total) * 100
                 return "${value.toInt()} (${String.format("%.2f", percentage)}%)"
             }
         }
 
         val pieData = PieData(dataSet)
-        pieChart.data = pieData
+        statusCountsPieChart.data = pieData
 
+        customPieChart(statusCountsPieChart)
+
+        statusCountsPieChart.invalidate()
+    }
+
+    private fun customPieChart(pieChart: PieChart) {
         pieChart.setHoleRadius(0f)
         pieChart.setTransparentCircleRadius(0f)
         pieChart.setHoleColor(Color.TRANSPARENT)
@@ -179,11 +183,9 @@ class StatisticBookFragment : Fragment() {
         pieChart.description.isEnabled = false
         pieChart.setDrawEntryLabels(false)
         pieChart.setDrawSliceText(false)
-
-        pieChart.invalidate()
     }
 
-    private fun setupBarChart(fromDate: String?, toDate: String?) {
+    private fun setupBookMostBorrowBarChart(fromDate: String?, toDate: String?) {
         val bookMostBorrowed = statisticDao.getTop5BookMostBorrowed(fromDate, toDate)
 
         val entries = mutableListOf<BarEntry>()
@@ -219,11 +221,11 @@ class StatisticBookFragment : Fragment() {
         }
 
         val barData = BarData(dataSet)
-        barChart.data = barData
+        bookMostBorrowedBarChart.data = barData
 
-        customBarChart(barChart)
+        customBarChart(bookMostBorrowedBarChart)
 
-        barChart.invalidate()
+        bookMostBorrowedBarChart.invalidate()
     }
 
     private fun setupBookCategoryBarChart() {
@@ -240,11 +242,6 @@ class StatisticBookFragment : Fragment() {
         }
 
         val colorList = listOf(
-            ContextCompat.getColor(requireContext(), R.color.primary_variant),
-            ContextCompat.getColor(requireContext(), R.color.primary),
-            ContextCompat.getColor(requireContext(), R.color.secondary),
-            ContextCompat.getColor(requireContext(), R.color.secondary_variant),
-            ContextCompat.getColor(requireContext(), R.color.third),
             ContextCompat.getColor(requireContext(), R.color.primary_variant),
             ContextCompat.getColor(requireContext(), R.color.primary),
             ContextCompat.getColor(requireContext(), R.color.secondary),

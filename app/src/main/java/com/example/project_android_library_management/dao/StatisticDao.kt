@@ -17,9 +17,9 @@ class StatisticDao(private val databaseHelper: DatabaseHelper) {
         return totalBook
     }
 
-    fun getQuantityBorrow(startDate: String?, endDate: String?): Int {
+    fun getBookBorrow(startDate: String?, endDate: String?): Int {
         val db = databaseHelper.openDatabase()
-        var quantityBorrow = 0
+        var bookBorrow = 0
         val query: String
         val args: Array<String>? = if (startDate != null && endDate != null) {
             query = """
@@ -39,15 +39,15 @@ class StatisticDao(private val databaseHelper: DatabaseHelper) {
         }
         val cursor: Cursor = db.rawQuery(query, args)
         if (cursor.moveToFirst()) {
-            quantityBorrow = cursor.getInt(0)
+            bookBorrow = cursor.getInt(0)
         }
         cursor.close()
-        return quantityBorrow
+        return bookBorrow
     }
 
-    fun getQuantityReturn(startDate: String?, endDate: String?): Int {
+    fun getBookReturn(startDate: String?, endDate: String?): Int {
         val db = databaseHelper.openDatabase()
-        var quantityReturn = 0
+        var bookReturn = 0
         val query: String
         val args: Array<String>? = if (startDate != null && endDate != null) {
             query = """
@@ -67,15 +67,15 @@ class StatisticDao(private val databaseHelper: DatabaseHelper) {
         }
         val cursor: Cursor = db.rawQuery(query, args)
         if (cursor.moveToFirst()) {
-            quantityReturn = cursor.getInt(0)
+            bookReturn = cursor.getInt(0)
         }
         cursor.close()
-        return quantityReturn
+        return bookReturn
     }
 
-    fun getQuantityNew(startDate: String?, endDate: String?): Int {
+    fun getBookNew(startDate: String?, endDate: String?): Int {
         val db = databaseHelper.openDatabase()
-        var quantityNew = 0
+        var bookNew = 0
 
         val query: String
         val args: Array<String>? = if (startDate != null && endDate != null) {
@@ -96,10 +96,10 @@ class StatisticDao(private val databaseHelper: DatabaseHelper) {
         }
         val cursor: Cursor = db.rawQuery(query, args)
         if (cursor.moveToFirst()) {
-            quantityNew = cursor.getInt(0)
+            bookNew = cursor.getInt(0)
         }
         cursor.close()
-        return quantityNew
+        return bookNew
     }
 
     fun getStatusCounts(startDate: String?, endDate: String?):  Map<String, Int> {
@@ -154,23 +154,10 @@ class StatisticDao(private val databaseHelper: DatabaseHelper) {
         }
 
         val cursor: Cursor = db.rawQuery(query, args)
-
-//        if (cursor.moveToFirst()) {
-//            do {
-//                val daTra = cursor.getInt(cursor.getColumnIndexOrThrow("DaTra"))
-//                val chuaTra = cursor.getInt(cursor.getColumnIndexOrThrow("ChuaTra"))
-//                val quaHan = cursor.getInt(cursor.getColumnIndexOrThrow("QuaHan"))
-//
-//                statusCounts.add(StatusCount("DaTra", daTra))
-//                statusCounts.add(StatusCount("ChuaTra", chuaTra))
-//                statusCounts.add(StatusCount("QuaHan", quaHan))
-//            } while (cursor.moveToNext())
-//        }
-
         if (cursor.moveToFirst()) {
-            statusCounts["DaTra"] = cursor.getInt(cursor.getColumnIndexOrThrow("DaTra"))
-            statusCounts["ChuaTra"] = cursor.getInt(cursor.getColumnIndexOrThrow("ChuaTra"))
-            statusCounts["QuaHan"] = cursor.getInt(cursor.getColumnIndexOrThrow("QuaHan"))
+            statusCounts["Dã trả"] = cursor.getInt(cursor.getColumnIndexOrThrow("DaTra"))
+            statusCounts["Chưa trả"] = cursor.getInt(cursor.getColumnIndexOrThrow("ChuaTra"))
+            statusCounts["Quá hạn"] = cursor.getInt(cursor.getColumnIndexOrThrow("QuaHan"))
         }
         cursor.close()
 
@@ -226,39 +213,39 @@ class StatisticDao(private val databaseHelper: DatabaseHelper) {
         val bookCategoryData = mutableMapOf<String, Int>()
 
         val query = """
-            WITH RankedCategories AS (
-                SELECT 
-                    tl.TenLoai, 
-                    SUM(s.SoLuongTon) AS SoLuongTon,
-                    ROW_NUMBER() OVER (ORDER BY SUM(s.SoLuongTon) DESC) AS rn
-                FROM Sach s
-                JOIN TheLoai tl ON s.MaTL = tl.MaLoai
-                GROUP BY tl.TenLoai
+            WITH TheLoaiSach AS (
+                SELECT MaTL, COUNT(*) AS SoLuongSach
+                FROM Sach
+                GROUP BY MaTL
             ),
-            TopCategories AS (
-                SELECT 
-                    TenLoai,
-                    SoLuongTon
-                FROM RankedCategories
-                WHERE rn <= 9
-            ),
-            OtherCategories AS (
-                SELECT 
-                    'Các thể loại khác' AS TenLoai,
-                    SUM(SoLuongTon) AS SoLuongTon
-                FROM RankedCategories
-                WHERE rn > 9
+            Top4TheLoai AS (
+                SELECT MaTL
+                FROM TheLoaiSach
+                ORDER BY SoLuongSach DESC
+                LIMIT 4
             )
-            SELECT * FROM TopCategories
-            UNION ALL
-            SELECT * FROM OtherCategories
+            SELECT 
+                CASE 
+                    WHEN s.MaTL IN (SELECT MaTL FROM Top4TheLoai) THEN l.TenLoai
+                    ELSE 'Khác'
+                END AS TenLoai,
+                COUNT(*) AS SoLuongSach
+            FROM Sach s
+            LEFT JOIN TheLoaiSach tls ON s.MaTL = tls.MaTL
+            LEFT JOIN TheLoai l ON s.MaTL = l.MaLoai
+            GROUP BY 
+                CASE 
+                    WHEN s.MaTL IN (SELECT MaTL FROM Top4TheLoai) THEN s.MaTL
+                    ELSE 'Khác'
+                END
+            ORDER BY SoLuongSach DESC
         """.trimIndent()
 
         val cursor: Cursor = db.rawQuery(query, null)
         if (cursor.moveToFirst()) {
             do {
                 val category = cursor.getString(cursor.getColumnIndexOrThrow("TenLoai"))
-                val quantity = cursor.getInt(cursor.getColumnIndexOrThrow("SoLuongTon"))
+                val quantity = cursor.getInt(cursor.getColumnIndexOrThrow("SoLuongSach"))
                 bookCategoryData[category] = quantity
             } while (cursor.moveToNext())
         }
@@ -266,5 +253,162 @@ class StatisticDao(private val databaseHelper: DatabaseHelper) {
         db.close()
 
         return bookCategoryData
+    }
+
+    fun getTotalReader(): Int {
+        val db = databaseHelper.openDatabase()
+        var totalReader = 0
+        val cursor: Cursor = db.rawQuery("SELECT COUNT(*) FROM DocGia", null)
+        if (cursor.moveToFirst()) {
+            totalReader = cursor.getInt(0)
+        }
+        cursor.close()
+        return totalReader
+    }
+
+    fun getReaderBorrow(startDate: String?, endDate: String?): Int {
+        val db = databaseHelper.openDatabase()
+        var readerBorrow = 0
+        val query: String
+        val args: Array<String>? = if (startDate != null && endDate != null) {
+            query = """
+                SELECT COUNT(DISTINCT MaDG) AS SoLuongDocGia
+                FROM PhieuMuon
+                WHERE NgayMuon BETWEEN ? AND ?
+            """.trimIndent()
+            arrayOf(startDate, endDate)
+        } else {
+            query = """
+                SELECT COUNT(DISTINCT MaDG) AS SoLuongDocGia
+                FROM PhieuMuon
+            """.trimIndent()
+            null
+        }
+        val cursor: Cursor = db.rawQuery(query, args)
+        if (cursor.moveToFirst()) {
+            readerBorrow = cursor.getInt(0)
+        }
+        cursor.close()
+        return readerBorrow
+    }
+
+    fun getReaderReturn(startDate: String?, endDate: String?): Int {
+        val db = databaseHelper.openDatabase()
+        var readerReturn = 0
+        val query: String
+        val args: Array<String>? = if (startDate != null && endDate != null) {
+            query = """
+                SELECT COUNT(DISTINCT MaDG) AS SoLuongDocGia
+                FROM PhieuTra
+                WHERE NgayTra BETWEEN ? AND ?
+            """.trimIndent()
+            arrayOf(startDate, endDate)
+        } else {
+            query = """
+                SELECT COUNT(DISTINCT MaDG) AS SoLuongDocGia
+                FROM PhieuTra
+            """.trimIndent()
+            null
+        }
+        val cursor: Cursor = db.rawQuery(query, args)
+        if (cursor.moveToFirst()) {
+            readerReturn = cursor.getInt(0)
+        }
+        cursor.close()
+        return readerReturn
+    }
+
+    fun getReaderNew(startDate: String?, endDate: String?): Int {
+        val db = databaseHelper.openDatabase()
+        var readerNew = 0
+        val query: String
+        val args: Array<String>? = if (startDate != null && endDate != null) {
+            query = """
+                SELECT COUNT(DISTINCT MaDG) AS SoLuongDocGiaMoi
+                FROM DocGia
+                WHERE NgayLamThe BETWEEN ? AND ?
+            """.trimIndent()
+            arrayOf(startDate, endDate)
+        } else {
+            query = """
+                SELECT COUNT(DISTINCT MaDG) AS SoLuongDocGiaMoi
+                FROM DocGia
+            """.trimIndent()
+            null
+        }
+        val cursor: Cursor = db.rawQuery(query, args)
+        if (cursor.moveToFirst()) {
+            readerNew = cursor.getInt(0)
+        }
+        cursor.close()
+        return readerNew
+    }
+
+    fun getReaderCountByGeander(): Map<String, Int> {
+        val readerCounts = mutableMapOf<String, Int>()
+        val db = databaseHelper.openDatabase()
+
+        val query = """
+            SELECT GioiTinh, COUNT(*) AS SoLuongDocGia
+            FROM DocGia
+            GROUP BY GioiTinh
+            ORDER BY SoLuongDocGia DESC
+        """.trimIndent()
+
+        val cursor: Cursor = db.rawQuery(query, null)
+        if (cursor.moveToFirst()) {
+            do {
+                val gender = cursor.getString(cursor.getColumnIndexOrThrow("GioiTinh"))
+                val count = cursor.getInt(cursor.getColumnIndexOrThrow("SoLuongDocGia"))
+                readerCounts[gender] = count
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+
+        return readerCounts
+    }
+
+    fun getTop5ReaderMostBorrowed(startDate: String?, endDate: String?): Map<String, Int> {
+        val readerMostBorrowed = mutableMapOf<String, Int>()
+        val db = databaseHelper.openDatabase()
+
+        val query: String
+        val args: Array<String>? = if (startDate != null && endDate != null) {
+            query =
+                """
+                    SELECT dg.HoTen, COUNT(pm.MaPM) AS SoLuongPhieuMuon
+                    FROM PhieuMuon pm
+                        JOIN DocGia dg ON pm.MaDG = dg.MaDG
+                    WHERE pm.NgayMuon BETWEEN ? AND ?
+                    GROUP BY dg.MaDG, dg.HoTen
+                    ORDER BY SoLuongPhieuMuon DESC
+                    LIMIT 5
+            """.trimIndent()
+            arrayOf(startDate, endDate)
+        } else {
+            query =
+                """
+                    SELECT dg.HoTen, COUNT(pm.MaPM) AS SoLuongPhieuMuon
+                    FROM PhieuMuon pm
+                        JOIN DocGia dg ON pm.MaDG = dg.MaDG
+                    GROUP BY dg.MaDG, dg.HoTen
+                    ORDER BY SoLuongPhieuMuon DESC
+                    LIMIT 5
+            """.trimIndent()
+            null
+        }
+
+        val cursor: Cursor = db.rawQuery(query, args)
+        if (cursor.moveToFirst()) {
+            do {
+                val readerName = cursor.getString(cursor.getColumnIndexOrThrow("HoTen"))
+                val count = cursor.getInt(cursor.getColumnIndexOrThrow("SoLuongPhieuMuon"))
+                readerMostBorrowed[readerName] = count
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+
+        return readerMostBorrowed
     }
 }
