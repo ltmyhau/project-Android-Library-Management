@@ -13,6 +13,7 @@ import com.example.project_android_library_management.fragment.account.AccountFr
 import com.example.project_android_library_management.fragment.book.BookFragment
 import com.example.project_android_library_management.fragment.borrow_record.BorrowRecordFragment
 import com.example.project_android_library_management.fragment.home.HomeFragment
+import com.example.project_android_library_management.fragment.librarian.LibrarianFragment
 import com.example.project_android_library_management.fragment.order_book.OrderBookFragment
 import com.example.project_android_library_management.fragment.reader.ReaderFragment
 import com.example.project_android_library_management.fragment.return_record.ReturnRecordFragment
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private lateinit var toolbar: Toolbar
+    private var userRole: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.nav_view)
 
+        userRole = intent.getStringExtra("USER_ROLE")
+        configureDrawerMenu(userRole)
+
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
@@ -41,10 +46,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
 
         if (savedInstanceState == null) {
+            val homeFragment = HomeFragment()
+            homeFragment.setUserRole(userRole)
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, HomeFragment()).commit()
+                .replace(R.id.fragment_container, homeFragment).commit()
             navigationView.setCheckedItem(R.id.nav_home)
         }
+    }
+
+    private fun configureDrawerMenu(role: String?) {
+        val menu = navigationView.menu
+        menu.findItem(R.id.nav_librarians).isVisible = (role == "Admin")
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -53,7 +65,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         when (item.itemId) {
             R.id.nav_home -> {
-                selectedFragment = HomeFragment()
+                selectedFragment = HomeFragment().apply {
+                    setUserRole(userRole)
+                }
                 title = getString(R.string.app_name)
             }
             R.id.nav_books -> {
@@ -63,6 +77,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_readers -> {
                 selectedFragment = ReaderFragment()
                 title = "Độc giả"
+            }
+            R.id.nav_librarians -> {
+                selectedFragment = LibrarianFragment()
+                title = "Thủ thư"
             }
             R.id.nav_borrow_record -> {
                 selectedFragment = BorrowRecordFragment()
@@ -86,6 +104,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_logout -> {
                 Toast.makeText(this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
 
@@ -110,6 +129,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (title) {
             "Sách" -> navigationView.setCheckedItem(R.id.nav_books)
             "Độc giả" -> navigationView.setCheckedItem(R.id.nav_readers)
+            "Thủ thư" -> navigationView.setCheckedItem(R.id.nav_librarians)
             "Phiếu mượn" -> navigationView.setCheckedItem(R.id.nav_borrow_record)
             "Phiếu trả" -> navigationView.setCheckedItem(R.id.nav_return_record)
             "Đặt sách" -> navigationView.setCheckedItem(R.id.nav_order_book)

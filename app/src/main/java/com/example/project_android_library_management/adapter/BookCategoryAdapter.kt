@@ -13,7 +13,7 @@ import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.fragment.book.BookDetailActivity
 import com.example.project_android_library_management.model.BookCategory
-import com.example.project_android_library_management.search.SearchBookActivity
+import com.example.project_android_library_management.fragment.search.SearchBookActivity
 
 class BookCategoryAdapter(private val categoryList: ArrayList<BookCategory>) : RecyclerView.Adapter<BookCategoryAdapter.CategoryViewHolder>() {
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -1,4 +1,4 @@
-package com.example.project_android_library_management.search
+package com.example.project_android_library_management.fragment.search
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.SearchBookAdapter
-import com.example.project_android_library_management.dao.BookDao
-import com.example.project_android_library_management.dao.BorrowDetailDao
+import com.example.project_android_library_management.adapter.SearchBorrowAdapter
+import com.example.project_android_library_management.dao.BorrowRecordDao
 import com.example.project_android_library_management.model.Book
-import com.example.project_android_library_management.model.OrderBook
+import com.example.project_android_library_management.model.BorrowRecord
 
-class SearchBookActivity : AppCompatActivity() {
+class SearchBorrowActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
-    private lateinit var bookDao: BookDao
-    private lateinit var searchBookAdapter: SearchBookAdapter
-    private lateinit var bookList: ArrayList<Book>
-    private lateinit var bookListCopy: ArrayList<Book>
+    private lateinit var borrowRecordDao: BorrowRecordDao
+    private lateinit var searchBorrowAdapter: SearchBorrowAdapter
+    private lateinit var borrowRecordList: ArrayList<BorrowRecord>
+    private lateinit var borrowRecordListCopy: ArrayList<BorrowRecord>
 
     private lateinit var edtSearch: SearchView
     private lateinit var rcvList: RecyclerView
@@ -30,33 +30,25 @@ class SearchBookActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val toolbarTitle = intent.getStringExtra("TOOLBAR_TITLE")
-        val hideBtnSelect = intent.getBooleanExtra("HIDE_BTN_SELECT", false)
-
-        if (toolbarTitle != null) {
-            supportActionBar?.title = toolbarTitle
-        }
-
         edtSearch = findViewById(R.id.edtSearch)
 
         rcvList = findViewById(R.id.rcvList)
         rcvList.layoutManager = LinearLayoutManager(this)
 
         databaseHelper = DatabaseHelper(this)
-        bookDao = BookDao(databaseHelper)
+        borrowRecordDao = BorrowRecordDao(databaseHelper)
 
         val source = intent.getStringExtra("SOURCE")
-        bookList = if (source == "BookList") {
-            intent.getSerializableExtra("BOOK_LIST") as ArrayList<Book>
+        borrowRecordList = if (source == "BorrowRecordNotReturned") {
+            intent.getSerializableExtra("BORROW_LIST") as ArrayList<BorrowRecord>
         } else {
-            bookDao.getAllBooks()
+            borrowRecordDao.getAllBorrowRecord()
         }
 
-        bookListCopy = ArrayList(bookList)
+        borrowRecordListCopy = ArrayList(borrowRecordList)
 
-        searchBookAdapter = SearchBookAdapter(this, bookList, hideBtnSelect)
-
-        rcvList.adapter = searchBookAdapter
+        searchBorrowAdapter = SearchBorrowAdapter(this, borrowRecordList)
+        rcvList.adapter = searchBorrowAdapter
 
         edtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -80,20 +72,21 @@ class SearchBookActivity : AppCompatActivity() {
         return true
     }
 
-    fun updateBookList(newList: List<Book>) {
-        bookList.clear()
-        bookList.addAll(newList)
-        searchBookAdapter.notifyDataSetChanged()
+    fun updateBorrowList(newList: List<BorrowRecord>) {
+        borrowRecordList.clear()
+        borrowRecordList.addAll(newList)
+        searchBorrowAdapter.notifyDataSetChanged()
     }
 
     private fun performSearch(query: String) {
         val normalizedQuery = query.toLowerCase()
-        val listSearch = bookListCopy.filter {
-            it.MaSach.toLowerCase().contains(normalizedQuery) ||
-            it.ISBN.toLowerCase().contains(normalizedQuery) ||
-            it.TenSach.toLowerCase().contains(normalizedQuery) ||
-            it.TacGia.toLowerCase().contains(normalizedQuery)
+        val listSearch = borrowRecordListCopy.filter {
+            it.MaPM.toLowerCase().contains(normalizedQuery) ||
+            it.SoNgayMuon.toString().contains(normalizedQuery) ||
+            it.TienCoc.toString().contains(normalizedQuery) ||
+            it.MaDG.toLowerCase().contains(normalizedQuery) ||
+            it.MaTT.toLowerCase().contains(normalizedQuery)
         }
-        updateBookList(listSearch)
+        updateBorrowList(listSearch)
     }
 }

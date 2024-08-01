@@ -23,9 +23,9 @@ import com.example.project_android_library_management.fragment.order_book.OrderU
 import com.example.project_android_library_management.model.Book
 import com.example.project_android_library_management.model.OrderBook
 import com.example.project_android_library_management.model.OrderDetail
-import com.example.project_android_library_management.search.SearchBookActivity
-import com.example.project_android_library_management.search.SearchLibrarianActivity
-import com.example.project_android_library_management.search.SearchPublisherActivity
+import com.example.project_android_library_management.fragment.search.SearchBookActivity
+import com.example.project_android_library_management.fragment.search.SearchLibrarianActivity
+import com.example.project_android_library_management.fragment.search.SearchPublisherActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.ParseException

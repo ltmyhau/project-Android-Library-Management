@@ -5,235 +5,369 @@
     android:layout_height="match_parent"
     tools:context=".fragment.home.HomeFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="8dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="8dp">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btnBook"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:backgroundTint="@color/third"
-                    android:drawableTop="@drawable/book_64"
-                    android:drawableTint="@color/primary"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:paddingLeft="40dp"
-                    android:paddingTop="32dp"
-                    android:paddingRight="40dp"
-                    android:paddingBottom="16dp"
-                    android:text="130603"
-                    android:textColor="#757575"
-                    android:textSize="16sp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/btnBook"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:backgroundTint="@color/third"
+                        android:drawableTop="@drawable/book_64"
+                        android:drawableTint="@color/primary"
+                        android:gravity="center"
+                        android:paddingLeft="40dp"
+                        android:paddingTop="32dp"
+                        android:paddingRight="40dp"
+                        android:paddingBottom="16dp"
+                        android:text="130603"
+                        android:textColor="#757575"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Sách"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Sách"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnOrderBook"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:backgroundTint="@color/third"
+                        android:drawableTop="@drawable/order_book_64"
+                        android:drawableTint="@color/primary"
+                        android:gravity="center"
+                        android:paddingLeft="40dp"
+                        android:paddingTop="32dp"
+                        android:paddingRight="40dp"
+                        android:paddingBottom="16dp"
+                        android:text="130603"
+                        android:textColor="#757575"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Đặt sách"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btnReader"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:backgroundTint="@color/third"
-                    android:drawableTop="@drawable/reader_64"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:paddingLeft="40dp"
-                    android:paddingTop="32dp"
-                    android:paddingRight="40dp"
-                    android:paddingBottom="16dp"
-                    android:text="130603"
-                    android:textColor="@color/text_color"
-                    android:textSize="16sp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/btnBorrowRecord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:backgroundTint="@color/third"
+                        android:drawableTop="@drawable/borrow_book_64"
+                        android:drawableTint="@color/primary"
+                        android:gravity="center"
+                        android:paddingLeft="40dp"
+                        android:paddingTop="32dp"
+                        android:paddingRight="40dp"
+                        android:paddingBottom="16dp"
+                        android:text="130603"
+                        android:textColor="#757575"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Phiếu mượn"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Độc giả"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnReturnRecord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:backgroundTint="@color/third"
+                        android:drawableTop="@drawable/return_book_64"
+                        android:drawableTint="@color/primary"
+                        android:gravity="center"
+                        android:paddingLeft="40dp"
+                        android:paddingTop="32dp"
+                        android:paddingRight="40dp"
+                        android:paddingBottom="16dp"
+                        android:text="130603"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Phiếu trả"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/adminRole1Layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnReader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:backgroundTint="@color/third"
+                        android:drawableTop="@drawable/reader_64"
+                        android:gravity="center"
+                        android:paddingLeft="40dp"
+                        android:paddingTop="32dp"
+                        android:paddingRight="40dp"
+                        android:paddingBottom="16dp"
+                        android:text="130603"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Độc giả"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnLibrarian"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:backgroundTint="@color/third"
+                        android:drawableTop="@drawable/librarian_64"
+                        android:drawableTint="@color/primary"
+                        android:gravity="center"
+                        android:paddingLeft="40dp"
+                        android:paddingTop="32dp"
+                        android:paddingRight="40dp"
+                        android:paddingBottom="16dp"
+                        android:text="130603"
+                        android:textColor="#757575"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Thủ thư"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/adminRole2Layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="32dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnStatistic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:backgroundTint="@color/third"
+                        android:drawableTop="@drawable/statistic_64"
+                        android:drawableTint="@color/primary"
+                        android:gravity="center"
+                        android:paddingLeft="40dp"
+                        android:paddingTop="32dp"
+                        android:paddingRight="40dp"
+                        android:paddingBottom="16dp"
+                        android:text="130603"
+                        android:textColor="#757575"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Thống kê"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/librarianRoleLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="32dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnLibReader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:backgroundTint="@color/third"
+                        android:drawableTop="@drawable/reader_64"
+                        android:gravity="center"
+                        android:paddingLeft="40dp"
+                        android:paddingTop="32dp"
+                        android:paddingRight="40dp"
+                        android:paddingBottom="16dp"
+                        android:text="130603"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Độc giả"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnLibStatistic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:backgroundTint="@color/third"
+                        android:drawableTop="@drawable/statistic_64"
+                        android:drawableTint="@color/primary"
+                        android:gravity="center"
+                        android:paddingLeft="40dp"
+                        android:paddingTop="32dp"
+                        android:paddingRight="40dp"
+                        android:paddingBottom="16dp"
+                        android:text="130603"
+                        android:textColor="#757575"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Thống kê"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/btnBorrowRecord"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:backgroundTint="@color/third"
-                    android:drawableTop="@drawable/borrow_book_64"
-                    android:drawableTint="@color/primary"
-                    android:gravity="center"
-                    android:paddingLeft="40dp"
-                    android:paddingTop="32dp"
-                    android:paddingRight="40dp"
-                    android:paddingBottom="16dp"
-                    android:text="130603"
-                    android:textColor="#757575"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Phiếu mượn"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/btnReturnRecord"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:backgroundTint="@color/third"
-                    android:drawableTop="@drawable/return_book_64"
-                    android:drawableTint="@color/primary"
-                    android:gravity="center"
-                    android:paddingLeft="40dp"
-                    android:paddingTop="32dp"
-                    android:paddingRight="40dp"
-                    android:paddingBottom="16dp"
-                    android:text="130603"
-                    android:textColor="@color/text_color"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Phiếu trả"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/btnOrderBook"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:backgroundTint="@color/third"
-                    android:drawableTop="@drawable/order_book_64"
-                    android:drawableTint="@color/primary"
-                    android:gravity="center"
-                    android:paddingLeft="40dp"
-                    android:paddingTop="32dp"
-                    android:paddingRight="40dp"
-                    android:paddingBottom="16dp"
-                    android:text="130603"
-                    android:textColor="#757575"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Đặt sách"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/btnStatistic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:backgroundTint="@color/third"
-                    android:drawableTop="@drawable/statistic_64"
-                    android:drawableTint="@color/primary"
-                    android:gravity="center"
-                    android:paddingLeft="40dp"
-                    android:paddingTop="32dp"
-                    android:paddingRight="40dp"
-                    android:paddingBottom="16dp"
-                    android:text="130603"
-                    android:textColor="#757575"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Thống kê"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </LinearLayout>
-
+    </ScrollView>
 </FrameLayout>

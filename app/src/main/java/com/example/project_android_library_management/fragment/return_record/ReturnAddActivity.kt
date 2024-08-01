@@ -35,9 +35,9 @@ import com.example.project_android_library_management.model.BorrowDetail
 import com.example.project_android_library_management.model.BorrowRecord
 import com.example.project_android_library_management.model.ReturnDetail
 import com.example.project_android_library_management.model.ReturnRecord
-import com.example.project_android_library_management.search.SearchBookActivity
-import com.example.project_android_library_management.search.SearchBorrowActivity
-import com.example.project_android_library_management.search.SearchLibrarianActivity
+import com.example.project_android_library_management.fragment.search.SearchBookActivity
+import com.example.project_android_library_management.fragment.search.SearchBorrowActivity
+import com.example.project_android_library_management.fragment.search.SearchLibrarianActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.ParseException

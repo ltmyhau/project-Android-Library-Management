@@ -18,6 +18,10 @@
             android:icon="@drawable/ic_reader"
             android:title="Độc giả"/>
         <item
+            android:id="@+id/nav_librarians"
+            android:icon="@drawable/ic_librarians"
+            android:title="Thủ thư"/>
+        <item
             android:id="@+id/nav_borrow_record"
             android:icon="@drawable/ic_borrow_book"
             android:title="Phiến mượn"/>

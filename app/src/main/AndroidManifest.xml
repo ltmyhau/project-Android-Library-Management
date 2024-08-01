@@ -45,27 +45,27 @@
             android:label="Chi tiết phiếu trả"
             android:theme="@style/Theme.ActionBar" />
         <activity
-            android:name=".search.SearchBookActivity"
+            android:name=".fragment.search.SearchBookActivity"
             android:exported="false"
             android:label="Chọn sách"
             android:theme="@style/Theme.ActionBar" />
         <activity
-            android:name=".search.SearchBorrowActivity"
+            android:name=".fragment.search.SearchBorrowActivity"
             android:exported="false"
             android:label="Chọn phiếu mượn"
             android:theme="@style/Theme.ActionBar" />
         <activity
-            android:name=".search.SearchLibrarianActivity"
+            android:name=".fragment.search.SearchLibrarianActivity"
             android:exported="false"
             android:label="Chọn thủ thư"
             android:theme="@style/Theme.ActionBar" />
         <activity
-            android:name=".search.SearchReaderActivity"
+            android:name=".fragment.search.SearchReaderActivity"
             android:exported="false"
             android:label="Chọn độc giả"
             android:theme="@style/Theme.ActionBar" />
         <activity
-            android:name=".search.SearchPublisherActivity"
+            android:name=".fragment.search.SearchPublisherActivity"
             android:exported="false"
             android:label="Chọn nhà xuất bản"
             android:theme="@style/Theme.ActionBar" />

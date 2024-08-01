@@ -1,21 +1,22 @@
-package com.example.project_android_library_management.search
+package com.example.project_android_library_management.fragment.search
 
 import android.os.Bundle
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
-import com.example.project_android_library_management.adapter.SearchReaderAdapter
-import com.example.project_android_library_management.dao.ReaderDao
-import com.example.project_android_library_management.model.Reader
+import com.example.project_android_library_management.adapter.SearchPublisherAdapter
+import com.example.project_android_library_management.dao.PublisherDao
+import com.example.project_android_library_management.model.Librarian
+import com.example.project_android_library_management.model.Publisher
 
-class SearchReaderActivity : AppCompatActivity() {
+class SearchPublisherActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
-    private lateinit var readerDao: ReaderDao
-    private lateinit var searchReaderAdapter: SearchReaderAdapter
-    private lateinit var readerList: ArrayList<Reader>
+    private lateinit var publisherDao: PublisherDao
+    private lateinit var searchPublisherAdapter: SearchPublisherAdapter
+    private lateinit var publisherList: ArrayList<Publisher>
 
     private lateinit var edtSearch: SearchView
     private lateinit var rcvList: RecyclerView
@@ -33,11 +34,11 @@ class SearchReaderActivity : AppCompatActivity() {
         rcvList.layoutManager = LinearLayoutManager(this)
 
         databaseHelper = DatabaseHelper(this)
-        readerDao = ReaderDao(databaseHelper)
-        readerList = readerDao.getAllReaders()
+        publisherDao = PublisherDao(databaseHelper)
+        publisherList = publisherDao.getAllPublisher()
 
-        searchReaderAdapter = SearchReaderAdapter(this, readerList)
-        rcvList.adapter = searchReaderAdapter
+        searchPublisherAdapter = SearchPublisherAdapter(this, publisherList)
+        rcvList.adapter = searchPublisherAdapter
 
         edtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -61,14 +62,14 @@ class SearchReaderActivity : AppCompatActivity() {
         return true
     }
 
-    fun updateReaderList(newList: List<Reader>) {
-        readerList.clear()
-        readerList.addAll(newList)
-        searchReaderAdapter.notifyDataSetChanged()
+    fun updatePublisherList(newList: List<Publisher>) {
+        publisherList.clear()
+        publisherList.addAll(newList)
+        searchPublisherAdapter.notifyDataSetChanged()
     }
 
     private fun performSearch(query: String) {
-        val listSearch = readerDao.searchReader(query)
-        updateReaderList(listSearch)
+        val listSearch = publisherDao.searchPublisher(query)
+        updatePublisherList(listSearch)
     }
 }
