@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.dao.BookDao
+import com.example.project_android_library_management.fragment.book.BookDetailActivity
 import com.example.project_android_library_management.model.BookCategory
 import com.example.project_android_library_management.search.SearchBookActivity
 
@@ -34,7 +35,13 @@ class BookCategoryAdapter(private val categoryList: ArrayList<BookCategory>) : R
         val bookList = bookDao.getBooksByCategoryId(category.MaLoai)
 
         holder.rcvBook.layoutManager = LinearLayoutManager(holder.itemView.context, LinearLayoutManager.HORIZONTAL, false)
-        holder.rcvBook.adapter = BookByCategoryAdapter(bookList)
+//        holder.rcvBook.adapter = BookByCategoryAdapter(bookList)
+
+        holder.rcvBook.adapter = BookByCategoryAdapter(bookList) { selectedBook ->
+            val intent = Intent(holder.itemView.context, BookDetailActivity::class.java)
+            intent.putExtra("BOOK_ID", selectedBook.MaSach)
+            holder.itemView.context.startActivity(intent)
+        }
 
         holder.tvShowAll.paintFlags = holder.tvShowAll.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         holder.tvShowAll.setOnClickListener {

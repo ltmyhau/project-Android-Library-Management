@@ -11,11 +11,24 @@ import com.example.project_android_library_management.R
 import com.example.project_android_library_management.model.Book
 import java.io.File
 
-class BookByCategoryAdapter(private val bookList: ArrayList<Book>) : RecyclerView.Adapter<BookByCategoryAdapter.BookByCategoryViewHolder>() {
+class BookByCategoryAdapter(
+    private val bookList: ArrayList<Book>,
+    private val itemClickListener: (Book) -> Unit
+) : RecyclerView.Adapter<BookByCategoryAdapter.BookByCategoryViewHolder>() {
 
     inner class BookByCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgBookCover: ImageView = itemView.findViewById(R.id.imgBookCover)
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val selectedBook = bookList[position]
+                    itemClickListener(selectedBook)
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookByCategoryViewHolder {

@@ -222,12 +222,12 @@ class StatisticDao(private val databaseHelper: DatabaseHelper) {
                 SELECT MaTL
                 FROM TheLoaiSach
                 ORDER BY SoLuongSach DESC
-                LIMIT 4
+                LIMIT 9
             )
             SELECT 
                 CASE 
                     WHEN s.MaTL IN (SELECT MaTL FROM Top4TheLoai) THEN l.TenLoai
-                    ELSE 'Khác'
+                    ELSE 'Các thể loại khác'
                 END AS TenLoai,
                 COUNT(*) AS SoLuongSach
             FROM Sach s
@@ -236,7 +236,7 @@ class StatisticDao(private val databaseHelper: DatabaseHelper) {
             GROUP BY 
                 CASE 
                     WHEN s.MaTL IN (SELECT MaTL FROM Top4TheLoai) THEN s.MaTL
-                    ELSE 'Khác'
+                    ELSE 'Các thể loại khác'
                 END
             ORDER BY SoLuongSach DESC
         """.trimIndent()

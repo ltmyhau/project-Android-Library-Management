@@ -242,11 +242,16 @@ class StatisticBookFragment : Fragment() {
         }
 
         val colorList = listOf(
-            ContextCompat.getColor(requireContext(), R.color.primary_variant),
-            ContextCompat.getColor(requireContext(), R.color.primary),
-            ContextCompat.getColor(requireContext(), R.color.secondary),
-            ContextCompat.getColor(requireContext(), R.color.secondary_variant),
-            ContextCompat.getColor(requireContext(), R.color.third)
+            Color.parseColor("#a9d7e7"),
+            Color.parseColor("#8cc2da"),
+            Color.parseColor("#60a5c2"),
+            Color.parseColor("#4790b1"),
+            Color.parseColor("#2f7da3"),
+            Color.parseColor("#2c6f99"),
+            Color.parseColor("#044f89"),
+            Color.parseColor("#03497c"),
+            Color.parseColor("#033a61"),
+            Color.parseColor("#002a4c"),
         )
 
         val dataSet = entries.mapIndexed { index, entry ->
