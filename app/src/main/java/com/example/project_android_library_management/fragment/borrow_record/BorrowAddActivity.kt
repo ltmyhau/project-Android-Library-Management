@@ -1,8 +1,10 @@
 package com.example.project_android_library_management.fragment.borrow_record
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
@@ -19,6 +21,7 @@ import com.example.project_android_library_management.fragment.search.SearchBook
 import com.example.project_android_library_management.fragment.search.SearchLibrarianActivity
 import com.example.project_android_library_management.fragment.search.SearchReaderActivity
 import com.example.project_android_library_management.adapter.BookBorrowAdapter
+import com.example.project_android_library_management.dao.AccountDao
 import com.example.project_android_library_management.dao.BorrowDetailDao
 import com.example.project_android_library_management.dao.BorrowRecordDao
 import com.example.project_android_library_management.dao.LibrarianDao
@@ -40,6 +43,7 @@ class BorrowAddActivity : AppCompatActivity() {
     private lateinit var librarianDao: LibrarianDao
     private lateinit var borrowRecordDao: BorrowRecordDao
     private lateinit var borrowDetailDao: BorrowDetailDao
+    private lateinit var accountDao: AccountDao
     private lateinit var bookBorrows: ArrayList<BorrowDetail>
 
     private var maPM: String = ""
@@ -74,6 +78,7 @@ class BorrowAddActivity : AppCompatActivity() {
         librarianDao = LibrarianDao(databaseHelper)
         borrowRecordDao = BorrowRecordDao(databaseHelper)
         borrowDetailDao = BorrowDetailDao(databaseHelper)
+        accountDao = AccountDao(databaseHelper)
 
         edtBorrowId = findViewById(R.id.edtBorrowId)
         edtReaderName = findViewById(R.id.edtReaderName)
@@ -95,14 +100,29 @@ class BorrowAddActivity : AppCompatActivity() {
 
         bookBorrows = ArrayList<BorrowDetail>()
 
-        edtReaderName.setOnClickListener {
-            val intent = Intent(this, SearchReaderActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_READER_ID)
-        }
+        val sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val userRole = sharedPreferences.getString("USER_ROLE", "")
+        val accountId = sharedPreferences.getString("ACCOUNT_ID", null)
 
-        edtLibrarianName.setOnClickListener {
-            val intent = Intent(this, SearchLibrarianActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_LIBRARIAN_ID)
+        if (userRole == "ThuThu") {
+            if (accountId != null) {
+                val account = accountDao.getAccountById(accountId)
+                if (account != null) {
+                    if (account.MaTT != null) {
+                        edtLibrarianName.setBackgroundResource(R.drawable.gray_background)
+                        val librarian = librarianDao.getLibrarianById(account.MaTT)
+                        if (librarian != null) {
+                            edtLibrarianName.setText(librarian.HoTen)
+                            librarianId = librarian.MaTT
+                        }
+                    }
+                }
+            }
+        } else if (userRole == "Admin") {
+            edtLibrarianName.setOnClickListener {
+                val intent = Intent(this, SearchLibrarianActivity::class.java)
+                startActivityForResult(intent, REQUEST_CODE_LIBRARIAN_ID)
+            }
         }
 
         edtReaderName.setOnClickListener {

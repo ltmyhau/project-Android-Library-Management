@@ -1,5 +1,6 @@
 package com.example.project_android_library_management
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -29,6 +30,12 @@ class LoginActivity : AppCompatActivity() {
             val account = accountDao.getAccount(username, password)
 
             if (account != null) {
+                val sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putString("USER_ROLE", account.PhanQuyen)
+                editor.putString("ACCOUNT_ID", account.MaTK)
+                editor.apply()
+
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("USER_ROLE", account.PhanQuyen)
                 startActivity(intent)

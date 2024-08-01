@@ -1,6 +1,7 @@
 package com.example.project_android_library_management.fragment.return_record
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.BookReturnAdapter
+import com.example.project_android_library_management.dao.AccountDao
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.dao.BorrowDetailDao
 import com.example.project_android_library_management.dao.BorrowRecordDao
@@ -28,6 +30,7 @@ import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.dao.ReaderDao
 import com.example.project_android_library_management.dao.ReturnDetailDao
 import com.example.project_android_library_management.dao.ReturnRecordDao
+import com.example.project_android_library_management.fragment.borrow_record.BorrowAddActivity
 import com.example.project_android_library_management.fragment.order_book.OrderDetailActivity
 import com.example.project_android_library_management.fragment.return_record.ReturnUpdateActivity.Companion
 import com.example.project_android_library_management.model.Book
@@ -56,6 +59,7 @@ class ReturnAddActivity : AppCompatActivity() {
     private lateinit var borrowRecordDao: BorrowRecordDao
     private lateinit var borrowDetailDao: BorrowDetailDao
     private lateinit var bookDao: BookDao
+    private lateinit var accountDao: AccountDao
 
     private var maPT: String = ""
     private var borrowId: String = ""
@@ -103,6 +107,7 @@ class ReturnAddActivity : AppCompatActivity() {
         borrowRecordDao = BorrowRecordDao(databaseHelper)
         borrowDetailDao = BorrowDetailDao(databaseHelper)
         bookDao = BookDao(databaseHelper)
+        accountDao = AccountDao(databaseHelper)
 
         edtReturnId = findViewById(R.id.edtReturnId)
         edtReaderName = findViewById(R.id.edtReaderName)
@@ -123,9 +128,29 @@ class ReturnAddActivity : AppCompatActivity() {
         maPT = returnRecordDao.generateNewId()
         edtReturnId.setText(maPT)
 
-        edtLibrarianName.setOnClickListener {
-            val intent = Intent(this, SearchLibrarianActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_LIBRARIAN_ID)
+        val sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val userRole = sharedPreferences.getString("USER_ROLE", "")
+        val accountId = sharedPreferences.getString("ACCOUNT_ID", null)
+
+        if (userRole == "ThuThu") {
+            if (accountId != null) {
+                val account = accountDao.getAccountById(accountId)
+                if (account != null) {
+                    if (account.MaTT != null) {
+                        edtLibrarianName.setBackgroundResource(R.drawable.gray_background)
+                        val librarian = librarianDao.getLibrarianById(account.MaTT)
+                        if (librarian != null) {
+                            edtLibrarianName.setText(librarian.HoTen)
+                            librarianId = librarian.MaTT
+                        }
+                    }
+                }
+            }
+        } else if (userRole == "Admin") {
+            edtLibrarianName.setOnClickListener {
+                val intent = Intent(this, SearchLibrarianActivity::class.java)
+                startActivityForResult(intent, REQUEST_CODE_LIBRARIAN_ID)
+            }
         }
 
         val borrowList = borrowRecordDao.getAllBorrowRecord()

@@ -1,6 +1,7 @@
 package com.example.project_android_library_management.fragment.order_book
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
@@ -14,12 +15,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.BookOrderAdapter
+import com.example.project_android_library_management.dao.AccountDao
 import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.dao.OrderBookDao
 import com.example.project_android_library_management.dao.OrderDetailDao
 import com.example.project_android_library_management.dao.PublisherDao
 import com.example.project_android_library_management.fragment.order_book.OrderUpdateActivity.Companion
+import com.example.project_android_library_management.fragment.return_record.ReturnAddActivity
 import com.example.project_android_library_management.model.Book
 import com.example.project_android_library_management.model.OrderBook
 import com.example.project_android_library_management.model.OrderDetail
@@ -41,6 +44,7 @@ class OrderAddActivity : AppCompatActivity() {
     private lateinit var librarianDao: LibrarianDao
     private lateinit var orderBookDao: OrderBookDao
     private lateinit var orderDetailDao: OrderDetailDao
+    private lateinit var accountDao: AccountDao
     private lateinit var bookOrderAdapter: BookOrderAdapter
     private lateinit var bookOrders: ArrayList<OrderDetail>
 
@@ -76,6 +80,7 @@ class OrderAddActivity : AppCompatActivity() {
         librarianDao = LibrarianDao(databaseHelper)
         orderBookDao = OrderBookDao(databaseHelper)
         orderDetailDao = OrderDetailDao(databaseHelper)
+        accountDao = AccountDao(databaseHelper)
 
         edtOrderId = findViewById(R.id.edtOrderId)
         edtPublisher = findViewById(R.id.edtPublisher)
@@ -84,25 +89,40 @@ class OrderAddActivity : AppCompatActivity() {
         edtNotes = findViewById(R.id.edtNotes)
         rcvBooks = findViewById(R.id.rcvBooks)
 
-//        loadOrderDetails(maPD)
-//
-//        bookOrders = orderDetailDao.getOrderDetailsById(maPD)
-//        loadBookOrders(bookOrders)
-
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         edtOrderDate.setText(sdf.format(Date()))
 
         maPD = orderBookDao.generateNewId()
         edtOrderId.setText(maPD)
 
+        val sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val userRole = sharedPreferences.getString("USER_ROLE", "")
+        val accountId = sharedPreferences.getString("ACCOUNT_ID", null)
+
+        if (userRole == "ThuThu") {
+            if (accountId != null) {
+                val account = accountDao.getAccountById(accountId)
+                if (account != null) {
+                    if (account.MaTT != null) {
+                        edtLibrarianName.setBackgroundResource(R.drawable.gray_background)
+                        val librarian = librarianDao.getLibrarianById(account.MaTT)
+                        if (librarian != null) {
+                            edtLibrarianName.setText(librarian.HoTen)
+                            librarianId = librarian.MaTT
+                        }
+                    }
+                }
+            }
+        } else if (userRole == "Admin") {
+            edtLibrarianName.setOnClickListener {
+                val intent = Intent(this, SearchLibrarianActivity::class.java)
+                startActivityForResult(intent, REQUEST_CODE_LIBRARIAN_ID)
+            }
+        }
+
         edtPublisher.setOnClickListener {
             val intent = Intent(this, SearchPublisherActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_PUBLISHER_ID)
-        }
-
-        edtLibrarianName.setOnClickListener {
-            val intent = Intent(this, SearchLibrarianActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_LIBRARIAN_ID)
         }
 
         val orderDateLayout = findViewById<TextInputLayout>(R.id.orderDateLayout)

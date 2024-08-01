@@ -30,4 +30,19 @@ class AccountDao(private val databaseHelper: DatabaseHelper) {
         db.close()
         return account
     }
+
+    fun getAccountById(accountId: String): Account? {
+        val db = databaseHelper.openDatabase()
+        val cursor = db.rawQuery(
+            "SELECT * FROM TaiKhoan WHERE MaTK = ?",
+            arrayOf(accountId)
+        )
+        var account: Account? = null
+        if (cursor.moveToFirst()) {
+            account = cursor(cursor)
+        }
+        cursor.close()
+        db.close()
+        return account
+    }
 }
