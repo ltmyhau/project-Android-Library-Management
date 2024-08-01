@@ -15,6 +15,21 @@
         android:theme="@style/Theme.ProjectAndroidLibraryManagement"
         tools:targetApi="31">
         <activity
+            android:name=".fragment.librarian.LibrarianAddActivity"
+            android:exported="false"
+            android:label="Thêm độc thủ thư"
+            android:theme="@style/Theme.ActionBar" />
+        <activity
+            android:name=".fragment.librarian.LibrarianUpdateActivity"
+            android:exported="false"
+            android:label="Cập nhật thông tin thủ thư"
+            android:theme="@style/Theme.ActionBar" />
+        <activity
+            android:name=".fragment.librarian.LibrarianDetailActivity"
+            android:exported="false"
+            android:label="Thông tin thủ thư"
+            android:theme="@style/Theme.ActionBar" />
+        <activity
             android:name=".fragment.order_book.OrderAddActivity"
             android:exported="false"
             android:label="Thêm phiếu đặt"

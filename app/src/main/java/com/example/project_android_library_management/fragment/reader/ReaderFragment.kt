@@ -57,6 +57,7 @@ class ReaderFragment : Fragment() {
     private lateinit var toDateLayout: TextInputLayout
     private lateinit var btnReset: Button
     private lateinit var btnApply: Button
+    private lateinit var tvDate: TextView
 
     companion object {
         private const val REQUEST_CODE_READER_LIST = 1
@@ -87,6 +88,8 @@ class ReaderFragment : Fragment() {
         toDateLayout = headerView.findViewById(R.id.toDateLayout)
         btnReset = headerView.findViewById(R.id.btnReset)
         btnApply = headerView.findViewById(R.id.btnApply)
+        tvDate = headerView.findViewById(R.id.tvDate)
+        tvDate.text = "Theo ngày làm thẻ"
 
         databaseHelper = DatabaseHelper(requireContext())
         readerDao = ReaderDao(databaseHelper)

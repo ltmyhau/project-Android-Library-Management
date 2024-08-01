@@ -6,6 +6,7 @@ data class Librarian (
     val NgaySinh: String,
     val GioiTinh: String,
     val DienThoai: String,
+    val Email: String,
     val DiaChi: String?,
     val HinhAnh: String?
 )
