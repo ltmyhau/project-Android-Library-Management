@@ -165,7 +165,7 @@ class ReturnAddActivity : AppCompatActivity() {
             }
             val intent = Intent(this, SearchBorrowActivity::class.java)
             intent.putExtra("SOURCE", "BorrowRecordNotReturned")
-            intent.putExtra("BORROW_LIST", borrowListNotReturned)
+//            intent.putExtra("BORROW_LIST", borrowListNotReturned)
             startActivityForResult(intent, REQUEST_CODE_BORROW_ID)
         }
 

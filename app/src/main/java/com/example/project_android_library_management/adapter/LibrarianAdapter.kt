@@ -46,14 +46,10 @@ class LibrarianAdapter(
         val librarian = librarianList[position]
         holder.tvReaderName.text = librarian.HoTen
         holder.tvPhoneNumber.text = librarian.DienThoai
+
         if (librarian.HinhAnh != null) {
-            val imgFile = File(librarian.HinhAnh)
-            if (imgFile.exists()) {
-                val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                holder.imgAvatar.setImageBitmap(bitmap)
-            } else {
-                holder.imgAvatar.setImageResource(R.drawable.avatar)
-            }
+            val bitmap = BitmapFactory.decodeByteArray(librarian.HinhAnh, 0, librarian.HinhAnh.size)
+            holder.imgAvatar.setImageBitmap(bitmap)
         } else {
             holder.imgAvatar.setImageResource(R.drawable.avatar)
         }

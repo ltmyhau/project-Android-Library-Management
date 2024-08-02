@@ -83,7 +83,7 @@ class LibrarianDao(private val databaseHelper: DatabaseHelper) {
         val dienThoai = cursor.getString(cursor.getColumnIndexOrThrow("DienThoai"))
         val email = cursor.getString(cursor.getColumnIndexOrThrow("Email"))
         val diaChi = cursor.getString(cursor.getColumnIndexOrThrow("DiaChi"))
-        val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
+        val hinhAnh = cursor.getBlob(cursor.getColumnIndexOrThrow("HinhAnh"))
 
         return Librarian(maTT, hoTen, ngaySinh, gioiTinh, dienThoai, email, diaChi, hinhAnh)
     }

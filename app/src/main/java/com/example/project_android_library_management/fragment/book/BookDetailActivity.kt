@@ -85,13 +85,11 @@ class BookDetailActivity : AppCompatActivity() {
 
             publisher?.let { tvPublisher.text = publisher.TenNXB }
 
-            val imagePath = book.HinhAnh
-            if (imagePath != null) {
-                val imgFile = File(imagePath)
-                if (imgFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                    imgBookCover.setImageBitmap(bitmap)
-                }
+            if (book.HinhAnh != null) {
+                val bitmap = BitmapFactory.decodeByteArray(book.HinhAnh, 0, book.HinhAnh.size)
+                imgBookCover.setImageBitmap(bitmap)
+            } else {
+                imgBookCover.setImageResource(R.drawable.book_cover)
             }
         } else {
             Toast.makeText(this, "Không tìm thấy sách", Toast.LENGTH_SHORT).show()

@@ -130,7 +130,6 @@ class OrderAddActivity : AppCompatActivity() {
             showDatePickerDialog(edtOrderDate)
         }
 
-        bookListByPublisher = bookDao.getBooksByPublisherId(publisherId)
         val btnAddBook = findViewById<ImageButton>(R.id.btnAddBook)
         btnAddBook.setOnClickListener {
             if (publisherId == null || publisherId.isEmpty()) {
@@ -139,8 +138,8 @@ class OrderAddActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             val intent = Intent(this, SearchBookActivity::class.java)
-            intent.putExtra("SOURCE", "BookList")
-            intent.putExtra("BOOK_LIST", bookListByPublisher)
+            intent.putExtra("SOURCE", "BookPublisherList")
+            intent.putExtra("PUBLISHER_ID", publisherId)
             startActivityForResult(intent, REQUEST_CODE_BOOK_ID)
         }
 

@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import com.example.project_android_library_management.DatabaseHelper
 import com.example.project_android_library_management.fragment.librarian.LibrarianFragment
 import com.example.project_android_library_management.R
+import com.example.project_android_library_management.dao.StatisticDao
 import com.example.project_android_library_management.fragment.book.BookFragment
 import com.example.project_android_library_management.fragment.borrow_record.BorrowRecordFragment
 import com.example.project_android_library_management.fragment.order_book.OrderBookFragment
@@ -20,6 +22,18 @@ import com.example.project_android_library_management.fragment.statistic.Statist
 class HomeFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private var userRole: String? = null
+    private lateinit var databaseHelper: DatabaseHelper
+    private lateinit var statisticDao: StatisticDao
+
+    private lateinit var btnBook: Button
+    private lateinit var btnOrderBook: Button
+    private lateinit var btnBorrowRecord: Button
+    private lateinit var btnReturnRecord: Button
+    private lateinit var btnReader: Button
+    private lateinit var btnLibrarian: Button
+    private lateinit var btnStatistic: Button
+    private lateinit var btnLibReader: Button
+    private lateinit var btnLibStatistic: Button
 
     interface OnFragmentInteractionListener {
         fun onFragmentChange(fragment: Fragment, title: String)
@@ -40,15 +54,18 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        val btnBook = view.findViewById<Button>(R.id.btnBook)
-        val btnOrderBook = view.findViewById<Button>(R.id.btnOrderBook)
-        val btnBorrowRecord = view.findViewById<Button>(R.id.btnBorrowRecord)
-        val btnReturnRecord = view.findViewById<Button>(R.id.btnReturnRecord)
-        val btnReader = view.findViewById<Button>(R.id.btnReader)
-        val btnLibrarian = view.findViewById<Button>(R.id.btnLibrarian)
-        val btnStatistic = view.findViewById<Button>(R.id.btnStatistic)
-        val btnLibReader = view.findViewById<Button>(R.id.btnLibReader)
-        val btnLibStatistic = view.findViewById<Button>(R.id.btnLibStatistic)
+        databaseHelper = DatabaseHelper(requireContext())
+        statisticDao = StatisticDao(databaseHelper)
+
+        btnBook = view.findViewById(R.id.btnBook)
+        btnOrderBook = view.findViewById(R.id.btnOrderBook)
+        btnBorrowRecord = view.findViewById(R.id.btnBorrowRecord)
+        btnReturnRecord = view.findViewById(R.id.btnReturnRecord)
+        btnReader = view.findViewById(R.id.btnReader)
+        btnLibrarian = view.findViewById(R.id.btnLibrarian)
+        btnStatistic = view.findViewById(R.id.btnStatistic)
+        btnLibReader = view.findViewById(R.id.btnLibReader)
+        btnLibStatistic = view.findViewById(R.id.btnLibStatistic)
 
         btnBook.setOnClickListener {
             listener?.onFragmentChange(BookFragment(), "Sách")
@@ -92,6 +109,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateUI(view: View) {
+        btnBook.text = statisticDao.getBookQuantity().toString()
+        btnOrderBook.text = statisticDao.getOrderBookQuantity().toString()
+        btnBorrowRecord.text = statisticDao.getBorrowRecordQuantity().toString()
+        btnReturnRecord.text = statisticDao.getReturnRecordQuantity().toString()
+        btnReader.text = statisticDao.getReaderQuantity().toString()
+        btnLibrarian.text = statisticDao.getLibrarianQuantity().toString()
+        btnLibReader.text = statisticDao.getReaderQuantity().toString()
+
         val librarianRoleLayout = view.findViewById<LinearLayout>(R.id.librarianRoleLayout)
         val adminRole1Layout = view.findViewById<LinearLayout>(R.id.adminRole1Layout)
         val adminRole2Layout = view.findViewById<LinearLayout>(R.id.adminRole2Layout)

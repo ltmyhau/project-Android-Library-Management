@@ -36,14 +36,10 @@ class SearchReaderAdapter(
         val reader = readerList[position]
         holder.tvReaderName.text = reader.HoTen
         holder.tvPhoneNumber.text = reader.DienThoai
+
         if (reader.HinhAnh != null) {
-            val imgFile = File(reader.HinhAnh)
-            if (imgFile.exists()) {
-                val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                holder.imgAvatar.setImageBitmap(bitmap)
-            } else {
-                holder.imgAvatar.setImageResource(R.drawable.avatar)
-            }
+            val bitmap = BitmapFactory.decodeByteArray(reader.HinhAnh, 0, reader.HinhAnh.size)
+            holder.imgAvatar.setImageBitmap(bitmap)
         } else {
             holder.imgAvatar.setImageResource(R.drawable.avatar)
         }

@@ -62,13 +62,11 @@ class LibrarianDetailActivity : AppCompatActivity() {
             tvEmail.text = librarian.Email
             tvAddress.text = librarian.DiaChi
 
-            val imagePath = librarian.HinhAnh
-            if (imagePath != null) {
-                val imgFile = File(imagePath)
-                if (imgFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                    imgAvatar.setImageBitmap(bitmap)
-                }
+            if (librarian.HinhAnh != null) {
+                val bitmap = BitmapFactory.decodeByteArray(librarian.HinhAnh, 0, librarian.HinhAnh.size)
+                imgAvatar.setImageBitmap(bitmap)
+            } else {
+                imgAvatar.setImageResource(R.drawable.avatar)
             }
         } else {
             Toast.makeText(this, "Không tìm thấy thủ thư", Toast.LENGTH_SHORT).show()

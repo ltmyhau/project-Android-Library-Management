@@ -268,7 +268,6 @@
                         android:paddingTop="32dp"
                         android:paddingRight="40dp"
                         android:paddingBottom="16dp"
-                        android:text="130603"
                         android:textColor="#757575"
                         android:textSize="16sp" />
 
@@ -352,7 +351,6 @@
                         android:paddingTop="32dp"
                         android:paddingRight="40dp"
                         android:paddingBottom="16dp"
-                        android:text="130603"
                         android:textColor="#757575"
                         android:textSize="16sp" />
 

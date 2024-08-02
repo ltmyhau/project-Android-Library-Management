@@ -22,6 +22,7 @@ import com.example.project_android_library_management.dao.BookDao
 import com.example.project_android_library_management.dao.PublisherDao
 import com.example.project_android_library_management.model.Book
 import com.google.android.material.textfield.TextInputEditText
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -159,13 +160,11 @@ class BookUpdateActivity : AppCompatActivity() {
                 spnCategory.setText(bookCategoryName, false)
             }
 
-            imagePath = book.HinhAnh
-            imagePath?.let {
-                val imgFile = File(it)
-                if (imgFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                    imgBookCover.setImageBitmap(bitmap)
-                }
+            if (book.HinhAnh != null) {
+                val bitmap = BitmapFactory.decodeByteArray(book.HinhAnh, 0, book.HinhAnh.size)
+                imgBookCover.setImageBitmap(bitmap)
+            } else {
+                imgBookCover.setImageResource(R.drawable.book_cover)
             }
         } else {
             Toast.makeText(this, "Không tìm thấy sách", Toast.LENGTH_SHORT).show()
@@ -222,6 +221,12 @@ class BookUpdateActivity : AppCompatActivity() {
         return file.absolutePath
     }
 
+    private fun convertImageToByteArray(bitmap: Bitmap): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        return outputStream.toByteArray()
+    }
+
     private fun saveBookDetails() {
         val bookId = edtBookId.text.toString()
         val isbn = edtISBN.text.toString()
@@ -233,8 +238,13 @@ class BookUpdateActivity : AppCompatActivity() {
         val price = edtPrice.text.toString().toDoubleOrNull() ?: 0.0
         val description = edtDescription.text.toString()
 
+        val imageByteArray = imagePath?.let {
+            val bitmap = BitmapFactory.decodeFile(it)
+            bitmap?.let { convertImageToByteArray(it) }
+        }
+
         if (validateFields()) {
-            val book = Book(bookId, isbn, title, author, publisherId, year, pages, stock, price, description, imagePath, bookCategoryId)
+            val book = Book(bookId, isbn, title, author, publisherId, year, pages, stock, price, description, imageByteArray, bookCategoryId)
             val rowsAffected = bookDao.update(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Cập nhật thông tin sách thành công", Toast.LENGTH_SHORT).show()

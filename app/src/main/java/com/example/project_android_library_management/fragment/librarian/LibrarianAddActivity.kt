@@ -25,6 +25,7 @@ import com.example.project_android_library_management.model.Account
 import com.example.project_android_library_management.model.Librarian
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -156,6 +157,12 @@ class LibrarianAddActivity : AppCompatActivity() {
         return file.absolutePath
     }
 
+    private fun convertImageToByteArray(bitmap: Bitmap): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        return outputStream.toByteArray()
+    }
+
     private fun showDatePickerDialog(textView: TextView) {
         val calendar: Calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -196,8 +203,13 @@ class LibrarianAddActivity : AppCompatActivity() {
         val email = edtEmail.text.toString()
         val address = edtAddress.text.toString()
 
+        val imageByteArray = imagePath?.let {
+            val bitmap = BitmapFactory.decodeFile(it)
+            bitmap?.let { convertImageToByteArray(it) }
+        }
+
         if (validateFields()) {
-            val librarian = Librarian(librarianId, librarianName, dateOfBirth, gender, phoneNumber, email, address, imagePath)
+            val librarian = Librarian(librarianId, librarianName, dateOfBirth, gender, phoneNumber, email, address, imageByteArray)
             val rowsAffected = librarianDao.insert(librarian)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Thêm thủ thư mới thành công", Toast.LENGTH_SHORT).show()

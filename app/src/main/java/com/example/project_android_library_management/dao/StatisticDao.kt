@@ -411,4 +411,70 @@ class StatisticDao(private val databaseHelper: DatabaseHelper) {
 
         return readerMostBorrowed
     }
+
+    fun getBookQuantity(): Int {
+        val db = databaseHelper.openDatabase()
+        var bookQuantity = 0
+        val cursor: Cursor = db.rawQuery("SELECT COUNT(*) FROM Sach", null)
+        if (cursor.moveToFirst()) {
+            bookQuantity = cursor.getInt(0)
+        }
+        cursor.close()
+        return bookQuantity
+    }
+
+    fun getOrderBookQuantity(): Int {
+        val db = databaseHelper.openDatabase()
+        var orderBookQuantity = 0
+        val cursor: Cursor = db.rawQuery("SELECT COUNT(*) FROM PhieuDat", null)
+        if (cursor.moveToFirst()) {
+            orderBookQuantity = cursor.getInt(0)
+        }
+        cursor.close()
+        return orderBookQuantity
+    }
+
+    fun getBorrowRecordQuantity(): Int {
+        val db = databaseHelper.openDatabase()
+        var borrowedRecordQuantity = 0
+        val cursor: Cursor = db.rawQuery("SELECT COUNT(*) FROM PhieuMuon", null)
+        if (cursor.moveToFirst()) {
+            borrowedRecordQuantity = cursor.getInt(0)
+        }
+        cursor.close()
+        return borrowedRecordQuantity
+    }
+
+    fun getReturnRecordQuantity(): Int {
+        val db = databaseHelper.openDatabase()
+        var returnRecordQuantity = 0
+        val cursor: Cursor = db.rawQuery("SELECT COUNT(*) FROM PhieuTra", null)
+        if (cursor.moveToFirst()) {
+            returnRecordQuantity = cursor.getInt(0)
+        }
+        cursor.close()
+        return returnRecordQuantity
+    }
+
+    fun getReaderQuantity(): Int {
+        val db = databaseHelper.openDatabase()
+        var readerQuantity = 0
+        val cursor: Cursor = db.rawQuery("SELECT COUNT(*) FROM DocGia", null)
+        if (cursor.moveToFirst()) {
+            readerQuantity = cursor.getInt(0)
+            }
+        cursor.close()
+        return readerQuantity
+    }
+
+    fun getLibrarianQuantity(): Int {
+        val db = databaseHelper.openDatabase()
+        var librarianQuantity = 0
+        val cursor: Cursor = db.rawQuery("SELECT COUNT(*) FROM ThuThu", null)
+        if (cursor.moveToFirst()) {
+            librarianQuantity = cursor.getInt(0)
+        }
+        cursor.close()
+        return librarianQuantity
+    }
 }

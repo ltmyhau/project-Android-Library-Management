@@ -8,6 +8,6 @@ data class Reader (
     val DienThoai: String,
     val Email: String,
     val DiaChi: String,
-    val HinhAnh: String?,
+    val HinhAnh: ByteArray?,
     val NgayLamThe: String
 )

@@ -13,6 +13,6 @@ data class Book(
     val SoLuongTon: Int,
     val GiaBan: Double,
     val MoTa: String?,
-    val HinhAnh: String?,
+    val HinhAnh: ByteArray?,
     val MaTL: String
 ) : Serializable

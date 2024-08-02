@@ -87,7 +87,7 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
         val soLuongTon = cursor.getInt(cursor.getColumnIndexOrThrow("SoLuongTon"))
         val giaBan = cursor.getDouble(cursor.getColumnIndexOrThrow("GiaBan"))
         val moTa = cursor.getString(cursor.getColumnIndexOrThrow("MoTa"))
-        val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
+        val hinhAnh = cursor.getBlob(cursor.getColumnIndexOrThrow("HinhAnh"))
         val maTL = cursor.getString(cursor.getColumnIndexOrThrow("MaTL"))
 
         return Book(

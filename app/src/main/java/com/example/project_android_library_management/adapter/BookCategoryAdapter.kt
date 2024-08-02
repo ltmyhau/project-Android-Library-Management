@@ -35,7 +35,6 @@ class BookCategoryAdapter(private val categoryList: ArrayList<BookCategory>) : R
         val bookList = bookDao.getBooksByCategoryId(category.MaLoai)
 
         holder.rcvBook.layoutManager = LinearLayoutManager(holder.itemView.context, LinearLayoutManager.HORIZONTAL, false)
-//        holder.rcvBook.adapter = BookByCategoryAdapter(bookList)
 
         holder.rcvBook.adapter = BookByCategoryAdapter(bookList) { selectedBook ->
             val intent = Intent(holder.itemView.context, BookDetailActivity::class.java)
@@ -46,8 +45,8 @@ class BookCategoryAdapter(private val categoryList: ArrayList<BookCategory>) : R
         holder.tvShowAll.paintFlags = holder.tvShowAll.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         holder.tvShowAll.setOnClickListener {
             val intent = Intent(holder.itemView.context, SearchBookActivity::class.java)
-            intent.putExtra("SOURCE", "BookList")
-            intent.putExtra("BOOK_LIST", bookList)
+            intent.putExtra("SOURCE", "BookCategoryList")
+            intent.putExtra("CATEGORY_ID", category.MaLoai)
             intent.putExtra("TOOLBAR_TITLE", "${category.TenLoai}")
             intent.putExtra("HIDE_BTN_SELECT", true)
             holder.itemView.context.startActivity(intent)

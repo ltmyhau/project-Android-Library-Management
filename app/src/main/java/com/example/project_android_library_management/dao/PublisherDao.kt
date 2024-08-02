@@ -12,7 +12,7 @@ class PublisherDao(private val databaseHelper: DatabaseHelper) {
         val diaChi = cursor.getString(cursor.getColumnIndexOrThrow("DiaChi"))
         val email = cursor.getString(cursor.getColumnIndexOrThrow("Email"))
         val dienThoai = cursor.getString(cursor.getColumnIndexOrThrow("DienThoai"))
-        val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
+        val hinhAnh = cursor.getBlob(cursor.getColumnIndexOrThrow("HinhAnh"))
 
         return Publisher(maNXB, tenNXB, diaChi, email, dienThoai, hinhAnh)
     }

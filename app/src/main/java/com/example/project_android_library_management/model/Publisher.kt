@@ -6,5 +6,5 @@ data class Publisher(
     val DiaChi: String?,
     val Email: String?,
     val DienThoai: String?,
-    val HinhAnh: String?
+    val HinhAnh: ByteArray?
 )

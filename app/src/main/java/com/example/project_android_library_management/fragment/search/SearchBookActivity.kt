@@ -46,9 +46,14 @@ class SearchBookActivity : AppCompatActivity() {
         bookDao = BookDao(databaseHelper)
 
         val source = intent.getStringExtra("SOURCE")
-        bookList = if (source == "BookList") {
-            intent.getSerializableExtra("BOOK_LIST") as ArrayList<Book>
-        } else {
+        bookList = if (source == "BookCategoryList") {
+            val categoryId = intent.getStringExtra("CATEGORY_ID")
+            bookDao.getBooksByCategoryId(categoryId)
+        } else if (source == "BookPublisherList") {
+            val publisherId = intent.getStringExtra("PUBLISHER_ID")
+            bookDao.getBooksByPublisherId(publisherId)
+        }
+        else {
             bookDao.getAllBooks()
         }
 

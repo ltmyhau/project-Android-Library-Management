@@ -24,6 +24,7 @@ import com.example.project_android_library_management.dao.PublisherDao
 import com.example.project_android_library_management.fragment.order_book.OrderDetailActivity
 import com.example.project_android_library_management.model.Book
 import com.google.android.material.textfield.TextInputEditText
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -189,6 +190,12 @@ class BookAddActivity : AppCompatActivity() {
         return file.absolutePath
     }
 
+    private fun convertImageToByteArray(bitmap: Bitmap): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        return outputStream.toByteArray()
+    }
+
     private fun addNewBook() {
         val bookId = edtBookId.text.toString()
         val isbn = edtISBN.text.toString()
@@ -200,8 +207,13 @@ class BookAddActivity : AppCompatActivity() {
         val price = edtPrice.text.toString().toDoubleOrNull() ?: 0.0
         val description = edtDescription.text.toString()
 
+        val imageByteArray = imagePath?.let {
+            val bitmap = BitmapFactory.decodeFile(it)
+            bitmap?.let { convertImageToByteArray(it) }
+        }
+
         if (validateFields()) {
-            val book = Book(bookId, isbn, title, author, publisherId, year, pages, stock, price, description, imagePath, bookCategoryId)
+            val book = Book(bookId, isbn, title, author, publisherId, year, pages, stock, price, description, imageByteArray, bookCategoryId)
             val rowsAffected = bookDao.insert(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Thêm sách mới thành công", Toast.LENGTH_SHORT).show()

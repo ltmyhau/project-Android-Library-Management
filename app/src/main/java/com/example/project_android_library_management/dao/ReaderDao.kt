@@ -85,7 +85,7 @@ class ReaderDao(private val databaseHelper: DatabaseHelper) {
         val dienThoai = cursor.getString(cursor.getColumnIndexOrThrow("DienThoai"))
         val email = cursor.getString(cursor.getColumnIndexOrThrow("Email"))
         val diaChi = cursor.getString(cursor.getColumnIndexOrThrow("DiaChi"))
-        val hinhAnh = cursor.getString(cursor.getColumnIndexOrThrow("HinhAnh"))
+        val hinhAnh = cursor.getBlob(cursor.getColumnIndexOrThrow("HinhAnh"))
         val ngayLamThe = cursor.getString(cursor.getColumnIndexOrThrow("NgayLamThe"))
 
         return Reader(

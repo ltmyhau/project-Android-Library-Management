@@ -76,19 +76,17 @@ class StatisticReaderFragment : Fragment() {
         var fromDate = arguments?.getString(ARG_FROM_DATE)
         var toDate = arguments?.getString(ARG_TO_DATE)
 
-        if (fromDate == null || toDate == null) {
-            val dates = when (selectedTab) {
-                "Ngày" -> getTodayDates()
-                "Tháng" -> getCurrentMonthDates()
-                "Quý" -> getCurrentQuarterDates()
-                "Năm" -> getCurrentYearDates()
-                "Tùy chỉnh" -> null
-                else -> null
-            }
-            if (dates != null) {
-                fromDate = dates.first
-                toDate = dates.second
-            }
+        val dates = when (selectedTab) {
+            "Ngày" -> getTodayDates()
+            "Tháng" -> getCurrentMonthDates()
+            "Quý" -> getCurrentQuarterDates()
+            "Năm" -> getCurrentYearDates()
+            "Tùy chỉnh" -> null
+            else -> null
+        }
+        if (dates != null) {
+            fromDate = dates.first
+            toDate = dates.second
         }
 
         loadQuantityReader(fromDate, toDate)

@@ -99,13 +99,11 @@ class ReaderDetailActivity : AppCompatActivity() {
             tvEmail.text = reader.Email
             tvAddress.text = reader.DiaChi
 
-            val imagePath = reader.HinhAnh
-            if (imagePath != null) {
-                val imgFile = File(imagePath)
-                if (imgFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                    imgAvatar.setImageBitmap(bitmap)
-                }
+            if (reader.HinhAnh != null) {
+                val bitmap = BitmapFactory.decodeByteArray(reader.HinhAnh, 0, reader.HinhAnh.size)
+                imgAvatar.setImageBitmap(bitmap)
+            } else {
+                imgAvatar.setImageResource(R.drawable.avatar)
             }
         } else {
             Toast.makeText(this, "Không tìm thấy độc giả", Toast.LENGTH_SHORT).show()

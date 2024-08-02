@@ -23,6 +23,7 @@ import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.model.Librarian
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -129,13 +130,11 @@ class LibrarianUpdateActivity : AppCompatActivity() {
                 "khác", "khac" -> rgGender.check(R.id.rdoOther)
             }
 
-            imagePath = librarian.HinhAnh
-            imagePath?.let {
-                val imgFile = File(it)
-                if (imgFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                    imgAvatar.setImageBitmap(bitmap)
-                }
+            if (librarian.HinhAnh != null) {
+                val bitmap = BitmapFactory.decodeByteArray(librarian.HinhAnh, 0, librarian.HinhAnh.size)
+                imgAvatar.setImageBitmap(bitmap)
+            } else {
+                imgAvatar.setImageResource(R.drawable.avatar)
             }
         } else {
             Toast.makeText(this, "Không tìm thấy thủ thư", Toast.LENGTH_SHORT).show()
@@ -211,6 +210,12 @@ class LibrarianUpdateActivity : AppCompatActivity() {
         return file.absolutePath
     }
 
+    private fun convertImageToByteArray(bitmap: Bitmap): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        return outputStream.toByteArray()
+    }
+
     private fun saveLibrarianDetails() {
         val librarianName = edtLibrarianName.text.toString()
         val dateOfBirth = edtDateOfBirth.text.toString()
@@ -224,8 +229,13 @@ class LibrarianUpdateActivity : AppCompatActivity() {
         val email = edtEmail.text.toString()
         val address = edtAddress.text.toString()
 
+        val imageByteArray = imagePath?.let {
+            val bitmap = BitmapFactory.decodeFile(it)
+            bitmap?.let { convertImageToByteArray(it) }
+        }
+
         if (validateFields()) {
-            val librarian = Librarian(maTT, librarianName, dateOfBirth, gender, phoneNumber, email, address, imagePath)
+            val librarian = Librarian(maTT, librarianName, dateOfBirth, gender, phoneNumber, email, address, imageByteArray)
             val rowsAffected = librarianDao.update(librarian)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Cập nhật thông tin thủ thư thành công", Toast.LENGTH_SHORT).show()

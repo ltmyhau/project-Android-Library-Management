@@ -23,6 +23,7 @@ import com.example.project_android_library_management.dao.ReaderDao
 import com.example.project_android_library_management.model.Reader
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -137,13 +138,11 @@ class ReaderUpdateActivity : AppCompatActivity() {
                 "khác", "khac" -> rgGender.check(R.id.rdoOther)
             }
 
-            imagePath = reader.HinhAnh
-            imagePath?.let {
-                val imgFile = File(it)
-                if (imgFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                    imgAvatar.setImageBitmap(bitmap)
-                }
+            if (reader.HinhAnh != null) {
+                val bitmap = BitmapFactory.decodeByteArray(reader.HinhAnh, 0, reader.HinhAnh.size)
+                imgAvatar.setImageBitmap(bitmap)
+            } else {
+                imgAvatar.setImageResource(R.drawable.avatar)
             }
         } else {
             Toast.makeText(this, "Không tìm thấy độc giả", Toast.LENGTH_SHORT).show()
@@ -219,6 +218,12 @@ class ReaderUpdateActivity : AppCompatActivity() {
         return file.absolutePath
     }
 
+    private fun convertImageToByteArray(bitmap: Bitmap): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        return outputStream.toByteArray()
+    }
+
     private fun saveReaderDetails() {
         val readerName = edtReaderName.text.toString()
         val dateOfBirth = edtDateOfBirth.text.toString()
@@ -233,8 +238,13 @@ class ReaderUpdateActivity : AppCompatActivity() {
         val joinDate = edtJoinDate.text.toString()
         val address = edtAddress.text.toString()
 
+        val imageByteArray = imagePath?.let {
+            val bitmap = BitmapFactory.decodeFile(it)
+            bitmap?.let { convertImageToByteArray(it) }
+        }
+
         if (validateFields()) {
-            val reader = Reader(maDG, readerName, dateOfBirth, gender, phoneNumber, email, address, imagePath, joinDate)
+            val reader = Reader(maDG, readerName, dateOfBirth, gender, phoneNumber, email, address, imageByteArray, joinDate)
             val rowsAffected = readerDao.update(reader)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Cập nhật thông tin độc giả thành công", Toast.LENGTH_SHORT).show()

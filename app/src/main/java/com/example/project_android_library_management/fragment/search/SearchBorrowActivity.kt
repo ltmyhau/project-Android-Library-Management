@@ -10,12 +10,14 @@ import com.example.project_android_library_management.R
 import com.example.project_android_library_management.adapter.SearchBookAdapter
 import com.example.project_android_library_management.adapter.SearchBorrowAdapter
 import com.example.project_android_library_management.dao.BorrowRecordDao
+import com.example.project_android_library_management.dao.ReturnRecordDao
 import com.example.project_android_library_management.model.Book
 import com.example.project_android_library_management.model.BorrowRecord
 
 class SearchBorrowActivity : AppCompatActivity() {
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var borrowRecordDao: BorrowRecordDao
+    private lateinit var returnRecordDao: ReturnRecordDao
     private lateinit var searchBorrowAdapter: SearchBorrowAdapter
     private lateinit var borrowRecordList: ArrayList<BorrowRecord>
     private lateinit var borrowRecordListCopy: ArrayList<BorrowRecord>
@@ -37,10 +39,14 @@ class SearchBorrowActivity : AppCompatActivity() {
 
         databaseHelper = DatabaseHelper(this)
         borrowRecordDao = BorrowRecordDao(databaseHelper)
+        returnRecordDao = ReturnRecordDao(databaseHelper)
 
         val source = intent.getStringExtra("SOURCE")
         borrowRecordList = if (source == "BorrowRecordNotReturned") {
-            intent.getSerializableExtra("BORROW_LIST") as ArrayList<BorrowRecord>
+            val borrowList = borrowRecordDao.getAllBorrowRecord()
+            val returnList = returnRecordDao.getAllReturnRecord()
+            val returnedMaPMs = returnList.map { it.MaPM }.toSet()
+            ArrayList(borrowList.filter { it.MaPM !in returnedMaPMs })
         } else {
             borrowRecordDao.getAllBorrowRecord()
         }

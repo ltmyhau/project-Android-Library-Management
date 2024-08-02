@@ -36,14 +36,10 @@ class SearchPublisherAdapter(
         val publisher = publisherList[position]
         holder.tvName.text = publisher.TenNXB
         holder.tvPhoneNumber.text = publisher.DienThoai
+
         if (publisher.HinhAnh != null) {
-            val imgFile = File(publisher.HinhAnh)
-            if (imgFile.exists()) {
-                val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                holder.imgAvatar.setImageBitmap(bitmap)
-            } else {
-                holder.imgAvatar.setImageResource(R.drawable.avatar)
-            }
+            val bitmap = BitmapFactory.decodeByteArray(publisher.HinhAnh, 0, publisher.HinhAnh.size)
+            holder.imgAvatar.setImageBitmap(bitmap)
         } else {
             holder.imgAvatar.setImageResource(R.drawable.avatar)
         }

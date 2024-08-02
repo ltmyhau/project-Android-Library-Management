@@ -56,13 +56,8 @@ class BookBorrowAdapter(
             holder.tvAuthor.text = book.TacGia
 
             if (book.HinhAnh != null) {
-                val imgFile = File(book.HinhAnh)
-                if (imgFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                    holder.imgBookCover.setImageBitmap(bitmap)
-                } else {
-                    holder.imgBookCover.setImageResource(R.drawable.book_cover)
-                }
+                val bitmap = BitmapFactory.decodeByteArray(book.HinhAnh, 0, book.HinhAnh.size)
+                holder.imgBookCover.setImageBitmap(bitmap)
             } else {
                 holder.imgBookCover.setImageResource(R.drawable.book_cover)
             }
