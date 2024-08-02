@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         binding.btnLogin.setOnClickListener {
-            val username = binding.edtUsename.text.toString()
+            val username = binding.edtUsername.text.toString()
             val password = binding.edtPassword.text.toString()
             val account = accountDao.getAccount(username, password)
 

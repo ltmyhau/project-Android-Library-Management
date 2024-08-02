@@ -25,7 +25,6 @@ class BookDao(private val databaseHelper: DatabaseHelper) {
     }
 
     fun insert(book: Book): Int {
-//        val db = databaseHelper.writableDatabase
         val db = databaseHelper.openDatabase()
 
         val contentValues = ContentValues().apply {

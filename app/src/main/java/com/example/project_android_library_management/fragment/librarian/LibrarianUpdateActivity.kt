@@ -138,7 +138,7 @@ class LibrarianUpdateActivity : AppCompatActivity() {
                 }
             }
         } else {
-            Toast.makeText(this, "Không tìm thấy độc giả", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Không tìm thấy thủ thư", Toast.LENGTH_SHORT).show()
         }
     }
 

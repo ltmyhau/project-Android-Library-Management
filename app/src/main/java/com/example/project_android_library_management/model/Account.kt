@@ -5,7 +5,7 @@ import java.io.Serializable
 data class Account(
     val MaTK: String,
     val Username: String,
-    val Password: String,
+    var Password: String,
     val PhanQuyen: String,
     val MaTT: String?
 ) : Serializable

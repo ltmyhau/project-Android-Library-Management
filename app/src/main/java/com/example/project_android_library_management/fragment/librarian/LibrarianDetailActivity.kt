@@ -113,9 +113,9 @@ class LibrarianDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun editReader(maDG: String) {
+    private fun editReader(maTT: String) {
         val intent = Intent(this, LibrarianUpdateActivity::class.java)
-        intent.putExtra("LIBRARIAN_ID", maDG)
+        intent.putExtra("LIBRARIAN_ID", maTT)
         startActivityForResult(intent, REQUEST_CODE_UPDATE_LIBRARIAN)
     }
 
