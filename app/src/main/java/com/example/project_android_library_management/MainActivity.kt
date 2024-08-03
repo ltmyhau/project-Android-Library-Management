@@ -1,7 +1,11 @@
 package com.example.project_android_library_management
 
+import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -9,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.project_android_library_management.dao.AccountDao
+import com.example.project_android_library_management.dao.LibrarianDao
 import com.example.project_android_library_management.fragment.account.AccountFragment
 import com.example.project_android_library_management.fragment.book.BookFragment
 import com.example.project_android_library_management.fragment.borrow_record.BorrowRecordFragment
@@ -25,6 +31,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var navigationView: NavigationView
     private lateinit var toolbar: Toolbar
     private var userRole: String? = null
+
+    private lateinit var databaseHelper: DatabaseHelper
+    private lateinit var accountDao: AccountDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +53,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         navigationView.setNavigationItemSelectedListener(this)
+
+        databaseHelper = DatabaseHelper(this)
+        accountDao = AccountDao(databaseHelper)
+
+        val sharedPref = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val accountId = sharedPref.getString("ACCOUNT_ID", null)
+
+        if (accountId != null) {
+            val account = accountDao.getAccountById(accountId)
+            if (account != null) {
+                if (account.MaTT != null) {
+                    val librarianDao = LibrarianDao(databaseHelper)
+                    val librarian = librarianDao.getLibrarianById(account.MaTT)
+                    if (librarian != null) {
+                        val headerView = navigationView.getHeaderView(0)
+                        val tvUsername = headerView.findViewById<TextView>(R.id.tvUsername)
+                        val imgAvatar = headerView.findViewById<ImageView>(R.id.imgAvatar)
+                        tvUsername.text = librarian.HoTen
+                        if (librarian.HinhAnh != null) {
+                            val bitmap = BitmapFactory.decodeByteArray(
+                                librarian.HinhAnh,
+                                0,
+                                librarian.HinhAnh.size
+                            )
+                            imgAvatar.setImageBitmap(bitmap)
+                        }
+                    }
+                }
+            }
+        }
 
         if (savedInstanceState == null) {
             val homeFragment = HomeFragment()
