@@ -165,7 +165,6 @@ class ReturnAddActivity : AppCompatActivity() {
             }
             val intent = Intent(this, SearchBorrowActivity::class.java)
             intent.putExtra("SOURCE", "BorrowRecordNotReturned")
-//            intent.putExtra("BORROW_LIST", borrowListNotReturned)
             startActivityForResult(intent, REQUEST_CODE_BORROW_ID)
         }
 
@@ -181,8 +180,8 @@ class ReturnAddActivity : AppCompatActivity() {
         btnAddBook = findViewById(R.id.btnAddBook)
         btnAddBook.setOnClickListener {
             val intent = Intent(this, SearchBookActivity::class.java)
-            intent.putExtra("SOURCE", "BookList")
-            intent.putExtra("BOOK_LIST", bookList)
+            intent.putExtra("SOURCE", "BookBorrowList")
+            intent.putExtra("BORROW_ID", borrowId)
             startActivityForResult(intent, REQUEST_CODE_BOOK_ID)
         }
 

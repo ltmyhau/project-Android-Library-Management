@@ -23,6 +23,8 @@ class ChangePasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_password)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         edtOldPassword = findViewById(R.id.edtOldPassword)
         edtNewPassword = findViewById(R.id.edtNewPassword)
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword)
@@ -34,6 +36,11 @@ class ChangePasswordActivity : AppCompatActivity() {
         btnChangePassword.setOnClickListener {
             changePassword()
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun changePassword() {

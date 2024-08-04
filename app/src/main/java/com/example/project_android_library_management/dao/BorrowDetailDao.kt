@@ -78,4 +78,19 @@ class BorrowDetailDao(private val databaseHelper: DatabaseHelper) {
         db.close()
         return borrowDetail
     }
+
+    fun getBooksIdByBorrowId(borrowId: String?): List<String> {
+        val db = databaseHelper.openDatabase()
+        val cursor: Cursor = db.rawQuery("SELECT MaSach FROM CTPhieuMuon WHERE MaPM = ?", arrayOf(borrowId))
+        val bookIds = mutableListOf<String>()
+        if (cursor.moveToFirst()) {
+            do {
+                val bookId = cursor.getString(cursor.getColumnIndexOrThrow("MaSach"))
+                bookIds.add(bookId)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return bookIds
+    }
 }

@@ -9,6 +9,7 @@
         <item name="colorSecondaryVariant">@color/secondary_variant</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:fontFamily">@font/oswald</item>
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 
     <style name="Theme.ActionBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -19,6 +20,7 @@
         <item name="colorSecondaryVariant">@color/secondary_variant</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:fontFamily">@font/oswald</item>
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 
     <style name="ShapeAppearance_App_Circular">

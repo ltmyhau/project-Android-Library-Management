@@ -37,6 +37,7 @@ class BookUpdateActivity : AppCompatActivity() {
     private var bookCategoryId: String = ""
     private var imagePath: String? = null
     private var publisherId: String = ""
+    private var bookCover: ByteArray? = null
 
     private lateinit var imgBookCover: ImageView
     private lateinit var imgEditIcon: ImageView
@@ -146,12 +147,17 @@ class BookUpdateActivity : AppCompatActivity() {
             edtISBN.setText(book.ISBN)
             edtTitle.setText(book.TenSach)
             edtAuthor.setText(book.TacGia)
-            edtPublisher.setText(book.MaNXB)
             edtYear.setText(book.NamXB.toString())
             edtPages.setText(book.SoTrang.toString())
             edtStock.setText(book.SoLuongTon.toString())
             edtPrice.setText(String.format("%.0f", book.GiaBan))
             edtDescription.setText(book.MoTa)
+
+            publisherId = book.MaNXB
+            val publisherDao = PublisherDao(databaseHelper)
+            val publisher = publisherDao.getPublisherById(publisherId)
+
+            publisher?.let { edtPublisher.setText(publisher.TenNXB) }
 
             bookCategoryId = book.MaTL
 
@@ -161,6 +167,7 @@ class BookUpdateActivity : AppCompatActivity() {
             }
 
             if (book.HinhAnh != null) {
+                bookCover = book.HinhAnh
                 val bitmap = BitmapFactory.decodeByteArray(book.HinhAnh, 0, book.HinhAnh.size)
                 imgBookCover.setImageBitmap(bitmap)
             } else {
@@ -238,13 +245,13 @@ class BookUpdateActivity : AppCompatActivity() {
         val price = edtPrice.text.toString().toDoubleOrNull() ?: 0.0
         val description = edtDescription.text.toString()
 
-        val imageByteArray = imagePath?.let {
+        bookCover = imagePath?.let {
             val bitmap = BitmapFactory.decodeFile(it)
             bitmap?.let { convertImageToByteArray(it) }
-        }
+        } ?: bookCover
 
         if (validateFields()) {
-            val book = Book(bookId, isbn, title, author, publisherId, year, pages, stock, price, description, imageByteArray, bookCategoryId)
+            val book = Book(bookId, isbn, title, author, publisherId, year, pages, stock, price, description, bookCover, bookCategoryId)
             val rowsAffected = bookDao.update(book)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Cập nhật thông tin sách thành công", Toast.LENGTH_SHORT).show()

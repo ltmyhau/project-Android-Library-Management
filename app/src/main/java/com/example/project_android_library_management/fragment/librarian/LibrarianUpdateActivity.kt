@@ -38,6 +38,7 @@ class LibrarianUpdateActivity : AppCompatActivity() {
 
     private var imagePath: String? = null
     private var maTT: String = ""
+    private var avatarImg: ByteArray? = null
 
     private lateinit var imgAvatar: ImageView
     private lateinit var imgEditIcon: ImageView
@@ -131,6 +132,7 @@ class LibrarianUpdateActivity : AppCompatActivity() {
             }
 
             if (librarian.HinhAnh != null) {
+                avatarImg = librarian.HinhAnh
                 val bitmap = BitmapFactory.decodeByteArray(librarian.HinhAnh, 0, librarian.HinhAnh.size)
                 imgAvatar.setImageBitmap(bitmap)
             } else {
@@ -229,13 +231,13 @@ class LibrarianUpdateActivity : AppCompatActivity() {
         val email = edtEmail.text.toString()
         val address = edtAddress.text.toString()
 
-        val imageByteArray = imagePath?.let {
+        avatarImg = imagePath?.let {
             val bitmap = BitmapFactory.decodeFile(it)
             bitmap?.let { convertImageToByteArray(it) }
-        }
+        } ?: avatarImg
 
         if (validateFields()) {
-            val librarian = Librarian(maTT, librarianName, dateOfBirth, gender, phoneNumber, email, address, imageByteArray)
+            val librarian = Librarian(maTT, librarianName, dateOfBirth, gender, phoneNumber, email, address, avatarImg)
             val rowsAffected = librarianDao.update(librarian)
             if (rowsAffected > 0) {
                 Toast.makeText(this, "Cập nhật thông tin thủ thư thành công", Toast.LENGTH_SHORT).show()
